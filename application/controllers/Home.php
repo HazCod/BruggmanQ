@@ -40,8 +40,9 @@ class Home extends Core_controller
                 $_SESSION['admin'] = '1';
                 $this->redirect('admin/index');
             } else {
-                $_SESSION['user'] = $formdata->firstname + ' ' + $formdata->lastname;
-                $this->redirect('home/index');   
+                //$_SESSION['user'] = $formdata->firstname + ' ' + $formdata->lastname;
+                $this->setCurrentFlashmessage($this->lang['wrongname'], 'warning');
+                $this->template->render('home/index');   
             }
         } else {
             $this->template->formdata = $formdata;

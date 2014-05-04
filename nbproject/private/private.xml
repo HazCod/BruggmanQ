@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/index.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/languages/lang.nl.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/languages/lang.en.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/lists_m.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/menu_m.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/controllers/Admin.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/system/Core_db.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/languages/lang.fr.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/controllers/Admin.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/languages/lang.en.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/lists.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/languages/lang.nl.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/controllers/Home.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/index.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/lists.add.php.add</file>
         </group>
     </open-files>
 </project-private>

@@ -7,6 +7,16 @@ class Lists_m extends Core_db
         parent::__construct();
         $this->table = 'lists';
     }
+    
+    public function addList($name) {
+        $query = "INSERT INTO lists (id, name) VALUES ('', '$name');";  
+        $this->db->query($query);
+    }
+    
+    public function deleteList($id) {
+        $query = "DELETE FROM lists WHERE (id = '$id')";
+        $this->db->query($query);
+    }
 
     public function getLists()
     {
@@ -15,6 +25,7 @@ class Lists_m extends Core_db
         $query = "
             SELECT *
             FROM lists
+            ORDER BY id
         ";
 
         $lists = $this->db->query($query)->getResult();
