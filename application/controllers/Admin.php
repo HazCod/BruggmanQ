@@ -62,11 +62,43 @@
     {
         if ($this->checkPrivilege() == true){
             if ($list){
-                if (!$command){
+                if (!$command or $command == false){
                     //Show all pages of list $list
-                    $this->template->pages = $this->page_m->getPages($list);
+                    $this->template->pages = $this->lists_m->getPages($list);
                     $this->template->list = $list;
                     $this->template->render('admin/pages');
+                } else if ($command == 'add'){
+                    if ($_POST){
+                        $formdata = $this->form->getPost();
+                        $this->form->validateLength('pagename', 3);
+                        $this->form->validateLength('descr', 3);
+                        if (!$formdata->nr){
+                            $formdata->nr = 0;
+                        }
+                        if ($this->form->isFormValid()){
+                            $this->lists_m->addPage($formdata->pagename, $list, $formdata->descr, $formdata->nr);
+                            $this->setFlashmessage($this->lang['addedpage']);
+                            $this->redirect('admin/pages/' . $list);
+                        } else {
+                            $this->setCurrentFlashmessage($this->lang['erroraddingpage'], 'danger');
+                            $this->template->formdata = $formdata;
+                            $this->template->list = $list;
+                            $this->template->render('admin/lists.add');
+                        }
+                    } else {
+                        $this->template->pages = $this->lists_m->getPages($list);
+                        $this->template->list = $list;
+                        $this->template->render('admin/pages.add');
+                    }
+                } elseif ($command == 'up'){
+                    $this->lists_m->movePageUp($par1);
+                    $this->redirect('admin/pages/' . $list);
+                } elseif ($command == 'down'){
+                    $this->lists_m->movePageDown($par1);
+                    $this->redirect('admin/pages/' . $list);
+                } else {
+                    $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
+                    $this->template->render('admin/lists'); 
                 }
             } else {
                $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');

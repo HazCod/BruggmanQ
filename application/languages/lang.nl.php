@@ -38,6 +38,13 @@ function getLang($controller){
           $lang['addpage']      = 'Nieuwe Pagina';
           $lang['nopagesyet']   = 'Er zijn nog geen pagina\'s voor deze lijst.';
           $lang['gobacktolist'] = '< Ga terug naar lijstnr. ';
+          $lang['wrongpagename']= 'Gelieve een correcte pagina naam te gebruiken.';
+          $lang['erroraddingpage'] = 'Fout bij het toevoegen van de pagina. Controleer uw parameters.';
+          $lang['pagetitle']    = 'Paginatitel';
+          $lang['pagedescr']    = 'Beschrijving van de pagina.';
+          $lang['addedpage']    = 'Uw pagina is toegevoegd.';
+          $lang['moveup']       = 'Boven';
+          $lang['movedown']     = 'Beneden';
           break;    
 
     }

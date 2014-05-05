@@ -9,7 +9,7 @@
              <a href="<?= URL::base_uri(); ?>admin/lists/<?= $this->list; ?>"><?= $this->lang['gobacktolist']; ?>&nbsp;<?= $this->list; ?>&nbsp;.</a><br>
              <div class="pull-right">
                 <button type="button" class="btn btn-default">
-                    <a href="<?= URL::base_uri(); ?>admin/pages/add"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['addpage']; ?></a>
+                    <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->list; ?>/add"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['addpage']; ?></a>
                 </button>
              </div>
              <table class="table table-hover">
@@ -30,6 +30,10 @@
                   <td><?= $data ?></td>
                   <?php endforeach; ?>
                   <td>
+                      <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->list; ?>/up/<?= $list->id; ?>"><i class="glyphicon glyphicon-arrow-up"></i><?= $this->lang['moveup']; ?></a>  
+                      &nbsp;
+                      <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->list; ?>/down/<?= $list->id; ?>"><i class="glyphicon glyphicon-arrow-down"></i><?= $this->lang['movedown']; ?></a>  
+                      &nbsp;
                       <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->list; ?>/delete/<?= $list->id; ?>"><i class="glyphicon glyphicon-remove"></i><?= $this->lang['delete']; ?></a>
                   </td>
                 </tr>

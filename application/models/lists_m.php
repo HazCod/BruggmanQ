@@ -8,6 +8,23 @@ class Lists_m extends Core_db
         $this->table = 'lists';
     }
     
+    public function movePageUp($pageid)
+    {
+        $query = "Update page
+                  Set nr = nr+1
+                  Where (nr != 0) AND (nr=(Select nr-1 From page where id='$pageid'));";
+        $this->db->query($query);
+    }
+
+    public function movePageDown($pageid)
+    {
+        $query = "Update page
+                  Set nr = nr-1
+                  Where (nr != (SELECT count(*)-1 from page)) AND (nr=(Select nr+1 From page where id='$pageid'));";
+        $this->db->query($query);
+    }    
+    
+    
     public function addList($name) {
         $query = "INSERT INTO lists (id, name) VALUES ('', '$name');";  
         $this->db->query($query);
@@ -16,6 +33,27 @@ class Lists_m extends Core_db
     public function deleteList($id) {
         $query = "DELETE FROM lists WHERE (id = '$id')";
         $this->db->query($query);
+    }
+    
+    public function addPage($name, $list, $descr, $nr)
+    {
+        $query = "INSERT INTO page (id, questionlist, nr, descr, title) VALUES ('', '$list', $nr, '$descr', '$name')";
+        $this->db->query($query);
+    }
+    
+    
+    public function getPages( $list )
+    {
+        $result = false;
+        $query = "SELECT * FROM page WHERE (questionlist = '$list') ORDER BY nr";
+        
+        $pages = $this->db->query($query)->getResult();
+
+        if ($pages){
+            $result = $pages;
+        }
+
+        return $result;
     }
 
     public function getLists()
