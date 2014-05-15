@@ -10,18 +10,40 @@ class Lists_m extends Core_db
     
     public function movePageUp($pageid)
     {
-        $query = "Update page
-                  Set nr = nr+1
-                  Where (nr != 0) AND (nr=(Select nr-1 From page where id='$pageid'));";
-        $this->db->query($query);
+        $queryGetUpperPage = "SELECT nr-1
+                              FROM pages
+                              WHERE (id = '$pageid')";
+        $nrUpper = $this->db->query($queryGetUpperPage)->getRow()->nr;
+        if ($nrUpper != false){
+            // Move the upper page down
+            $query2 = "UPDATE page SET nr = ('$nrUpper' - 1) WHERE (nr = '$nrUpper');";
+            $this->db->query($query2);
+            // Move this row up
+            $query1 = "UDPATE page SET nr = '$nrUpper' WHERE (id = '$pageid')";
+            $this->db->query($query1);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function movePageDown($pageid)
     {
-        $query = "Update page
-                  Set nr = nr-1
-                  Where (nr != (SELECT count(*)-1 from page)) AND (nr=(Select nr+1 From page where id='$pageid'));";
-        $this->db->query($query);
+        $querygetLowerPage = "SELECT nr+1
+                              FROM pages
+                              WHERE (id = '$pageid')";
+        $nrLower = $this->db->query($querygetLowerPage)->getRow()->nr;
+        if ($nrLower != false){
+            // Move the lower page up
+            $query2 = "UPDATE page SET nr = ('$nrLower' + 1) WHERE (nr = '$nrLower');";
+            $this->db->query($query2);
+            // Move this row down
+            $query1 = "UDPATE page SET nr = '$nrLower' WHERE (id = '$pageid')";
+            $this->db->query($query1);
+            return true;
+        } else {
+            return false;
+        }
     }    
     
     
@@ -41,11 +63,21 @@ class Lists_m extends Core_db
         $this->db->query($query);
     }
     
+    public function removePage( $list )
+    {
+        $query = "DELETE FROM page WHERE (id = '$list')";
+        $this->db->query($query);
+    }
+    
     
     public function getPages( $list )
     {
         $result = false;
-        $query = "SELECT * FROM page WHERE (questionlist = '$list') ORDER BY nr";
+        $query =   "SELECT p.id, p.nr, p.title, p.descr
+                    FROM page p 
+                      LEFT OUTER JOIN questionlists ql ON (questionlist = page)
+                    WHERE (p.questionlist = '22')
+                    ORDER BY nr";  
         
         $pages = $this->db->query($query)->getResult();
 

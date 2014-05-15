@@ -45,6 +45,32 @@ function getLang($controller){
           $lang['addedpage']    = 'Uw pagina is toegevoegd.';
           $lang['moveup']       = 'Boven';
           $lang['movedown']     = 'Beneden';
+          $lang['deletedpage']  = 'Pagina verwijdert.';
+          $lang['manage']       = 'Beheer';
+          $lang['gobacktopage'] = '< Ga terug naar paginanr. ';
+          $lang['questions']    = 'Vragen';
+          $lang['addquestion']  = 'Voeg vraag toe';
+          $lang['noquestionsyet'] = 'Er zijn nog geen vragen voor deze pagina. ';
+          $lang['addedquestion'] = 'Vraag toegevoegd.';
+          $lang['erroraddingquestion'] = 'Fout bij het toevoegen van de vraag. Controleer uw parameters.';
+          $lang['newquestion']  = 'Nieuwe Vraag';
+          $lang['questiondescr'] = 'De vraagstelling.';
+          $lang['questiontype'] = 'Type van Vraag';
+          $lang['next']         = 'Ga Verder';
+          $lang['answers']      = 'Antwoorden';
+          $lang['deletedquestion'] = 'De vraag is verwijdert.';
+          $lang['manageanswers'] = 'Beheer de antwoorden';
+          $lang['noanswersyet'] = 'Er zitten nog geen antwoorden in de databank voor deze vraag.';
+          $lang['type']         = 'Type';
+          $lang['addanswer']    = 'Voeg antwoord toe';
+          
+          //- description of every type
+          $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
+          $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';
+          $lang['CHECKBOXdesc']  = 'Dit is een lijst van opties waar mensen geen of meerdere waardes kunnen uitkiezen.';
+          $lang['TEXTINPUTdesc']  = 'Een tekstveld waar mensen iets in kunnen invullen.';
+          $lang['DATEINPUTdesc']  = 'Een inputveld voor een datum.';
+          $lang['NUMBERINPUTdesc']  = 'Een inputveld voor een getal.';
           break;    
 
     }

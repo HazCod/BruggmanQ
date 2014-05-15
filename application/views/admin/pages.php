@@ -35,6 +35,8 @@
                       <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->list; ?>/down/<?= $list->id; ?>"><i class="glyphicon glyphicon-arrow-down"></i><?= $this->lang['movedown']; ?></a>  
                       &nbsp;
                       <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->list; ?>/delete/<?= $list->id; ?>"><i class="glyphicon glyphicon-remove"></i><?= $this->lang['delete']; ?></a>
+                      &nbsp;
+                      <a href="<?= URL::base_uri(); ?>admin/questions/<?= $list->id; ?>"><i class="glyphicon glyphicon-th-list"></i><?= $this->lang['manage']; ?></a>
                   </td>
                 </tr>
                 <?php endforeach; ?>

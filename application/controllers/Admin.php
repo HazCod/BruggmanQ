@@ -12,6 +12,7 @@
         
         $this->lists_m = Load::model('lists_m');
         $this->page_m  = Load::model('page_m');
+        $this->questions_m = Load::model('questions_m');
         
         $this->menu_m = Load::model('menu_m');
         $this->template->menuitems = $this->menu_m->getBeheerderMenu($this->lang);
@@ -58,6 +59,77 @@
         }
     }
     
+    
+    public function answers($question, $command=false, $par1=false)
+    {
+        if ($this->checkPrivilege() == true){
+            if ($question){
+               if (!$command or $command == false){
+                    $this->template->questions = $this->questions_m->getQuestions($page);
+                    $this->template->types = $this->questions_m->getTypes();
+                    $this->template->question = $this->questions_m->getQuestion($question);
+                    $this->template->render('admin/questions.answers');
+                } 
+            } else {
+               $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
+               $this->template->render('admin/index');   
+            }
+        }
+    }
+    
+    public function questions($page, $command=false, $par1=false)
+    {
+        if ($this->checkPrivilege() == true){
+            if ($page){
+                if (!$command or $command == false){
+                    $this->template->questions = $this->questions_m->getQuestions($page);
+                    $this->template->types = $this->questions_m->getTypes();
+                    $this->template->page = $page;
+                    $this->template->render('admin/questions');
+                } elseif ($command == 'add'){
+                    if ($_POST){
+                        $formdata = $this->form->getPost();
+                        $this->form->validateLength('descr', 3);
+                        if (!$formdata->nr){
+                            $formdata->nr = 0;
+                        }
+                        if ($this->form->isFormValid()){
+                            $this->setFlashmessage($this->lang['addedquestion']);
+                            $this->questions_m->addQuestion($formdata->descr, $formdata->type, null, $formdata->nr, $page);
+                            $this->redirect('admin/questions/' . $page);
+                        } else {
+                            $this->setCurrentFlashmessage($this->lang['erroraddingquestion'], 'danger');
+                            $this->template->formdata = $formdata;
+                            $this->template->page = $page;
+                            $this->template->render('admin/questions.add');
+                        }
+                    } else {
+                        $this->template->questions = $this->questions_m->getQuestions($list);
+                        $this->template->types = $this->questions_m->getTypes();
+                        $this->template->page = $page;
+                        $this->template->render('admin/questions.add');
+                    }
+                } elseif ($command == 'delete') {
+                    $this->questions_m->deleteQuestion($par1);
+                    $this->setFlashmessage($this->lang['deletedquestion']);
+                    $this->redirect('admin/questions/' . $page);
+                } elseif ($command == 'up'){
+                    //TODO
+                    $this->redirect('admin/questions/' . $page);
+                } elseif ($command == 'down'){
+                    //TODO
+                    $this->redirect('admin/questions/' . $page);
+                } else {
+                    $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
+                    $this->template->render('admin/lists');    
+                }
+            } else {
+               $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
+               $this->template->render('admin/lists');   
+            }
+        }
+    }
+    
     public function pages($list, $command=false, $par1=false)
     {
         if ($this->checkPrivilege() == true){
@@ -90,6 +162,10 @@
                         $this->template->list = $list;
                         $this->template->render('admin/pages.add');
                     }
+                } elseif ($command == 'delete'){
+                    $this->lists_m->removePage($par1);
+                    $this->setFlashmessage($this->lang['deletedpage']);
+                    $this->redirect('admin/pages/' . $list);
                 } elseif ($command == 'up'){
                     $this->lists_m->movePageUp($par1);
                     $this->redirect('admin/pages/' . $list);
