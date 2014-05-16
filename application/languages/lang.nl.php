@@ -37,7 +37,7 @@ function getLang($controller){
           $lang['pages']        = 'Pagina\'s';
           $lang['addpage']      = 'Nieuwe Pagina';
           $lang['nopagesyet']   = 'Er zijn nog geen pagina\'s voor deze lijst.';
-          $lang['gobacktolist'] = '< Ga terug naar lijstnr. ';
+          $lang['gobacktolists'] = '< Ga terug naar lijstoverzicht. ';
           $lang['wrongpagename']= 'Gelieve een correcte pagina naam te gebruiken.';
           $lang['erroraddingpage'] = 'Fout bij het toevoegen van de pagina. Controleer uw parameters.';
           $lang['pagetitle']    = 'Paginatitel';
@@ -48,6 +48,7 @@ function getLang($controller){
           $lang['deletedpage']  = 'Pagina verwijdert.';
           $lang['manage']       = 'Beheer';
           $lang['gobacktopage'] = '< Ga terug naar paginanr. ';
+          $lang['question']     = 'Vraag';
           $lang['questions']    = 'Vragen';
           $lang['addquestion']  = 'Voeg vraag toe';
           $lang['noquestionsyet'] = 'Er zijn nog geen vragen voor deze pagina. ';
@@ -63,7 +64,7 @@ function getLang($controller){
           $lang['noanswersyet'] = 'Er zitten nog geen antwoorden in de databank voor deze vraag.';
           $lang['type']         = 'Type';
           $lang['addanswer']    = 'Voeg antwoord toe';
-          
+          $lang['backtoquestion'] = 'Ga terug naar vraagnr. ';          
           //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';
@@ -71,6 +72,12 @@ function getLang($controller){
           $lang['TEXTINPUTdesc']  = 'Een tekstveld waar mensen iets in kunnen invullen.';
           $lang['DATEINPUTdesc']  = 'Een inputveld voor een datum.';
           $lang['NUMBERINPUTdesc']  = 'Een inputveld voor een getal.';
+          $lang['newanswer']    = 'Nieuw antwoord';
+          $lang['answerdescr']   = 'Hier komt uw antwoord.';
+          $lang['addedanswer']  = 'Uw antwoord is toegevoegd.';
+          $lang['erroraddinganswer'] = 'Fout bij het toevoegen van uw antwoord. Controleer uw parameters.';
+          $lang['deletedanswer']    = 'Antwoord is verwijdert.';
+          $lang['adminlangs']       = 'Talen';
           break;    
 
     }

@@ -1,3 +1,17 @@
+<?php //Return the lang str when given the type id
+    function getLangStr($arr, $typenr){
+        $result = false;
+        for ($i=0; $i < sizeof($arr) and $result == false; $i++){
+            if ($arr[$i]->id == $typenr){
+                $result = $arr[$i]->name;
+            }
+        }
+        if ($result == false){
+            $result = '???(' . $typenr . ')';
+        }
+        return $result;
+    }
+?>
 <br><br><br>
 <div class="bs-docs-section">
         <div class="row">
@@ -26,7 +40,13 @@
                 <?php foreach ($this->lists as $key => $list): ?>
                 <tr>
                   <?php foreach ($list as $property => $data): ?>
-                  <td><?= $data ?></td>
+                  <td>
+                  <?php if ($property == 'language'): ?>
+                  <?= getLangStr($this->langs, $data); ?>
+                  <?php else: ?>
+                  <?= $data ?>
+                  <?php endif; ?>
+                  </td>
                   <?php endforeach; ?>
                   <td>
                       <a href="<?= URL::base_uri(); ?>admin/pages/<?= $list->id; ?>"><i class="glyphicon glyphicon-file"></i><?= $this->lang['pages']; ?></a>

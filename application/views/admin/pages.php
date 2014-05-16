@@ -6,7 +6,7 @@
         <div class="row-fluid">
           <div class="span4">
              <h2><?= $this->lang['pages']; ?></h2>
-             <a href="<?= URL::base_uri(); ?>admin/lists/<?= $this->list; ?>"><?= $this->lang['gobacktolist']; ?>&nbsp;<?= $this->list; ?>&nbsp;.</a><br>
+             <a href="<?= URL::base_uri(); ?>admin/lists/"><?= $this->lang['gobacktolists']; ?></a><br>
              <div class="pull-right">
                 <button type="button" class="btn btn-default">
                     <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->list; ?>/add"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['addpage']; ?></a>

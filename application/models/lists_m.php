@@ -47,13 +47,13 @@ class Lists_m extends Core_db
     }    
     
     
-    public function addList($name) {
-        $query = "INSERT INTO lists (id, name) VALUES ('', '$name');";  
+    public function addList($name, $language) {
+        $query = "INSERT INTO lists (id, name, language) VALUES ('', '$name', '$language');";  
         $this->db->query($query);
     }
     
     public function deleteList($id) {
-        $query = "DELETE FROM lists WHERE (id = '$id')";
+        $query = "DELETE FROM lists WHERE (id = '$id');";
         $this->db->query($query);
     }
     

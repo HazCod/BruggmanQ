@@ -13,6 +13,8 @@
         $this->lists_m = Load::model('lists_m');
         $this->page_m  = Load::model('page_m');
         $this->questions_m = Load::model('questions_m');
+        $this->answers_m = Load::model('answers_m');
+        $this->langs_m = Load::model('langs_m');
         
         $this->menu_m = Load::model('menu_m');
         $this->template->menuitems = $this->menu_m->getBeheerderMenu($this->lang);
@@ -60,16 +62,49 @@
     }
     
     
-    public function answers($question, $command=false, $par1=false)
+    public function answers($question=false, $command=false, $par1=false)
     {
         if ($this->checkPrivilege() == true){
             if ($question){
                if (!$command or $command == false){
-                    $this->template->questions = $this->questions_m->getQuestions($page);
-                    $this->template->types = $this->questions_m->getTypes();
+                    $this->template->answers = $this->answers_m->getAnswers($question);
                     $this->template->question = $this->questions_m->getQuestion($question);
+                    $this->template->types = $this->questions_m->getTypes();
                     $this->template->render('admin/questions.answers');
-                } 
+                } elseif ($command == 'add'){
+                    if ($_POST){
+                        $formdata = $this->form->getPost();
+                        $this->form->validateLength('descr', 2);
+                        if (!$formdata->nr){
+                            $formdata->nr = 0;
+                        }
+                        if ($this->form->isFormValid()){
+                            $this->setFlashmessage($this->lang['addedanswer']);
+                            $this->answers_m->addAnswer($formdata->descr, $question, $formdata->nr);
+                            $this->redirect('admin/answers/' . $question);
+                        } else {
+                            $this->setCurrentFlashmessage($this->lang['erroraddinganswer'], 'danger');
+                            $this->template->formdata = $formdata;
+                            $this->template->answers = $this->answers_m->getAnswers($question);
+                            $this->template->question = $question;
+                            $this->template->render('admin/questions.answers.add');
+                        }
+                    } else {
+                        $this->template->question = $question;
+                        $this->template->answers = $this->answers_m->getAnswers($question);
+                        $this->template->render('admin/questions.answers.add');
+                    }
+                } elseif ($command == 'delete'){
+                    $this->answers_m->deleteAnswer($par1);
+                    $this->setFlashmessage($this->lang['deletedanswer']);
+                    $this->redirect('admin/answers/' . $question);
+                } elseif ($command == 'up'){
+                    //TODO
+                    $this->redirect('admin/answers/' . $question);
+                } elseif ($command == 'down'){
+                    //TODO
+                    $this->redirect('admin/answers/' . $question);
+                }
             } else {
                $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                $this->template->render('admin/index');   
@@ -77,7 +112,7 @@
         }
     }
     
-    public function questions($page, $command=false, $par1=false)
+    public function questions($page=false, $command=false, $par1=false)
     {
         if ($this->checkPrivilege() == true){
             if ($page){
@@ -130,7 +165,7 @@
         }
     }
     
-    public function pages($list, $command=false, $par1=false)
+    public function pages($list=false, $command=false, $par1=false)
     {
         if ($this->checkPrivilege() == true){
             if ($list){
@@ -188,6 +223,7 @@
         if ($this->checkPrivilege() == true){
             if ($command == false){
                 $this->template->lists = $this->lists_m->getLists();
+                $this->template->langs = $this->langs_m->getLangs();
                 $this->template->render('admin/lists');
             } else {
                 if ($command == 'add'){
@@ -197,27 +233,30 @@
                         if ($this->form->isFormValid()) {
                             //var_dump($this->lists_m->getLists()); quit();
                             if (!$this->in_array_case_insensitive($formdata->listname, $this->lists_m->getLists(), 'name')){
-                                $this->lists_m->addList($formdata->listname);
+                                $this->lists_m->addList($formdata->listname, $formdata->lang);
                                 $this->setFlashmessage($this->lang['addedlist']);
                                 $this->redirect('admin/lists');
                             } else {
                                 $this->setCurrentFlashmessage($this->lang['erroraddinglist'], 'danger');
                                 $this->template->listname = $formdata->listname;
+                                $this->template->langs = $this->langs_m->getLangs();
                                 $this->template->render('admin/lists.add');
                             }
                         } else {
                             $this->template->formdata = $formdata;
+                            $this->template->langs = $this->langs_m->getLangs();
                             $this->setCurrentFlashmessage($this->lang['wronglistname'], 'danger');
                             $this->template->render('admin/lists'); 
                         }
                     } else {
+                        $this->template->langs = $this->langs_m->getLangs();
                         $this->template->render('admin/lists.add');
                     }
                 } elseif ($command == 'delete' && $par1) {
                     $this->lists_m->deleteList($par1);
                     $this->setFlashmessage($this->lang['listremoved']);
                     $this->redirect('admin/lists');
-                }else {
+                } else {
                     $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                     $this->template->render('admin/lists');
                 }

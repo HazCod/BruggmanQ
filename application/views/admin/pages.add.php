@@ -8,7 +8,7 @@
               <h2><?= $this->lang['addpage']; ?></h2>
               <form method="post" action="<?= URL::base_uri(); ?>admin/questions/<?= $this->list; ?>/add">
                 <div class="form-group">
-                    <textarea class="form-control" name="descr" id="descr" rows="6" placeholder="<?= $this->lang['pagedescr']; ?>"><?php if ($this->formdata){ echo $this->formdata['descr']; } ?></textarea>
+                    <textarea class="form-control" name="descr" id="descr" rows="6" placeholder="<?= $this->lang['pagedescr']; ?>"><?php if ($this->formdata){ echo $this->formdata->descr; } ?></textarea>
                 </div><!-- /input-group -->
                 
                 <div style="display:none;"> <!-- hidden textfield, generated automatically -->

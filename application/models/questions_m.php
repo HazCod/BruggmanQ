@@ -22,6 +22,8 @@ class Questions_m extends Core_db
     public function deleteQuestion($id) {
         $query = "DELETE FROM questions WHERE (id = '$id')";
         $this->db->query($query);
+        $query = "DELETE FROM questionlists WHERE (question = '$id')";
+        $this->db->query($query);
     }
     
     public function getQuestion($id) {

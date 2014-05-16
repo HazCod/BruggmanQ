@@ -21,7 +21,8 @@
           <div class="span4">
               <h2><?= $this->lang['manageanswers']; ?></h2>
               <h3><?= $this->lang['type']; ?>: <?= getTypeStr($this->types, $this->question->type); ?></h3>
-              <p><?= $this->lang[getTypeStr($this->types, $this->type) . 'desc']; ?></p>
+              <p><?= $this->lang[getTypeStr($this->types, $this->question->type) . 'desc']; ?></p>
+              <p class="lead"><?= $this->lang['question']; ?>: "<?= $this->question->question; ?>"</p>
              <div class="pull-right">
                 <button type="button" class="btn btn-default">
                     <a href="<?= URL::base_uri(); ?>admin/answers/<?= $this->question->id; ?>/add"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['addanswer']; ?></a>
