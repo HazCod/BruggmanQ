@@ -8,8 +8,8 @@ class Questions_m extends Core_db
         $this->table = 'questions';
     }
     
-    public function addQuestion($question, $type, $nr, $page) {
-        $query = "INSERT INTO questions (id, question, type, nr) VALUES ('', '$question', '$type', '$nr');
+    public function addQuestion($question, $type, $nr, $extra, $page) {
+        $query = "INSERT INTO questions (id, question, type, nr, extra) VALUES ('', '$question', '$type', '$nr', '$extra');
                   INSERT INTO questionlists(page, question) VALUES ('$page', LAST_INSERT_ID());";
         $this->db->query($query);
     }
@@ -86,7 +86,7 @@ class Questions_m extends Core_db
         $result = false;
 
         $query = "
-            SELECT page, q.nr, q.id, q.question, q.type
+            SELECT page, q.nr, q.id, q.question, q.type, q.extra
             FROM questionlists ql
             INNER JOIN questions q ON (ql.question = q.id)
             WHERE (ql.page = '$pageid')

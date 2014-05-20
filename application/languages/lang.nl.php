@@ -17,8 +17,10 @@ function getLang($controller){
         $lang['page']       = 'Pagina';
         //-- error messages displayed at start page
         $lang['pagenotfound'] = 'Fout: Pagina niet gevonden. (of meerdere pagina\'s met zelfde nr.)';
-        $lang['noquestions']  = 'Geen vragen beschikbaar.';
+        $lang['noquestions']  = 'Geen vragen beschikbaar voor deze pagina.';
         $lang['next']         = 'Volgende';
+        $lang['hasended']   = 'De vragenlijst is beëindigd.';
+        $lang['thankyou']    = 'Dank u voor het invullen van deze vragenlijst.<br>U mag zich nu uitloggen door op de knop <b>\'Logout\'</b> te drukken rechtsboven.';
         break;
     
       //survey pages 
@@ -101,6 +103,7 @@ function getLang($controller){
           $lang['addedlang']        = 'Taal is toegevoegd';
           $lang['identifier']       = 'Identificatiecode';
           $lang['identifierdescr']  = 'Identificatiecode van het antwoord.';
+          $lang['extra']            = 'Extra parameters';
           break;  
       
       default: error_log('Lang info not found for controller ' . $controller);

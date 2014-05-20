@@ -23,10 +23,12 @@ class Home extends Core_controller
     public function index()
     {
         if (isset($_SESSION['user'])) {
-            //TODO: Write pickQuestionnaire 
-            //$this->redirect('home/login');
-            $this->template->lists = $this->lists_m->getListsbyLang($_SESSION['lang']);
-            $this->template->render('home/lists');
+            if (isset($_SESSION['list'])){
+                $this->redirect('lists/index/' . $_SESSION['list']);
+            } else {
+                $this->template->lists = $this->lists_m->getListsbyLang($_SESSION['lang']);
+                $this->template->render('home/lists');
+            }
         } else {
             $this->template->render('home/index');
         }
@@ -44,7 +46,7 @@ class Home extends Core_controller
                 $_SESSION['admin'] = '1';
                 $this->redirect('admin/index');
             } else {
-                $_SESSION['user'] = $formdata->firstname + '_' + $formdata->lastname;
+                $_SESSION['user'] = $formdata->firstname . '_' . $formdata->lastname;
                 $this->redirect('home');
             }
         } else {
@@ -53,13 +55,15 @@ class Home extends Core_controller
             $this->template->render('home/index');
         }
     }
+    
+    public function end()
+    {
+        $this->template->render('home/end');
+    }
 
     public function logout()
     {
-        unset($_SESSION['user']);
-        unset($_SESSION['admin']);
-        unset($_SESSION['list']);
-        unset($_SESSION['page']);
+        session_unset();
         $this->setFlashmessage($this->lang['loggedout']);
         $this->redirect("home");
     }

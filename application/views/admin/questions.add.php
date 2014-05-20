@@ -20,6 +20,12 @@
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label for="type"><?= $this->lang['extra']; ?></label>
+                    <p>NUMBERINPUT: min;max;step;prefix</p>
+                    <input type="text" id="extra" name="extra" placeholder="/" />
+                </div>
+                
                 <div style="display:none;"> <!-- hidden textfield, generated automatically -->
                     <input type="text" id="nr" name="nr" value="<? if ($this->questions == false){ echo '1'; } else { echo intval(sizeof($this->questions) +1); } ?>" />
                 </div><!-- /input-group -->

@@ -57,6 +57,24 @@ class Answers_m extends Core_db
 
         return $result;
     }
+    
+    public function getQuestionsWithAnswers()
+    {
+        $result = false;
+
+        $query = "
+            SELECT question
+            FROM answerlists
+        ";
+
+        $questions = $this->db->query($query)->getResult();
+
+        if ($questions){
+            $result = $questions;
+        }
+
+        return $result;
+    }
 
     public function getAnswers($questionid)
     {

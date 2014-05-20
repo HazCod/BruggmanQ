@@ -16,19 +16,21 @@
             </div>
             <div class="well">
                 <?php if ($this->questions): ?>
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" method="POST" action="<?= URL::base_uri(); ?>lists/page/<?= $this->pagenr; ?>/">
                 <?php foreach ($this->questions as $key => $question): ?>
                   <div class="form-group">
                       <?php if ($question['type'] == "MESSAGE"): ?>
                       <div class="col-sm-8">
                         <p><?= $question['question']; ?></p>
                       </div>
+                      <?php elseif ($question['type'] == "TITLE"): ?>
+                      <h2><?= $question['question']; ?></h2>
                       <?php elseif ($question['type'] == "COMBOBOX" and ($question['answers'])): ?>
                       <label for="inputEmail3" class="col-sm-4 control-label"><?= $question['question']; ?></label>
                       <div class="col-sm-8">
-                        <select class="form-control">
+                        <select class="form-control" name="<?= $question['id']; ?>">
                             <?php foreach ($question['answers'] as $item => $answer): ?>
-                            <option name='<?= $answer->id; ?>'><?= $answer->answer; ?></option>
+                            <option value='<?= $answer->id; ?>'><?= $answer->answer; ?></option>
                             <?php endforeach; ?>
                         </select>
                       </div>
@@ -37,7 +39,7 @@
                       <div class="col-sm-8">
                             <?php foreach ($question['answers'] as $item => $answer): ?>
                             <label class="radio-inline">
-                              <input class="radio" type="radio" id="<?= $answer->id; ?>" name='<?= $question['id']; ?>' value="<?= $answer->id; ?>"><?= $answer->answer; ?>
+                              <input class="radio" type="radio" name='<?= $question['id']; ?>' value="<?= $answer->id; ?>"><?= $answer->answer; ?>
                             </label><br>
                             <?php endforeach; ?>
                       </div>
@@ -47,7 +49,7 @@
                             <?php foreach ($question['answers'] as $item => $answer): ?>
                             <div class="checkbox">
                                 <label>
-                                  <input type="checkbox" name="<?= $answer->id; ?>" id="<?= $answer->id; ?>"> <?= $answer->answer; ?>
+                                  <input type="checkbox" name="<?= $question['id']; ?>[]" value="<?= $answer->id; ?>"> <?= $answer->answer; ?>
                                 </label>
                             </div>
                             <?php endforeach; ?>
@@ -55,19 +57,47 @@
                       <?php elseif ($question['type'] == "TEXTINPUT"): ?>
                       <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
                       <div class="col-sm-8">
-                            <textarea class="form-control" name="<?= $question->id; ?>" id="descr" rows="3"></textarea>
+                            <textarea class="form-control" name="<?= $question['id']; ?>" id="descr" rows="3"></textarea>
                       </div>
                       <?php elseif ($question['type'] == "LINEINPUT"): ?>
                       <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
                       <div class="col-sm-8">
-                          <input type="text" class="form-control" id="<?= $question['question']; ?>" name="<?= $question['question']; ?>" >
+                          <input type="text" class="form-control" name="<?= $question['id']; ?>" >
                       </div>
                       <?php elseif ($question['type'] == "DATEINPUT"): ?>
                       <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
                       <div class="col-sm-8">
                           <div class="input-group date">
-                            <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                            <input type="text" name="<?= $question['id']; ?>" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                           </div>
+                      </div>
+                      <?php elseif ($question['type'] == "NUMBERINPUT"): ?>
+                      <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                        <input type="text" value="0" name="<?= $question['id']; ?>" class="col-md-8 form-control">
+                        <?php 
+                            $extras = explode(';', $question['extra']);
+                            //min;max;step;prefix
+                            if (sizeof($extras) < 1){
+                                $extras[0] = 0;
+                                if (sizeof($extras) < 2){
+                                    $extras[1] = 100;
+                                    if (sizeof($extras) < 3){
+                                        $extras[2] = 1;
+                                    }
+                                }
+                            }
+                        ?>
+                        <script type="text/javascript">
+                            $("input[name='<?= $question['id']; ?>']").TouchSpin({
+                                    min: <?= $extras[0] ?>,
+                                    max: <?= $extras[1] ?>,
+                                    stepinterval: <?= $extras[2] ?>,
+                                    <?php if (sizeof($extras) > 2): ?> //prefix is not required.
+                                    postfix: '<?= $extras[3] ?>'
+                                    <?php endif; ?>
+                            });
+                        </script>
                       </div>
                       <?php endif; ?>
                   </div>
@@ -79,15 +109,20 @@
                   </div>    
                 </form>
                 <?php else: ?>
+                <form class="form-horizontal" role="form" method="POST" action="<?= URL::base_uri(); ?>lists/page/<?= $this->pagenr; ?>/">
                     <p>
                         <?= $this->lang['noquestions']; ?>
                     </p>
+                    <input type="text" style="display:none;" name="skip" value="1" />
+                    <div class="form-group">
+                        <div class="btn pull-right">
+                            <button type="submit" class="btn btn-default"><?= $this->lang['next']; ?></button>
+                        </div>
+                    </div>  
+                </form>
                 <?php endif; ?>
             </div>
           </div>
 
         </div>
       </div>
-<script type="text/javascript">
-    $('.input-group.date').datepicker({});
-</script>

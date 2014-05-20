@@ -15,6 +15,7 @@
         $this->questions_m = Load::model('questions_m');
         $this->answers_m = Load::model('answers_m');
         $this->langs_m = Load::model('langs_m');
+        $this->data_m = Load::model('data_m');
         
         $this->menu_m = Load::model('menu_m');
         $this->template->menuitems = $this->menu_m->getBeheerderMenu($this->lang);
@@ -166,7 +167,7 @@
                         }
                         if ($this->form->isFormValid()){
                             $this->setFlashmessage($this->lang['addedquestion']);
-                            $this->questions_m->addQuestion(htmlentities($formdata->descr), $formdata->type, $formdata->nr, $page);
+                            $this->questions_m->addQuestion(htmlentities($formdata->descr), $formdata->type, $formdata->nr, $formdata->extra, $page);
                             $this->redirect('admin/questions/' . $page);
                         } else {
                             $this->setCurrentFlashmessage($this->lang['erroraddingquestion'], 'danger');
@@ -197,6 +198,18 @@
             } else {
                $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                $this->template->render('admin/lists');   
+            }
+        }
+    }
+    
+    public function data($usr=false, $command=false, $par1=false)
+    {
+        if ($this->checkPrivilege() == true){
+            if (!$usr){
+                $this->template->data = $this->data_m->getAllData();
+                $this->template->render('admin/data');
+            } else {
+                
             }
         }
     }
@@ -234,7 +247,7 @@
                         $this->template->render('admin/pages.add');
                     }
                 } elseif ($command == 'delete'){
-                    $this->page_m->removePage($par1);
+                    $this->page_m->deletePage($par1);
                     $this->setFlashmessage($this->lang['deletedpage']);
                     $this->redirect('admin/pages/' . $list);
                 } elseif ($command == 'up'){
