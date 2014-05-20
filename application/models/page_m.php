@@ -8,8 +8,8 @@ class Page_m extends Core_db
         $this->table = 'page';
     }
     
-    public function addPage($name, $nr, $descr, $title) {
-        $query = "INSERT INTO page (id, questionlist, nr, descr, title) VALUES ('', '$name', '$nr', '$descr', '$title');";  
+    public function addPage($list, $nr, $descr, $title) {
+        $query = "INSERT INTO page (id, questionlist, nr, descr, title) VALUES ('', '$list', '$nr', '$descr', '$title');";
         $this->db->query($query);
     }
     
@@ -32,10 +32,48 @@ class Page_m extends Core_db
         $pages = $this->db->query($query)->getResult();
 
         if ($pages){
-            $result = $lists;
+            $result = $pages;
         }
 
         return $result;
+    }
+    
+    public function getAmountOfPages($listid)
+    {
+        $result = false;
+
+        $query = "
+            SELECT count(id) AS pages
+            FROM page
+            WHERE (questionlist = '$listid')
+        ";
+
+        $pages = $this->db->query($query)->getRow();
+
+        if ($pages){
+            $result = $pages;
+        }
+
+        return $result;
+    }
+    
+    public function getPageByNr($listid, $nr)
+    {
+        $result = false;
+
+        $query = "
+            SELECT *
+            FROM page
+            WHERE (questionlist = '$listid') AND (nr = '$nr');
+        ";
+
+        $page = $this->db->query($query)->getRow();
+
+        if ($page){
+            $result = $page;
+        }
+
+        return $result; 
     }
 	
 

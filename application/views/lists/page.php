@@ -1,0 +1,93 @@
+<br>
+<div class="bs-docs-section">
+        <div class="row">
+	<?php $this->renderPartial('flashmessage'); ?>
+        </div>
+        <div class="row-fluid">
+          <div class="span4">
+            <h1><?= $this->lang['page']; ?>&nbsp;<?= $this->pagenr; ?>:&nbsp;<?= $this->page->title; ?></h1>
+            <p>
+                <?= $this->page->descr; ?>
+            </p>
+            <div class="progress progress-striped active">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?= intval($this->pagenr * 100 / $this->pagestotal); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= intval($this->pagenr * 100 / $this->pagestotal); ?>%">
+                 <!--   <span><?= $this->lang['page']; ?> <?= $this->pagenr; ?>/<?= $this->pagestotal; ?></span> -->
+                </div>
+            </div>
+            <div class="well">
+                <?php if ($this->questions): ?>
+                <form class="form-horizontal" role="form">
+                <?php foreach ($this->questions as $key => $question): ?>
+                  <div class="form-group">
+                      <?php if ($question['type'] == "MESSAGE"): ?>
+                      <div class="col-sm-8">
+                        <p><?= $question['question']; ?></p>
+                      </div>
+                      <?php elseif ($question['type'] == "COMBOBOX" and ($question['answers'])): ?>
+                      <label for="inputEmail3" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                        <select class="form-control">
+                            <?php foreach ($question['answers'] as $item => $answer): ?>
+                            <option name='<?= $answer->id; ?>'><?= $answer->answer; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                      </div>
+                      <?php elseif ($question['type'] == "RADIOBOX"): ?>
+                      <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                            <?php foreach ($question['answers'] as $item => $answer): ?>
+                            <label class="radio-inline">
+                              <input class="radio" type="radio" id="<?= $answer->id; ?>" name='<?= $question['id']; ?>' value="<?= $answer->id; ?>"><?= $answer->answer; ?>
+                            </label><br>
+                            <?php endforeach; ?>
+                      </div>
+                      <?php elseif ($question['type'] == "CHECKBOX"): ?>
+                      <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                            <?php foreach ($question['answers'] as $item => $answer): ?>
+                            <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" name="<?= $answer->id; ?>" id="<?= $answer->id; ?>"> <?= $answer->answer; ?>
+                                </label>
+                            </div>
+                            <?php endforeach; ?>
+                      </div>
+                      <?php elseif ($question['type'] == "TEXTINPUT"): ?>
+                      <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                            <textarea class="form-control" name="<?= $question->id; ?>" id="descr" rows="3"></textarea>
+                      </div>
+                      <?php elseif ($question['type'] == "LINEINPUT"): ?>
+                      <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" id="<?= $question['question']; ?>" name="<?= $question['question']; ?>" >
+                      </div>
+                      <?php elseif ($question['type'] == "DATEINPUT"): ?>
+                      <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                          <div class="input-group date">
+                            <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                          </div>
+                      </div>
+                      <?php endif; ?>
+                  </div>
+                <?php endforeach; ?>
+                  <div class="form-group">
+                    <div class="btn pull-right">
+                        <button type="submit" class="btn btn-default"><?= $this->lang['next']; ?></button>
+                    </div>
+                  </div>    
+                </form>
+                <?php else: ?>
+                    <p>
+                        <?= $this->lang['noquestions']; ?>
+                    </p>
+                <?php endif; ?>
+            </div>
+          </div>
+
+        </div>
+      </div>
+<script type="text/javascript">
+    $('.input-group.date').datepicker({});
+</script>

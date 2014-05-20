@@ -20,20 +20,6 @@ require_once(FRAMEWORK_PATH . 'Core_db.php');
 // application config and abstract classes
 require_once(APPLICATION_PATH . 'config.php');
 
-$available_langs = array('nl', 'fr', 'en');
-$default_lang = 'nl';
-//- language
-if (isset($_GET['lang'])){
-    // check if the language is one we support
-    if(in_array($_GET['lang'], $available_langs)){
-        $_SESSION['lang'] = $_GET['lang']; // Set session
-    } else {
-        $_SESSION['lang'] = $default_lang;
-    }
-} elseif (!isset($_SESSION['lang'])) {
-    $_SESSION['lang'] = $default_lang;
-}
-
 // initialising front controller
 $controller = new Controller();
 

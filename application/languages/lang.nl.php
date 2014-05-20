@@ -1,11 +1,11 @@
 <?php
 
 function getLang($controller){
-   
+    
     switch ($controller) {
       //login page
       case 'start':
-        $lang['start']      = 'Om te beginnen, voer hier uw naam in.';
+        $lang['start']      = 'Om te beginnen, kies rechtsboven uw taal en voer hier uw naam in.';
         $lang['loggedout']  = 'U bent uitgelogd.';
         $lang['firstname']  = 'Voornaam';
         $lang['lastname']   = 'Achternaam';
@@ -13,7 +13,20 @@ function getLang($controller){
         $lang['cancel']     = 'Annuleer';
         $lang['wrongname']  = 'Gelieve uw naam/voornaam correct in te geven.';
         $lang['accessdenied']='U hebt geen toegang tot deze pagina.';
+        $lang['picklist']   = 'Kies hieronder de vragenlijst die u wilt afnemen.';
+        $lang['page']       = 'Pagina';
+        //-- error messages displayed at start page
+        $lang['pagenotfound'] = 'Fout: Pagina niet gevonden. (of meerdere pagina\'s met zelfde nr.)';
+        $lang['noquestions']  = 'Geen vragen beschikbaar.';
+        $lang['next']         = 'Volgende';
         break;
+    
+      //survey pages 
+      case 'lists':
+          $lang['listnotfound'] = 'Fout: Vragenlijst niet gevonden.';
+          $lang['page']         = 'Pagina';
+          $lang['noquestions']  = 'Geen vragen beschikbaar.';
+          break;
     
       //admin page
       case 'admin':
@@ -78,7 +91,19 @@ function getLang($controller){
           $lang['erroraddinganswer'] = 'Fout bij het toevoegen van uw antwoord. Controleer uw parameters.';
           $lang['deletedanswer']    = 'Antwoord is verwijdert.';
           $lang['adminlangs']       = 'Talen';
-          break;    
+          $lang['deletedlang']      = 'Taal is verwijdert.';
+          $lang['addlang']          = 'Voeg taal toe';
+          $lang['nolangsyet']       = 'Er zitten nog geen talen in het systeem.';
+          $lang['addlang']          = 'Voeg taal toe';
+          $lang['flagcode']         = 'Taalcode voor vlaggetje';
+          $lang['flagcodedescr']    = 'Taalcode voor vlaggetje, dit bevindt zich in /img/flags/taalcode.png';
+          $lang['erroraddinglang']  = 'Fout bij het toevoegen van een Taal. Controleer uw parameters.';
+          $lang['addedlang']        = 'Taal is toegevoegd';
+          $lang['identifier']       = 'Identificatiecode';
+          $lang['identifierdescr']  = 'Identificatiecode van het antwoord.';
+          break;  
+      
+      default: error_log('Lang info not found for controller ' . $controller);
 
     }
     

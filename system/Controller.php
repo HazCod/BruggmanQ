@@ -10,6 +10,7 @@ class Controller
     private $controller = self::DEFAULT_CONTROLLER;
     private $action = self::DEFAULT_ACTION;
     private $params = array();
+    
     public function __construct()
     {
         $this->parseUri();
@@ -41,15 +42,13 @@ class Controller
         // the @-sign is used to supress errors when the function after it fails
         @list($controller, $action, $params) = explode("/", $path, 3);
         
-        if (isset($controller)) {
-            $this->setController($controller);
-        }
-        if (isset($action)) {
-            $this->setAction($action);
-        }
-        if (isset($params)) {
-            $this->setParams(explode("/", $params));
-        }
+        $this->setController($controller);
+            if (isset($action)) {
+                $this->setAction($action);
+                if (isset($params)) {
+                    $this->setParams(explode("/", $params));
+                }
+            }
     }
 
     private function setController($controller)

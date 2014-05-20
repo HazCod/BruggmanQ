@@ -7,7 +7,18 @@ class Menu_m extends Core_db
         $menuitems = array(
             array(
                 'link' => 'home/index',
-                'description' => $this->lang['start'],
+                'description' => 'Start',
+            ),
+        );
+        return $menuitems;
+    }
+    
+    public function getSurveyMenu($lang, $nr=1 )
+    {
+        $menuitems = array(
+            array(
+                'link' => 'lists/page/' . $nr,
+                'description' => $lang["page"] . ' ' . $nr,
             ),
         );
         return $menuitems;

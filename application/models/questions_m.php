@@ -8,16 +8,17 @@ class Questions_m extends Core_db
         $this->table = 'questions';
     }
     
-    public function addQuestion($question, $type, $optionlist, $nr, $page) {
-        $query = "INSERT INTO questions (id, question, type, optionlist, nr) VALUES ('', '$question', '$type', '$optionlist', '$nr');
+    public function addQuestion($question, $type, $nr, $page) {
+        $query = "INSERT INTO questions (id, question, type, nr) VALUES ('', '$question', '$type', '$nr');
                   INSERT INTO questionlists(page, question) VALUES ('$page', LAST_INSERT_ID());";
         $this->db->query($query);
     }
    
-    public function addQuestionlist($question, $page){
+    /**
         $query = "INSERT INTO questionlists (page, question) VALUES ('$page', '$question')";
         $this->db->query($query);
     }
+     */
     
     public function deleteQuestion($id) {
         $query = "DELETE FROM questions WHERE (id = '$id')";

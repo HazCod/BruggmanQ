@@ -1,11 +1,15 @@
 <?php
-    function getLanguages(){
-        return array("nl" => "Nederlands",
-                     "fr" => "Français",
-                     "en" => "English");
+    function getLangName($arr, $code){
+        $result = '';
+        for ($i=0; $i < $arr and $result == ''; $i++){
+            if ($arr[$i]->flag == $code){
+                $result = $arr[$i]->name;
+            }
+        }
+        return $result;
     }
 ?>
-    <div class="navbar navbar-default navbar-fixed-top">
+<div class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="<?= URL::base_uri();?>home"><img id="logo" src="<?= URL::base_uri(); ?>img/eye.png" />CHU Bruggman</a>
@@ -28,10 +32,10 @@
               <li><a href="<?= URL::base_uri(); ?>admin/index"><b>Administrator</b></a></li>
             <?php endif; ?>
             <li class="dropdown">
-              <a href="" class="dropdown-toggle" data-toggle="dropdown"><img alt="<?= $_SESSION['lang']; ?>" src="<?= URL::base_uri(); ?>img/flags/<?= $_SESSION['lang']; ?>.png" />&nbsp;<?php $langs = getLanguages(); echo $langs[$_SESSION['lang']]; ?><b class="caret"></b></a>
+              <a href="" class="dropdown-toggle" data-toggle="dropdown"><img alt="<?= $_SESSION['lang']; ?>" src="<?= URL::base_uri(); ?>img/flags/<?= $_SESSION['lang']; ?>.png" />&nbsp;<?= getLangName($this->langs, $_SESSION['lang']); ?><b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <?php foreach ($langs as $code => $lang): ?>
-                <li><a href="<?= URL::base_uri() . URL::getCurrentPath() . '?lang=' . $code; ?>"><img alt="<?= $lang ?>" src="<?= URL::base_uri(); ?>img/flags/<?= $code; ?>.png" />&nbsp;<?= $lang ?></a></li>
+                <?php foreach ($this->langs as $key => $lang): ?>
+                <li><a href="<?= URL::base_uri() . URL::getCurrentPath() . '?lang=' . $lang->flag; ?>"><img alt="<?= $lang->name; ?>" src="<?= URL::base_uri(); ?>img/flags/<?= $lang->flag; ?>.png" />&nbsp;<?= $lang->name; ?></a></li>
                 <?php endforeach; ?>
               </ul>
             </li>

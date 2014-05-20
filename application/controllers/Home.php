@@ -12,7 +12,10 @@ class Home extends Core_controller
             ->setPartial('flashmessage');
 
         $this->menu_m = Load::model('menu_m');
+        $this->langs_m = Load::model('langs_m');
+        $this->lists_m = Load::model('lists_m');
         $this->template->menuitems = $this->menu_m->getStartMenu();
+        $this->template->langs = $this->langs_m->getLangs();
 
         $this->template->setPagetitle('Bruggman');	
     }
@@ -22,7 +25,8 @@ class Home extends Core_controller
         if (isset($_SESSION['user'])) {
             //TODO: Write pickQuestionnaire 
             //$this->redirect('home/login');
-            $this->template->render('home/index');
+            $this->template->lists = $this->lists_m->getListsbyLang($_SESSION['lang']);
+            $this->template->render('home/lists');
         } else {
             $this->template->render('home/index');
         }
@@ -54,8 +58,10 @@ class Home extends Core_controller
     {
         unset($_SESSION['user']);
         unset($_SESSION['admin']);
+        unset($_SESSION['list']);
+        unset($_SESSION['page']);
         $this->setFlashmessage($this->lang['loggedout']);
-        $this->redirect("home/index");
+        $this->redirect("home");
     }
 
 

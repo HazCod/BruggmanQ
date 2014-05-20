@@ -12,6 +12,11 @@
                     <textarea class="form-control" name="descr" id="descr" rows="6" placeholder="<?= $this->lang['answerdescr']; ?>"><?php if ($this->formdata){ echo $this->formdata->descr; } ?></textarea>
                 </div><!-- /input-group -->
                 
+                <div class="form-group">
+                    <label for="code"><?= $this->lang['identifier']; ?></label>
+                    <input type="text" class="form-control" id="code" name="code" placeholder="<?= $this->lang['identifierdescr']; ?>" value="<?php if ($this->formdata){ echo $this->formdata->code; } ?>">
+                </div><!-- /input-group -->
+                
                 <div style="display:none;"> <!-- hidden textfield, generated automatically -->
                     <input type="text" id="nr" name="nr" value="<?= sizeof($this->answers); ?>" />
                 </div><!-- /input-group -->

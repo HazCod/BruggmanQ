@@ -8,8 +8,8 @@ class Answers_m extends Core_db
         $this->table = 'answers';
     }
     
-    public function addAnswer($answer, $question, $nr) {
-        $query = "INSERT INTO answers (id, answer, nr) VALUES ('', '$answer', '$nr');
+    public function addAnswer($answer, $question, $nr, $code) {
+        $query = "INSERT INTO answers (id, answer, nr, code) VALUES ('', '$answer', '$nr', '$code');
                   INSERT INTO answerlists(question, answer) VALUES ('$question', LAST_INSERT_ID());";
         $this->db->query($query);
     }
