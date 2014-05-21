@@ -5,7 +5,7 @@
         </div>
         <div class="row-fluid">
           <div class="span4">
-             <h2><?= $this->lang['managedata']; ?></h2>
+             <h2><?= $this->lang['datalist']; ?></h2>
              <table class="table table-hover">
               <?php if ($this->datas == false): ?>
               <p><?= $this->lang['nodatayet']; ?></p>
@@ -23,13 +23,6 @@
                   <?php foreach ($list as $property => $data): ?>
                   <td><?= $data ?></td>
                   <?php endforeach; ?>
-                  <td>
-                      <a href="<?= URL::base_uri(); ?>admin/data/<?= $list->id; ?>"><i class="glyphicon glyphicon-file"></i><?= $this->lang['view']; ?></a>
-                      &nbsp;
-                      <a href="<?= URL::base_uri(); ?>admin/data/<?= $list->id; ?>/delete" onclick="return confirm('Are you sure?')"><i class="glyphicon glyphicon-remove"></i><?= $this->lang['delete']; ?></a>
-                      &nbsp;
-                      <a href="<?= URL::base_uri(); ?>report/generate/<?= $list->id; ?>/<?= $this->langcode; ?>"><i class="glyphicon glyphicon-circle-arrow-down"></i><?= $this->lang['generatereport']; ?></a>
-                  </td>
                 </tr>
                 <?php endforeach; ?>
               </tbody>

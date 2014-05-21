@@ -80,13 +80,6 @@ function getLang($controller){
           $lang['type']         = 'Type';
           $lang['addanswer']    = 'Voeg antwoord toe';
           $lang['backtoquestion'] = 'Ga terug naar vraagnr. ';          
-          //- description of every type
-          $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
-          $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';
-          $lang['CHECKBOXdesc']  = 'Dit is een lijst van opties waar mensen geen of meerdere waardes kunnen uitkiezen.';
-          $lang['TEXTINPUTdesc']  = 'Een tekstveld waar mensen iets in kunnen invullen.';
-          $lang['DATEINPUTdesc']  = 'Een inputveld voor een datum.';
-          $lang['NUMBERINPUTdesc']  = 'Een inputveld voor een getal.';
           $lang['newanswer']    = 'Nieuw antwoord';
           $lang['answerdescr']   = 'Hier komt uw antwoord.';
           $lang['addedanswer']  = 'Uw antwoord is toegevoegd.';
@@ -104,6 +97,27 @@ function getLang($controller){
           $lang['identifier']       = 'Identificatiecode';
           $lang['identifierdescr']  = 'Identificatiecode van het antwoord.';
           $lang['extra']            = 'Extra parameters';
+          $lang['managedata']       = 'Beheer ingegeven data';
+          $lang['removeddata']      = 'Data van gebruiker is verwijdert.';
+          $lang['datalist']         = 'Datalijst van gebruiker';
+          $lang['view']             = 'Bekijk';
+          $lang['lastusers']        = 'Laatste gebruikers';
+          $lang['generatereport']   = 'Genereer Rapport';
+          $lang['datafile']         = 'Databestand (.RTF, .HTML of text)';
+          $lang['invalidfile']      = 'Ongeldig bestand! Moet text, HTML of RTF zijn.';
+          $lang['fileexistant']     = 'Bestand bestond al op de server en is verwijdert. Probeer nog eens.';
+          $lang['scripterror']      = 'Fout bij het uitvoeren van het Script in script/readout_data.py';
+          $lang['report']           = 'Uw Rapport';
+          $lang['reportgenerating'] = "Uw rapport wordt gegenereerd &amp; en gedownload in u webbrowser. Gelieve even te wachten...\nDe output wordt hieronder weergegeven.";
+          $lang['noparameter']      = 'Geen parameter meegegeven in de URL.';
+          $lang['generatereport']   = 'Rapport';
+           //- description of every type
+          $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
+          $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';
+          $lang['CHECKBOXdesc']  = 'Dit is een lijst van opties waar mensen geen of meerdere waardes kunnen uitkiezen.';
+          $lang['TEXTINPUTdesc']  = 'Een tekstveld waar mensen iets in kunnen invullen.';
+          $lang['DATEINPUTdesc']  = 'Een inputveld voor een datum.';
+          $lang['NUMBERINPUTdesc']  = 'Een inputveld voor een getal.';
           break;  
       
       default: error_log('Lang info not found for controller ' . $controller);

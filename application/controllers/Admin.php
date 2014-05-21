@@ -176,7 +176,7 @@
                             $this->template->render('admin/questions.add');
                         }
                     } else {
-                        $this->template->questions = $this->questions_m->getQuestions($list);
+                        $this->template->questions = $this->questions_m->getQuestions($page);
                         $this->template->types = $this->questions_m->getTypes();
                         $this->template->page = $page;
                         $this->template->render('admin/questions.add');
@@ -206,10 +206,19 @@
     {
         if ($this->checkPrivilege() == true){
             if (!$usr){
-                $this->template->data = $this->data_m->getAllData();
+                $this->template->datas = $this->data_m->getAllData();
+                $t = $this->data_m->getUserAnswers($usr);
+                $this->template->langcode = $t[0]->lang;         
                 $this->template->render('admin/data');
             } else {
-                
+                if ($command == 'delete'){
+                    $this->data_m->deleteUserData($usr);
+                    $this->setFlashmessage($this->lang['removeddata']);
+                    $this->redirect('admin/data');
+                } else {
+                    $this->template->datas = $this->data_m->getUserAnswers($usr);
+                    $this->template->render('admin/datalist');
+                }
             }
         }
     }

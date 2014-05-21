@@ -14,8 +14,9 @@ class Data_m extends Core_db
     }
     
     public function deleteUserData($id) {
-        $query = "DELETE FROM data WHERE (userid = ?);";
-        $this->db->query($query, $id);
+        $query = "DELETE FROM data WHERE (userid = ?);"
+                . "DELETE FROM users WHERE (id = ?);";
+        $this->db->query($query, array($id, $id));
     } 
     
     public function getUserByName($fullname){
@@ -60,8 +61,10 @@ class Data_m extends Core_db
         $result = false;
 
         $query = "
-            SELECT *
-            FROM data
+            SELECT u.date, u.firstname, u.lastname, u.id
+            FROM data d
+                INNER JOIN users u ON (d.userid = u.id)
+            GROUP BY u.date, u.firstname, u.lastname
             ORDER BY userid
         ";
 
@@ -71,6 +74,27 @@ class Data_m extends Core_db
             $result = $answers;
         }
 
+        return $result;
+    }
+    
+    public function getUserAnswers($userid)
+    {
+        $result = false;
+        $query = "SELECT 
+                    qq.nr as nr,
+                    (SELECT question FROM questions q WHERE (q.id = d.questionid)) AS question,
+                    CASE 
+                        WHEN (d.answerid = 0) THEN d.answer 
+                        ELSE (SELECT answer FROM answers a WHERE (a.id = d.answerid)) 
+                    END AS answer,
+                    (SELECT flag FROM langs la INNER JOIN lists li ON (li.language = la.id) INNER JOIN page p ON (p.questionlist = li.id) INNER JOIN questionlists ql ON (ql.page = p.id) WHERE (ql.question = qq.id)) AS lang
+                  FROM data d JOIN questions qq ON (qq.id = d.questionid)
+                  WHERE (d.userid = '?')
+                  ORDER BY qq.nr";
+        $answers = $this->db->query($query, $userid)->getResult();
+        if ($answers){
+            $result = $answers;
+        } 
         return $result;
     }
 	
