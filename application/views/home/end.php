@@ -13,7 +13,7 @@
             </div>
             <div class="well">
                 <p>
-                    <?= $this->lang['thankyou']; ?>
+                    <?= $this->lang['thankyou   ']; ?>
                 </p>
             </div>
           </div>

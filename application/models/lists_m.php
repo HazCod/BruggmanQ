@@ -107,21 +107,18 @@ class Lists_m extends Core_db
     }
     
     
-    public function getLastUsers( $limit=false )
+    public function getLastUsers( )
     {
         $result = false;
-        if ($limit == false){
-            $limit = 10;
-        }
         $query = "
             SELECT u.date, u.firstname, u.lastname, count(distinct page) as done
             FROM users u
                  LEFT OUTER JOIN data d ON (d.userid = u.id)
                  LEFT OUTER JOIN questionlists ql ON (ql.question = d.questionid)
-            LIMIT ?
+            LIMIT 10
         ";
 
-        $users = $this->db->query($query, $limit)->getResult();
+        $users = $this->db->query($query)->getResult();
 
         if ($users){
             $result = $users;

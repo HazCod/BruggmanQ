@@ -10,12 +10,12 @@ class Data_m extends Core_db
     
     public function addData($user, $question, $answerid, $customanswer) {
         $query = "INSERT INTO data (userid, questionid, answerid, answer) VALUES ('$user', '$question', '$answerid', '$customanswer');";
-        $this->db->query($query);
+        $this->db->query($query, array($user, $question, $answerid, $customanswer));
     }
     
     public function deleteUserData($id) {
-        $query = "DELETE FROM data WHERE (userid = '$id');";
-        $this->db->query($query);
+        $query = "DELETE FROM data WHERE (userid = ?);";
+        $this->db->query($query, $id);
     } 
     
     public function getUserByName($fullname){
@@ -60,7 +60,7 @@ class Data_m extends Core_db
         $result = false;
 
         $query = "
-            SELECT *c
+            SELECT *
             FROM data
             ORDER BY userid
         ";

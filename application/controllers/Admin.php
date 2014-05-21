@@ -40,7 +40,7 @@
     {
         if ($this->checkPrivilege() == true){
             $this->template->lists = $this->lists_m->getLists();
-            $this->template->lastusers = $this->lists_m->getLastUsers(10);
+            $this->template->lastusers = $this->lists_m->getLastUsers();
             $this->template->render('admin/index');
         }
     }

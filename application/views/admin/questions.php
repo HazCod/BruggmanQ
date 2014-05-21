@@ -42,11 +42,16 @@
                 <tr>
                   <?php foreach ($question as $property => $data): ?>
                   <td>
-                  <?php if ($property == 'type'): ?>
-                    <?= getTypeStr($this->types, $data); ?>
-                  <?php else: ?>
-                    <?= $data ?>
-                  <?php endif; ?>
+                  <?php 
+                    if ($property == 'type'){
+                          echo getTypeStr($this->types, $data); 
+                    } else { 
+                    if (strlen($data) > 60) {
+                       echo substr($data, 0, 60) . '..'; 
+                    } else {
+                        echo $data;
+                    }
+                     } ?>
                   </td>
                   <?php endforeach; ?>
                   <td>
