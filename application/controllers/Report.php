@@ -21,7 +21,7 @@
         $this->template->menuitems = $this->menu_m->getBeheerderMenu($this->lang);
         $this->template->langs = $this->langs_m->getLangs();
 		
-	$this->template->setPagetitle('Bruggman');
+	$this->template->setPagetitle('Brugmann');
     }
     
     function checkPrivilege()

@@ -6,45 +6,7 @@ class Lists_m extends Core_db
     {
         parent::__construct();
         $this->table = 'lists';
-    }
-    
-    public function movePageUp($pageid)
-    {
-        $queryGetUpperPage = "SELECT nr-1
-                              FROM pages
-                              WHERE (id = ?)";
-        $nrUpper = $this->db->query($queryGetUpperPage, $pageid)->getRow()->nr;
-        if ($nrUpper != false){
-            // Move the upper page down
-            $query2 = "UPDATE page SET nr = ('$nrUpper' - 1) WHERE (nr = '$nrUpper');";
-            $this->db->query($query2);
-            // Move this row up
-            $query1 = "UDPATE page SET nr = '$nrUpper' WHERE (id = '$pageid')";
-            $this->db->query($query1);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function movePageDown($pageid)
-    {
-        $querygetLowerPage = "SELECT nr+1
-                              FROM pages
-                              WHERE (id = ?)";
-        $nrLower = $this->db->query($querygetLowerPage, $pageid)->getRow()->nr;
-        if ($nrLower != false){
-            // Move the lower page up
-            $query2 = "UPDATE page SET nr = ('$nrLower' + 1) WHERE (nr = '$nrLower');";
-            $this->db->query($query2);
-            // Move this row down
-            $query1 = "UDPATE page SET nr = '$nrLower' WHERE (id = '$pageid')";
-            $this->db->query($query1);
-            return true;
-        } else {
-            return false;
-        }
-    }    
+    } 
     
     
     public function addList($name, $language) {

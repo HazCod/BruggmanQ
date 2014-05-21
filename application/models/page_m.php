@@ -38,6 +38,47 @@ class Page_m extends Core_db
         return $result;
     }
     
+    
+    public function movePageUp($pageid)
+    {
+        $result = false;
+        $queryGetUpperPage = "SELECT nr, id, questionlist
+                              FROM page
+                              WHERE (id = ?);";
+        $current = $this->db->query($queryGetUpperPage, $pageid)->getRow();
+        if ($current != false){
+            $q_other = "SELECT nr, id FROM page WHERE (questionlist = $current->questionlist) AND (nr = $current->nr - 1)";
+            $other= $this->db->query($q_other)->getRow();
+            if ($other){
+                $query = "UPDATE page SET nr = $current->nr WHERE (id = $other->id);
+                          UPDATE page SET nr = $other->nr WHERE (id = $current->id);";
+                $this->db->query($query);
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
+    public function movePageDown($pageid)
+    {
+        $result = false;
+        $queryGetUpperPage = "SELECT nr, id, questionlist
+                              FROM page
+                              WHERE (id = ?);";
+        $current = $this->db->query($queryGetUpperPage, $pageid)->getRow();
+        if ($current != false){
+            $q_other = "SELECT nr, id FROM page WHERE (questionlist = $current->questionlist) AND (nr = $current->nr + 1)";
+            $other= $this->db->query($q_other)->getRow();
+            if ($other){
+                $query = "UPDATE page SET nr = $current->nr WHERE (id = $other->id);
+                          UPDATE page SET nr = $other->nr WHERE (id = $current->id);";
+                $this->db->query($query);
+                $result = true;
+            }
+        }
+        return $result;
+    }   
+    
     public function getAmountOfPages($listid)
     {
         $result = false;

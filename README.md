@@ -1,6 +1,5 @@
 TODO:
 -------
-- Fix moving rows up and down
 - Fix/check multiple checkboxes
 - Add back button in questionlist
 - Add editing support

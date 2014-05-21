@@ -21,7 +21,7 @@
         $this->template->menuitems = $this->menu_m->getBeheerderMenu($this->lang);
         $this->template->langs = $this->langs_m->getLangs();
 		
-	$this->template->setPagetitle('Bruggman');
+	$this->template->setPagetitle('Brugmann');
     }
     
     function checkPrivilege()
@@ -136,10 +136,10 @@
                     $this->setFlashmessage($this->lang['deletedanswer']);
                     $this->redirect('admin/answers/' . $question);
                 } elseif ($command == 'up'){
-                    //TODO
+                    $this->answers_m->moveAnswerUp($par1);
                     $this->redirect('admin/answers/' . $question);
                 } elseif ($command == 'down'){
-                    //TODO
+                    $this->answers_m->moveAnswerDown($par1);
                     $this->redirect('admin/answers/' . $question);
                 }
             } else {
@@ -186,10 +186,10 @@
                     $this->setFlashmessage($this->lang['deletedquestion']);
                     $this->redirect('admin/questions/' . $page);
                 } elseif ($command == 'up'){
-                    //TODO
+                    $this->questions_m->moveQuestionUp($par1);
                     $this->redirect('admin/questions/' . $page);
                 } elseif ($command == 'down'){
-                    //TODO
+                    $this->questions_m->moveQuestionDown($par1);
                     $this->redirect('admin/questions/' . $page);
                 } else {
                     $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');

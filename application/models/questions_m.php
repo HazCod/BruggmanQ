@@ -101,6 +101,50 @@ class Questions_m extends Core_db
 
         return $result;
     }
+    
+    
+    
+        public function moveQuestionUp($pageid)
+    {
+        $result = false;
+        $queryGetUpperPage = "SELECT nr, id, ql.page
+                              FROM  questions
+                              INNER JOIN questionlists ql ON (id = ql.question)
+                              WHERE (id = ?);";
+        $current = $this->db->query($queryGetUpperPage, $pageid)->getRow();
+        if ($current != false){
+            $q_other = "SELECT nr, id FROM questions INNER JOIN questionlists ql ON (id = ql.question) WHERE (ql.page = $current->page) AND (nr = $current->nr - 1)";
+            $other= $this->db->query($q_other)->getRow();
+            if ($other){
+                $query = "UPDATE questions SET nr = $current->nr WHERE (id = $other->id);
+                          UPDATE questions SET nr = $other->nr WHERE (id = $current->id);";
+                $this->db->query($query);
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
+    public function moveQuestionDown($pageid)
+    {
+        $result = false;
+        $queryGetUpperPage = "SELECT nr, id, ql.page
+                              FROM  questions
+                              INNER JOIN questionlists ql ON (id = ql.question)
+                              WHERE (id = ?);";
+        $current = $this->db->query($queryGetUpperPage, $pageid)->getRow();
+        if ($current != false){
+            $q_other = "SELECT nr, id FROM questions INNER JOIN questionlists ql ON (id = ql.question) WHERE (ql.page = $current->page) AND (nr = $current->nr + 1)";
+            $other= $this->db->query($q_other)->getRow();
+            if ($other){
+                $query = "UPDATE questions SET nr = $current->nr WHERE (id = $other->id);
+                          UPDATE questions SET nr = $other->nr WHERE (id = $current->id);";
+                $this->db->query($query);
+                $result = true;
+            }
+        }
+        return $result;
+    } 
 	
 
 
