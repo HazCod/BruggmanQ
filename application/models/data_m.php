@@ -60,7 +60,7 @@ class Data_m extends Core_db
         $result = false;
 
         $query = "
-            SELECT *
+            SELECT *c
             FROM data
             ORDER BY userid
         ";

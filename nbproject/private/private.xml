@@ -3,16 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/answers_m.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/languages/lang.nl.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/controllers/Lists.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/questions.answers.add.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/data_m.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/pages.add.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/questions_m.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/lists_m.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/lists.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/answers_m.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/lists.add.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/languages/lang.nl.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/_layouts/default.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/controllers/Home.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/page_m.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/_partials/navbar.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/pages.add.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/models/lists_m.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/home/lists.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/lists/page.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/data.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/admin/questions.add.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/home/end.php</file>
             <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/controllers/Admin.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/Bruggman/application/views/home/lists.php</file>
         </group>
     </open-files>
 </project-private>

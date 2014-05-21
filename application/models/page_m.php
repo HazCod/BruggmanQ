@@ -9,13 +9,13 @@ class Page_m extends Core_db
     }
     
     public function addPage($list, $nr, $descr, $title) {
-        $query = "INSERT INTO page (id, questionlist, nr, descr, title) VALUES ('', '$list', '$nr', '$descr', '$title');";
-        $this->db->query($query);
+        $query = "INSERT INTO page (id, questionlist, nr, descr, title) VALUES ('', ?, ?, ?, ?);";
+        $this->db->query($query, array($list, $nr, $descr, $title));
     }
     
     public function deletePage($id) {
-        $query = "DELETE FROM page WHERE (id = '$id')";
-        $this->db->query($query);
+        $query = "DELETE FROM page WHERE (id = ?)";
+        $this->db->query($query, $id);
     }
 
     public function getPages($listid)
@@ -25,11 +25,11 @@ class Page_m extends Core_db
         $query = "
             SELECT *
             FROM page
-            WHERE (questionlist = '$listid')
+            WHERE (questionlist = ?)
             ORDER BY nr
         ";
 
-        $pages = $this->db->query($query)->getResult();
+        $pages = $this->db->query($query, $listid)->getResult();
 
         if ($pages){
             $result = $pages;
@@ -45,10 +45,10 @@ class Page_m extends Core_db
         $query = "
             SELECT count(id) AS pages
             FROM page
-            WHERE (questionlist = '$listid')
+            WHERE (questionlist = ?)
         ";
 
-        $pages = $this->db->query($query)->getRow();
+        $pages = $this->db->query($query, $listid)->getRow();
 
         if ($pages){
             $result = $pages;
@@ -64,10 +64,10 @@ class Page_m extends Core_db
         $query = "
             SELECT *
             FROM page
-            WHERE (questionlist = '$listid') AND (nr = '$nr');
+            WHERE (questionlist = ?) AND (nr = ?);
         ";
 
-        $page = $this->db->query($query)->getRow();
+        $page = $this->db->query($query, array($listid, $nr))->getRow();
 
         if ($page){
             $result = $page;

@@ -12,8 +12,8 @@ class Lists_m extends Core_db
     {
         $queryGetUpperPage = "SELECT nr-1
                               FROM pages
-                              WHERE (id = '$pageid')";
-        $nrUpper = $this->db->query($queryGetUpperPage)->getRow()->nr;
+                              WHERE (id = ?)";
+        $nrUpper = $this->db->query($queryGetUpperPage, $pageid)->getRow()->nr;
         if ($nrUpper != false){
             // Move the upper page down
             $query2 = "UPDATE page SET nr = ('$nrUpper' - 1) WHERE (nr = '$nrUpper');";
@@ -31,8 +31,8 @@ class Lists_m extends Core_db
     {
         $querygetLowerPage = "SELECT nr+1
                               FROM pages
-                              WHERE (id = '$pageid')";
-        $nrLower = $this->db->query($querygetLowerPage)->getRow()->nr;
+                              WHERE (id = ?)";
+        $nrLower = $this->db->query($querygetLowerPage, $pageid)->getRow()->nr;
         if ($nrLower != false){
             // Move the lower page up
             $query2 = "UPDATE page SET nr = ('$nrLower' + 1) WHERE (nr = '$nrLower');";
@@ -48,13 +48,13 @@ class Lists_m extends Core_db
     
     
     public function addList($name, $language) {
-        $query = "INSERT INTO lists (id, name, language) VALUES ('', '$name', '$language');";  
-        $this->db->query($query);
+        $query = "INSERT INTO lists (id, name, language) VALUES ('', ?, ?);";  
+        $this->db->query($query, array($name, $language));
     }
     
     public function deleteList($id) {
-        $query = "DELETE FROM lists WHERE (id = '$id');";
-        $this->db->query($query);
+        $query = "DELETE FROM lists WHERE (id = ?);";
+        $this->db->query($query, $id);
     }
 
     public function getLists()
@@ -79,8 +79,8 @@ class Lists_m extends Core_db
     public function getList( $nr )
     {
         $result = false;
-        $query = "SELECT * FROM lists WHERE (id = '$nr');";
-        $list = $this->db->query($query)->getRow();
+        $query = "SELECT * FROM lists WHERE (id = ?);";
+        $list = $this->db->query($query, $nr)->getRow();
         if ($list){
             $result = $list;
         }
@@ -94,10 +94,10 @@ class Lists_m extends Core_db
         $query = "
             SELECT li.id, li.name
             FROM lists li INNER JOIN langs la ON (li.language = la.id)
-            WHERE (la.flag = '$lang');
+            WHERE (la.flag = ?);
         ";
 
-        $lists = $this->db->query($query)->getResult();
+        $lists = $this->db->query($query, $lang)->getResult();
 
         if ($lists){
             $result = $lists;
@@ -114,12 +114,14 @@ class Lists_m extends Core_db
             $limit = 10;
         }
         $query = "
-            SELECT date, firstname, lastname
-            FROM users
-            LIMIT $limit
+            SELECT u.date, u.firstname, u.lastname, count(distinct page) as done
+            FROM users u
+                 LEFT OUTER JOIN data d ON (d.userid = u.id)
+                 LEFT OUTER JOIN questionlists ql ON (ql.question = d.questionid)
+            LIMIT ?
         ";
 
-        $users = $this->db->query($query)->getResult();
+        $users = $this->db->query($query, $limit)->getResult();
 
         if ($users){
             $result = $users;

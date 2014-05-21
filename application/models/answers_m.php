@@ -9,16 +9,16 @@ class Answers_m extends Core_db
     }
     
     public function addAnswer($answer, $question, $nr, $code) {
-        $query = "INSERT INTO answers (id, answer, nr, code) VALUES ('', '$answer', '$nr', '$code');
-                  INSERT INTO answerlists(question, answer) VALUES ('$question', LAST_INSERT_ID());";
-        $this->db->query($query);
+        $query = "INSERT INTO answers (id, answer, nr, code) VALUES ('', ?, ?, ?);
+                  INSERT INTO answerlists(question, answer) VALUES (?, LAST_INSERT_ID());";
+        $this->db->query($query, array($answer, $nr, $code, $question));
     }
     
     public function deleteAnswer($id) {
-        $query = "DELETE FROM answers WHERE (id = '$id');";
-        $this->db->query($query);
-        $query = "DELETE FROM answerlists WHERE (answer = '$id');";
-        $this->db->query($query);
+        $query = "DELETE FROM answers WHERE (id = ?);";
+        $this->db->query($query, $id);
+        $query = "DELETE FROM answerlists WHERE (answer = ?);";
+        $this->db->query($query, $id);
     }
     
     public function getAnswer($id) {
@@ -27,10 +27,10 @@ class Answers_m extends Core_db
         $query = "
             SELECT *
             FROM answers
-            WHERE (id = '$id');
+            WHERE (id = ?);
         ";
 
-        $answer = $this->db->query($query)->getRow();
+        $answer = $this->db->query($query, $id)->getRow();
 
         if ($answer){
             $result = $answer;
@@ -46,10 +46,10 @@ class Answers_m extends Core_db
         $query = "
             SELECT *
             FROM answerlists ql
-            WHERE (ql.question = '$questionid');
+            WHERE (ql.question = ?);
         ";
 
-        $list = $this->db->query($query)->getResult();
+        $list = $this->db->query($query, $questionid)->getResult();
 
         if ($list){
             $result = $list;
@@ -84,11 +84,11 @@ class Answers_m extends Core_db
             SELECT a.nr, a.id, a.answer
             FROM answerlists al
             INNER JOIN answers a ON (al.answer = a.id)
-            WHERE (al.question = '$questionid')
+            WHERE (al.question = ?)
             ORDER BY nr
         ";
 
-        $answers = $this->db->query($query)->getResult();
+        $answers = $this->db->query($query, $questionid)->getResult();
 
         if ($answers){
             $result = $answers;

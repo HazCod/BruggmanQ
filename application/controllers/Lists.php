@@ -115,14 +115,9 @@ class Lists extends Core_controller
                     $this->template->render('lists/page');
                 }
             } else {
-                if (isset($_SESSION['page'])){
-                    $this->setCurrentFlashmessage($this->lang['pagenotfound'], 'danger');
-                    $this->template->formdata = $formdata;
-                    $this->template->render('lists/page/' . $_SESSION['page']);
-                } else {
-                    $this->setFlashmessage($this->lang['pagenotfound'], 'danger');
-                    $this->redirect('home/index');
-                }
+                unset($_SESSION['list']);
+                $this->setFlashmessage($this->lang['pagenotfound'], 'danger');
+                $this->redirect('home/index');
             }
         } else {
             $this->redirect('home/index');
@@ -137,7 +132,7 @@ class Lists extends Core_controller
                 $_SESSION['list'] = $nr;
                 if (isset($_SESSION['currentpage'])){ //we have already done page(s)
                     $this->redirect('lists/page/' . $_SESSION['currentpage']);
-                } else { //first page
+                } else { //first pagesession_unset();
                     $this->redirect('lists/page');
                 }
             } else {

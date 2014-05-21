@@ -9,9 +9,9 @@ class Questions_m extends Core_db
     }
     
     public function addQuestion($question, $type, $nr, $extra, $page) {
-        $query = "INSERT INTO questions (id, question, type, nr, extra) VALUES ('', '$question', '$type', '$nr', '$extra');
-                  INSERT INTO questionlists(page, question) VALUES ('$page', LAST_INSERT_ID());";
-        $this->db->query($query);
+        $query = "INSERT INTO questions (id, question, type, nr, extra) VALUES ('', ?, ?, ?, ?);
+                  INSERT INTO questionlists(page, question) VALUES (?, LAST_INSERT_ID());";
+        $this->db->query($query, array($question, $type, $nr, $extra, $page));
     }
    
     /**
@@ -21,10 +21,10 @@ class Questions_m extends Core_db
      */
     
     public function deleteQuestion($id) {
-        $query = "DELETE FROM questions WHERE (id = '$id')";
-        $this->db->query($query);
-        $query = "DELETE FROM questionlists WHERE (question = '$id')";
-        $this->db->query($query);
+        $query = "DELETE FROM questions WHERE (id = ?)";
+        $this->db->query($query, $id);
+        $query = "DELETE FROM questionlists WHERE (question = ?)";
+        $this->db->query($query, $id);
     }
     
     public function getQuestion($id) {
@@ -33,10 +33,10 @@ class Questions_m extends Core_db
         $query = "
             SELECT *
             FROM questions
-            WHERE (id = '$id');
+            WHERE (id = ?);
         ";
 
-        $question = $this->db->query($query)->getRow();
+        $question = $this->db->query($query, $id)->getRow();
 
         if ($question){
             $result = $question;
@@ -69,10 +69,10 @@ class Questions_m extends Core_db
         $query = "
             SELECT *
             FROM questionlists ql
-            WHERE (ql.page = '$pageid')
+            WHERE (ql.page = ?)
         ";
 
-        $list = $this->db->query($query)->getResult();
+        $list = $this->db->query($query, $pageid)->getResult();
 
         if ($list){
             $result = $list;
@@ -89,11 +89,11 @@ class Questions_m extends Core_db
             SELECT page, q.nr, q.id, q.question, q.type, q.extra
             FROM questionlists ql
             INNER JOIN questions q ON (ql.question = q.id)
-            WHERE (ql.page = '$pageid')
+            WHERE (ql.page = ?)
             ORDER BY nr
         ";
 
-        $questions = $this->db->query($query)->getResult();
+        $questions = $this->db->query($query, $pageid)->getResult();
 
         if ($questions){
             $result = $questions;

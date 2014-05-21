@@ -8,13 +8,13 @@ class Langs_m extends Core_db
     }
     
     public function addLang($name, $flag) {
-        $query = "INSERT INTO langs (id, name, flag) VALUES ('', '$name', '$flag');";  
-        $this->db->query($query);
+        $query = "INSERT INTO langs (id, name, flag) VALUES ('', ?, ?);";  
+        $this->db->query($query, array($name, $flag));
     }
     
     public function deleteLang($id) {
-        $query = "DELETE FROM langs WHERE (id = '$id');";
-        $this->db->query($query);
+        $query = "DELETE FROM langs WHERE (id = ?);";
+        $this->db->query($query, $id);
     } 
     
     public function getLangs()
