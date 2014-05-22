@@ -16,7 +16,7 @@
                     </select>
                 </div>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="listname" name="listname" placeholder="<?= $this->lang['namenewlist']; ?>" value="<?= $this->formdata->listname; ?>">
+                    <input type="text" class="form-control" id="listname" name="listname" placeholder="<?= $this->lang['namenewlist']; ?>" value="<?php if($this->formdata){ echo $this->formdata->listname; } ?>">
                   <span class="input-group-btn">
                       <button class="btn btn-default" type="submit"><?= $this->lang['add']; ?></button>
                   </span>

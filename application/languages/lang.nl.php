@@ -111,6 +111,11 @@ function getLang($controller){
           $lang['reportgenerating'] = "Uw rapport wordt gegenereerd &amp; en gedownload in u webbrowser. Gelieve even te wachten...\nDe output wordt hieronder weergegeven.";
           $lang['noparameter']      = 'Geen parameter meegegeven in de URL.';
           $lang['generatereport']   = 'Rapport';
+          $lang['langs']            = 'Talen';
+          $lang['nodatayet']        = 'Nog geen data in het systeem';
+          $lang['name']             = 'Naam';
+          $lang['flagcodedescr']    = 'Tweecijferige code voor de taal. (bv. en, fr, nl, ..)';
+          $lang['language']         = 'Taal';
            //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';

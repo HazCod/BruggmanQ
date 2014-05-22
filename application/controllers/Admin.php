@@ -127,7 +127,7 @@
                             $this->template->render('admin/questions.answers.add');
                         }
                     } else {
-                        $this->template->question = $question;
+                        $this->template->question = $this->questions_m->getQuestion($question);
                         $this->template->answers = $this->answers_m->getAnswers($question);
                         $this->template->render('admin/questions.answers.add');
                     }
@@ -208,7 +208,11 @@
             if (!$usr){
                 $this->template->datas = $this->data_m->getAllData();
                 $t = $this->data_m->getUserAnswers($usr);
-                $this->template->langcode = $t[0]->lang;         
+                if (!$t){
+                    $this->template->langcode = 'nl';
+                } else {
+                    $this->template->langcode = $t[0]->lang;                 
+                }        
                 $this->template->render('admin/data');
             } else {
                 if ($command == 'delete'){
