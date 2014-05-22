@@ -159,6 +159,21 @@ CREATE TABLE IF NOT EXISTS `types` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
+--
+-- Gegevens worden uitgevoerd voor tabel `types`
+--
+
+INSERT INTO `types` (`id`, `type`, `answers_possible`) VALUES
+(1, 'MESSAGE', 0),
+(2, 'COMBOBOX', 1),
+(3, 'RADIOBOX', 1),
+(4, 'CHECKBOX', 1),
+(5, 'TEXTINPUT', 1),
+(6, 'DATEINPUT', 1),
+(7, 'NUMBERINPUT', 1),
+(8, 'TITLE', 0),
+(9, 'LINEINPUT', 0);
+
 -- --------------------------------------------------------
 
 --
