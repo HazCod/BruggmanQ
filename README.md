@@ -1,5 +1,6 @@
 TODO:
 -------
+- Fix/check delete page/list
 - Fix/check multiple checkboxes
 - Add back button in questionlist
 - Add editing support
