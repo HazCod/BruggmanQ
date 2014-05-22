@@ -168,9 +168,9 @@ INSERT INTO `types` (`id`, `type`, `answers_possible`) VALUES
 (2, 'COMBOBOX', 1),
 (3, 'RADIOBOX', 1),
 (4, 'CHECKBOX', 1),
-(5, 'TEXTINPUT', 1),
-(6, 'DATEINPUT', 1),
-(7, 'NUMBERINPUT', 1),
+(5, 'TEXTINPUT', 0),
+(6, 'DATEINPUT', 0),
+(7, 'NUMBERINPUT', 0),
 (8, 'TITLE', 0),
 (9, 'LINEINPUT', 0);
 
