@@ -102,22 +102,29 @@
                         }
 
                         if ($ok) {
+                            $datastr = '';
                             foreach ($files as $file){
-                                $datafile = "upload/" . $this->generateRandomString() . '.' .end(explode('.', $file['name']));
-                                move_uploaded_file($_FILES["file"]["tmp_name"], $datafile);
+                                $datafile = '/tmp/' . $this->generateRandomString() . '.' .end(explode('.', $file['name']));
+                                if (!move_uploaded_file($file["tmp_name"], $datafile)){
+                                    $ok = false;
+                                    error_log('could not move ' . $file['tmp_name'] . ' to ' . $datafile);
+                                }
+                                chmod($datafile, 0777);
+                                chown($datafile, 'nindustries');
                                 $datastr .= $datafile . ',';
-                            }
+                            }                            
                             $datastr = rtrim($datastr, ',');
                             if (!$language){
                                 $language = 'nl';
                             }
-                            $results = $this->generateRandomString(5) . '.docx';
-                            exec("scripts/readout_data.py --language $language --output $results $datastr", $output, $return_var);
                             
-                            if ($return_var != 0){
-                                $this->setFlashmessage($this->lang['scripterror'] . ' (' . $return_var . ')', 'danger');
+                           if ($ok == False){
+                                $this->setFlashmessage($this->lang['scripterror'], 'danger');
                                 $this->redirect('report/generate/' . $userid . '/' . $lang);
                             } else {
+                                $results = '/tmp/' . $this->generateRandomString(5) . '.docx';
+                                $this->template->cmd = "python2 scripts/readout_data.py --language $language --output $results $datastr";
+                                $output = shell_exec($this->template->cmd . ' 2>&1');
                                 $this->downloadFile($results);
                                 $this->template->output = $output;
                                 $this->template->render('report/result');
