@@ -1,0 +1,20 @@
+NAME	\| Patient name:  \| (.+)   \|	0	0	0
+FIRSTNAME	\| First name:  \| (.+)   \|	0	0	0
+TST	\| TST \| : \| (\d+(?:\.\d*\d*)*) min \|	0	300	0
+SLEEP_EFFICIENCY	\| Sleep efficiency 2 \| : (\d+(?:\.\d+)*)%       \|	0	0	0
+SOL	WK before sleep \| : \| (?:(\d+\.\d+)|\s+) min \|	0	0	0
+WASO	WK during sleep \| : \| (?:(\d+\.\d+)|\s+) min \|	0	0	0
+WK	WK after sleep \| : \| (?:(\d+\.\d+)|\s+) min \|	0	0	0
+N1_min	S1 \| (?:(\d+\.\d+)|\s+) \|	0	10	0
+N2_min	S2 \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+N3_min	S3 \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+N4_min	S4 \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+REM_FROM_LIGHT	REM \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+REM_FROM_SLEEP	REM \| (?:\d+\.\d+|\s+) \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+S3_EPISODES	\| S3         \| (\d+\.*\d*)	0	0	0
+S3_DURATION	\| S3         \| \d+\.*\d*    \| (\d+\.*\d*)   \|	0	0	0
+S3_TIB	\| S3         \| \d+\.*\d*    \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+S3_SPT	\| S3         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+S3_TST	\| S3         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+ALPHA_INDEX_S3S4	Alpha index \[S3\+S4\]  \(#/h\)(\d+\.*\d*)	0	0	0
+SWS_TIME	\| SWS time \| : \| (\d+\.*\d*) min	0	0	0
