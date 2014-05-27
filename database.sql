@@ -80,6 +80,17 @@ CREATE TABLE IF NOT EXISTS `langs` (
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
+--
+-- insert
+--
+
+INSERT INTO `langs` (`id`, `name`, `flag`) VALUES
+(1, 'Nederlands', 'nl'),
+(2, 'Français', 'fr'),
+(3, 'English', 'en');
+
+
+
 -- --------------------------------------------------------
 
 --
