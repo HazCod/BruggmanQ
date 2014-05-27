@@ -27,7 +27,7 @@
     function checkPrivilege()
     {
         if (!isset($_SESSION['admin'])){
-            unset($_SESSION['user']);
+            //unset($_SESSION['user']);
             $this->setFlashmessage($this->lang['accessdenied'], 'danger');
             $this->redirect('home/index');
             return false;
