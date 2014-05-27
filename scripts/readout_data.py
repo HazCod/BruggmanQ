@@ -36,7 +36,7 @@ norm_str = 'norm_'						#Standard deviation variable prefix
 debugging = True 						#set this to True for logging to logfile & printing to (terminal) screen
 logger = None	   						#ignore this.
 parameters_file = 'report_parameters'	#where are the parameters (& regexes) saved
-results_file = 'report_rawdata'			#temporary file to store our extracted data
+results_file = 'report_resultstemp'			#temporary file to store our extracted data
 template_file = 'report_template.docx'	#our template file
 final_file = 'report_result.docx'		#our final report file!
 templates_dir = 'templates/'			#templates directory
@@ -142,8 +142,9 @@ def readParameters(c):
 	f_result = None
 
 	try:
+		log("readParameters: " + os.getcwd() + parameters_file)
 		#Open the file using Unicode character set
-		f = codecs.open(parameters_file,"r",encoding="utf-8")
+		f = codecs.open(os.getcwd() + parameters_file,"r",encoding="utf-8")
 		parList = []
 		headers = []
 
@@ -154,7 +155,8 @@ def readParameters(c):
 				headers.append(par[1])
 			parList.append(par)
 	finally:
-		f.close()
+		if f is not None:
+			f.close()
 
 	#Check if the Excel files contains all needed columns
 	if os.path.isfile(spreadsheet_file):	
@@ -190,7 +192,8 @@ def readParameters(c):
 			else:
 				notfound(var_name)
 	finally:
-		f_result.close()
+		if f_result is not None:
+				f_result.close()
 
 	return data
 
@@ -409,6 +412,8 @@ def main(argv=None):
 		parser.add_argument("-l","--language", help="Language code to write our template in. (nl/fr)")
 		parser.add_argument("-e","--excel", help="Excel file to write our lines to. (.xls)")
 		parser.add_argument("-o", "--output", help="Output file to be saved. (.docx at the end)")
+		parser.add_argument("-p", "--parameters", help="Default file is report_parameters. Specify the parameters file with this.")
+		parser.add_argument("-r", "--raw", help="Where to store our temporary RAW datafile.")
 		args = parser.parse_args()
 		if (args.Datafile is not None):
 			datafile = args.Datafile.split(',')
@@ -419,6 +424,12 @@ def main(argv=None):
 			if (args.output is not None):
 				global final_file
 				final_file = args.output
+			if (args.parameters is not None):
+				global parameters_file
+				parameters_file = args.parameters
+			if (args.raw is not None):
+				global report_rawdata
+				results_file = args.raw
 		else:
 			raise Exception("Must provide an argument!")
 			Usage()
@@ -457,7 +468,7 @@ def main(argv=None):
 	writeParameters(data, i)
 	#lean up the mess
 	log("Removing " + results_file)
-	os.remove(results_file)
+	#os.remove(results_file)
 
 	if (0 != os.path.isfile(spreadsheet_file)):	
 		#adjust the spreadsheet
