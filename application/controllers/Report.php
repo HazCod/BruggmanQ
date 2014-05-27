@@ -123,10 +123,16 @@
                                 $this->redirect('report/generate/' . $userid . '/' . $lang);
                             } else {
                                 $results = '/tmp/' . $this->generateRandomString(5) . '.docx';
-                                $this->template->cmd = "python2 scripts/readout_data.py --language $language --output $results $datastr";
+                                //chdir(rtrim(dirname(__FILE__), 'application/controllers') . '/scripts/');
+                                $parameters = URL::base_uri() . 'scripts/report_parameters';
+                                $raw = "/tmp/" . $this->generateRandomString(8);
+                                $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --output $results --parameters $parameters --raw $raw $datastr";
                                 $output = shell_exec($this->template->cmd . ' 2>&1');
+                                //chdir(dirname(__FILE__));
+                                //var_dump(getcwd()); quit();
                                 $this->downloadFile($results);
                                 $this->template->output = $output;
+                                //var_dump(getcwd()); quit();
                                 $this->template->render('report/result');
                             }
                         } else {
