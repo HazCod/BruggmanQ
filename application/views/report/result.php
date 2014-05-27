@@ -12,8 +12,11 @@
           </div>
             <div class="well">
                 <p>
-                    <?= $this->output; ?>
+                    <?= $this->cmd; ?>
                 </p>
+                <pre>
+                    <?= $this->output; ?>
+                </pre>
             </div>
         </div>
       </div>

@@ -68,7 +68,7 @@ class Lists extends Core_controller
                             $ename = explode('_', $_SESSION['user']);
                             $this->data_m->addUser($ename[0], $ename[1]);
                             $user = $this->data_m->getUserByName($_SESSION['user']);
-                            $_SESSION['user'] = $user->id;
+                            //$_SESSION['user'] = $user->id;
                         }
                         $questions = $this->answers_m->getQuestionsWithAnswers();
                         foreach ($formdata as $q_id => $answer){

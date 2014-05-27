@@ -110,7 +110,7 @@
                                     error_log('could not move ' . $file['tmp_name'] . ' to ' . $datafile);
                                 }
                                 chmod($datafile, 0777);
-                                chown($datafile, 'nindustries');
+                                //chown($datafile, 'nindustries');
                                 $datastr .= $datafile . ',';
                             }                            
                             $datastr = rtrim($datastr, ',');
