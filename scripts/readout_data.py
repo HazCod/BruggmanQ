@@ -228,8 +228,10 @@ def writeParameters(data, i, template = None):
 	log(templateVars)
 	log(str(i) + ' nights')
 
+	log('Looking in ' + os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
 	found = False #template found?
-	for file in glob.glob(os.getcwd() + '/' + templates_dir + lang_dir + template_dir + str(i) + '/' + "word/*.xml"):
+	#WARNING!!!!! change /scripts/ to / for running it without BruggmanQ
+	for file in glob.glob(os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/' + "word/*.xml"):
 		found = True
 		contents = u''
 		bckp_contents = u''
@@ -284,10 +286,10 @@ def writeParameters(data, i, template = None):
 
 	if found == True:
 		#zip it back to a docx
-		log('Zipping report from template back to a docx; ' + os.getcwd() + '/' + templates_dir + lang_dir + template_dir + str(i) + '/')
+		log('Zipping report from template back to a docx; ' + os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
 		zipf = zipfile.ZipFile(final_file, "w", compression=zipfile.ZIP_DEFLATED )
 		try:
-			recursive_zip(zipf, os.getcwd() + '/' + templates_dir + lang_dir + template_dir + str(i) + '/')
+			recursive_zip(zipf, os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
 		finally:
 			zipf.close()
 

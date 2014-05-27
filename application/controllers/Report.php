@@ -53,24 +53,6 @@
 
         return $file_ary;
     }
-
-    
-    public function downloadFile($file)
-    {
-        if (file_exists($file)) {
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename='.basename($file));
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
-            ob_clean();
-            flush();
-            readfile($file);
-            exit;
-        }
-    }
     
     public function index()
     {
@@ -122,7 +104,7 @@
                                 $this->setFlashmessage($this->lang['scripterror'], 'danger');
                                 $this->redirect('report/generate/' . $userid . '/' . $lang);
                             } else {
-                                $results = '/tmp/' . $this->generateRandomString(5) . '.docx';
+                                $results = '/var/www/upload/report.docx';
                                 //chdir(rtrim(dirname(__FILE__), 'application/controllers') . '/scripts/');
                                 $parameters = URL::base_uri() . 'scripts/report_parameters';
                                 $raw = "/tmp/" . $this->generateRandomString(8);
@@ -130,7 +112,9 @@
                                 $output = shell_exec($this->template->cmd . ' 2>&1');
                                 //chdir(dirname(__FILE__));
                                 //var_dump(getcwd()); quit();
-                                $this->downloadFile($results);
+                                //rename($results, URL::base_uri() . 'upload/report.docx');
+                                $this->template->result = URL::base_uri() . 'upload/report.docx';
+                                $this->template->name = 'report.docx';
                                 $this->template->output = $output;
                                 //var_dump(getcwd()); quit();
                                 $this->template->render('report/result');
