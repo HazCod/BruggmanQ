@@ -1,5 +1,6 @@
 TODO:
 -------
+- Add Edit template
 - Fix/check delete page/list
 - Fix/check multiple checkboxes
 - Add back button in questionlist
