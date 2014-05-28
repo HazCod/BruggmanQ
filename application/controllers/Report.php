@@ -10,8 +10,6 @@
             ->setPartial('footer')
             ->setPartial('flashmessage');
         
-        $this->lists_m = Load::model('lists_m');
-        $this->page_m  = Load::model('page_m');
         $this->questions_m = Load::model('questions_m');
         $this->answers_m = Load::model('answers_m');
         $this->langs_m = Load::model('langs_m');
@@ -21,7 +19,7 @@
         $this->template->menuitems = $this->menu_m->getBeheerderMenu($this->lang);
         $this->template->langs = $this->langs_m->getLangs();
 		
-	$this->template->setPagetitle('Brugmann');
+	   $this->template->setPagetitle('Brugmann');
     }
     
     function checkPrivilege()
@@ -92,7 +90,6 @@
                                     error_log('could not move ' . $file['tmp_name'] . ' to ' . $datafile);
                                 }
                                 chmod($datafile, 0777);
-                                //chown($datafile, 'nindustries');
                                 $datastr .= $datafile . ',';
                             }                            
                             $datastr = rtrim($datastr, ',');
@@ -105,18 +102,26 @@
                                 $this->redirect('report/generate/' . $userid . '/' . $lang);
                             } else {
                                 $results = '/var/www/upload/report.docx';
-                                //chdir(rtrim(dirname(__FILE__), 'application/controllers') . '/scripts/');
+                                
                                 $parameters = URL::base_uri() . 'scripts/report_parameters';
                                 $raw = "/tmp/" . $this->generateRandomString(8);
-                                $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --output $results --parameters $parameters --raw $raw $datastr";
+
+                                $questionnaire = '/tmp/' . $this->generateRandomString(8);
+                                $q_data = $this->data_m->getUserAnswers($userid);
+                                
+                                $file = fopen($questionnaire, 'w');
+                                foreach ($q_data as $question)
+                                {
+                                    fwrite($file, $question->code . "\t" . $question->answer . "\n");
+                                }
+                                fclose($file);
+
+                                $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --questionnaire $questionnaire --output $results --parameters $parameters --raw $raw $datastr";
                                 $output = shell_exec($this->template->cmd . ' 2>&1');
-                                //chdir(dirname(__FILE__));
-                                //var_dump(getcwd()); quit();
-                                //rename($results, URL::base_uri() . 'upload/report.docx');
+
                                 $this->template->result = URL::base_uri() . 'upload/report.docx';
                                 $this->template->name = 'report.docx';
                                 $this->template->output = $output;
-                                //var_dump(getcwd()); quit();
                                 $this->template->render('report/result');
                             }
                         } else {

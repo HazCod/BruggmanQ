@@ -36,7 +36,7 @@ norm_str = 'norm_'						#Standard deviation variable prefix
 debugging = True 						#set this to True for logging to logfile & printing to (terminal) screen
 logger = None	   						#ignore this.
 parameters_file = 'report_parameters'	#where are the parameters (& regexes) saved
-results_file = 'report_resultstemp'		#temporary file to store our extracted data
+results_file = 'report_rawdata'			#temporary file to store our extracted data
 template_file = 'report_template.docx'	#our template file
 final_file = 'report_result.docx'		#our final report file!
 templates_dir = 'templates/'			#templates directory
@@ -47,8 +47,6 @@ spreadsheet_file = 'Excel template.xls'	#where to write our Excel lines
 sheet_index = 0 						#number of the sheet to write to in our Excel workbook
 contents = None 						#leave this to None
 lang_dir = 'nl/' 						#language defaults to nl (=Dutch)
-questionnaire = None 					#datafile where questionnaire data is stored (if not None)
-ql_prefix = 'QL_'						#prefix for the questionnaire variables
 #==
 
 def log( logmsg ):
@@ -90,11 +88,7 @@ def convertFile( wfile, type='rtf' ):
 	if (wfile.endswith("." + type)):
 		cmd = docfraq + " --from-" + type + " " + wfile + " --to-text " + wfile.rstrip('.' + type)
 		log("Converting; " + cmd)
-		r = os.system(cmd + ' 2>&1')
-		if (r != 0):
-			log("Warning, Convertion result is: " + str(r))
-		else:
-			log('Convertion successful!')
+		os.system(cmd)
 	else:
 		log("Can only accept RTF or HTML files as input..quitting..")
 		quit()
@@ -144,21 +138,19 @@ def readParameters(c):
 	f_result = None
 
 	try:
-		log("readParameters: " + os.getcwd() + parameters_file)
 		#Open the file using Unicode character set
-		f = codecs.open(os.getcwd() + parameters_file,"r",encoding="utf-8")
+		f = codecs.open(parameters_file,"r",encoding="utf-8")
 		parList = []
 		headers = []
 
 		for line in nonblank_lines(f):
-			par = line.split('\t') #seperated by tabs
+			par = line.split("\t") #seperated by tabs
 			#If addToExcel = 1, add it to our headers list to check.
 			if (par[-1] == '1'):
 				headers.append(par[1])
 			parList.append(par)
 	finally:
-		if f is not None:
-			f.close()
+		f.close()
 
 	#Check if the Excel files contains all needed columns
 	if os.path.isfile(spreadsheet_file):	
@@ -194,8 +186,7 @@ def readParameters(c):
 			else:
 				notfound(var_name)
 	finally:
-		if f_result is not None:
-				f_result.close()
+		f_result.close()
 
 	return data
 
@@ -218,13 +209,10 @@ def writeParameters(data, i, template = None):
 
 	global lang_dir
 	templateVars = {}
-
-	data = addQuestionnaire(data)
-
 	for x in range(0,i):
 		for key in data[x].keys():
-			if (norm_str in key) or (standarddev_str in key) or (ql_prefix in key):
-				templateVars[key] = data[x][key] #Dont add the number of the night when it's a norm, stddev or questionnaire data.
+			if (norm_str in key) or (standarddev_str in key):
+				templateVars[key] = data[x][key] #Dont add the number of the night when it's a norm or stddev.
 			else:
 				templateVars[key + '_' + str(x+1)] = data[x][key]
 		#templateVars['LANGUAGE'] = language
@@ -233,10 +221,8 @@ def writeParameters(data, i, template = None):
 	log(templateVars)
 	log(str(i) + ' nights')
 
-	log('Looking in ' + os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
 	found = False #template found?
-	#WARNING!!!!! change /scripts/ to / for running it without BruggmanQ
-	for file in glob.glob(os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/' + "word/*.xml"):
+	for file in glob.glob(os.getcwd() + '/' + templates_dir + lang_dir + template_dir + str(i) + '/' + "word/*.xml"):
 		found = True
 		contents = u''
 		bckp_contents = u''
@@ -291,10 +277,10 @@ def writeParameters(data, i, template = None):
 
 	if found == True:
 		#zip it back to a docx
-		log('Zipping report from template back to a docx; ' + os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
+		log('Zipping report from template back to a docx; ' + os.getcwd() + '/' + templates_dir + lang_dir + template_dir + str(i) + '/')
 		zipf = zipfile.ZipFile(final_file, "w", compression=zipfile.ZIP_DEFLATED )
 		try:
-			recursive_zip(zipf, os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
+			recursive_zip(zipf, os.getcwd() + '/' + templates_dir + lang_dir + template_dir + str(i) + '/')
 		finally:
 			zipf.close()
 
@@ -387,25 +373,6 @@ def updateSpreadsheet( data ):
 		os.remove(spreadsheet_file.rstrip("xls") + "_new.xls")
 
 
-def addQuestionnaire( data ):
-	# add questionnaire data
-	data_t = data[0]
-	global questionnaire
-	if questionnaire is not None:
-		log('Questionnaire set! File: ' + questionnaire)
-		content = openFile(questionnaire)
-		contents = content.split("\n") 
-		for line in contents:
-			if (len(line) > 1):
-				parts = line.split("\t")
-				if (len(parts) == 2):
-					data_t[parts[0]] = parts[1]
-					log('QL; ' + parts[0] + ' : ' + parts[1])
-				else:
-					log("Notice: bad line in questionnaire file; " + line)
-	data[0] = data_t 
-	return data
-
 def processData( data ):
 	# e.g.: if (data[x]['nom'] == 'bla'): ...
 	log('-- ProcessData')
@@ -438,9 +405,6 @@ def main(argv=None):
 		parser.add_argument("-l","--language", help="Language code to write our template in. (nl/fr)")
 		parser.add_argument("-e","--excel", help="Excel file to write our lines to. (.xls)")
 		parser.add_argument("-o", "--output", help="Output file to be saved. (.docx at the end)")
-		parser.add_argument("-p", "--parameters", help="Default file is report_parameters. Specify the parameters file with this.")
-		parser.add_argument("-r", "--raw", help="Where to store our temporary RAW datafile with the extracted results.")
-		parser.add_argument("-q", "--questionnaire", help="Extra datafile for parameters, each line; VARIABLE _TAB_ VALUE")
 		args = parser.parse_args()
 		if (args.Datafile is not None):
 			datafile = args.Datafile.split(',')
@@ -451,15 +415,6 @@ def main(argv=None):
 			if (args.output is not None):
 				global final_file
 				final_file = args.output
-			if (args.parameters is not None):
-				global parameters_file
-				parameters_file = args.parameters
-			if (args.raw is not None):
-				global report_rawdata
-				results_file = args.raw
-			if (args.questionnaire):
-				global questionnaire
-				questionnaire = args.questionnaire
 		else:
 			raise Exception("Must provide an argument!")
 			Usage()
@@ -498,7 +453,7 @@ def main(argv=None):
 	writeParameters(data, i)
 	#lean up the mess
 	log("Removing " + results_file)
-	#os.remove(results_file)
+	os.remove(results_file)
 
 	if (0 != os.path.isfile(spreadsheet_file)):	
 		#adjust the spreadsheet

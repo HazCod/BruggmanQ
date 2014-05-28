@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <?php $this->renderPartial('headermeta'); ?>
-        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="<?= URL::base_uri(); ?>js/jquery.js"></script>
         <script src="<?= URL::base_uri(); ?>js/bootstrap.min.js"></script>
         <script src="<?= URL::base_uri(); ?>js/bootswatch.js"></script>
         <script src="<?= URL::base_uri(); ?>js/bootstrap-datepicker.js"></script>

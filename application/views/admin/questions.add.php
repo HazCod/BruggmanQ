@@ -19,6 +19,11 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="code"><?= $this->lang['code']; ?></label>
+                    <input type="text" id="code" name="code" value="QL_" />
+                </div>
                 
                 <div class="form-group">
                     <label for="type"><?= $this->lang['extra']; ?></label>

@@ -89,10 +89,9 @@ class Data_m extends Core_db
                     END AS answer,
                     (SELECT flag FROM langs la INNER JOIN lists li ON (li.language = la.id) INNER JOIN page p ON (p.questionlist = li.id) INNER JOIN questionlists ql ON (ql.page = p.id) WHERE (ql.question = qq.id)) AS lang
                   FROM data d JOIN questions qq ON (qq.id = d.questionid)
-                  WHERE (d.userid = '$userid')
+                  WHERE (d.userid = '?')
                   ORDER BY qq.nr";
-        $answers = $this->db->query($query)->getResult();
-
+        $answers = $this->db->query($query, $userid)->getResult();
         if ($answers){
             $result = $answers;
         } 

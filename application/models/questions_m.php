@@ -8,10 +8,10 @@ class Questions_m extends Core_db
         $this->table = 'questions';
     }
     
-    public function addQuestion($question, $type, $nr, $extra, $page) {
-        $query = "INSERT INTO questions (id, question, type, nr, extra) VALUES ('', ?, ?, ?, ?);
+    public function addQuestion($question, $type, $nr, $extra, $code, $page) {
+        $query = "INSERT INTO questions (id, question, type, nr, extra, code) VALUES ('', ?, ?, ?, ?, ?);
                   INSERT INTO questionlists(page, question) VALUES (?, LAST_INSERT_ID());";
-        $this->db->query($query, array($question, $type, $nr, $extra, $page));
+        $this->db->query($query, array($question, $type, $nr, $extra, $code, $page));
     }
    
     /**

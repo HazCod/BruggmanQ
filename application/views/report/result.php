@@ -1,12 +1,3 @@
-<script type="text/javascript">
-function downloadURI() 
-{
-    var link = document.createElement("a");
-    link.download = '<?= $this->name; ?>';
-    link.href = '<?= $this->result; ?>';
-    link.click();
-}
-</script>
 <br>
 <div class="bs-docs-section">
         <div class="row">
@@ -20,7 +11,9 @@ function downloadURI()
               </p>
           </div>
             <div class="well">
-                <button type="button" class="btn btn-primary" onClick="downloadURI()">Download Report</button>
+              <form action="<?= $this->result; ?>">
+                <button type="submit" id="downloadlink" class="btn btn-primary">Download Report</button>
+              </form>
                 <pre>
                     <strong><?= $this->cmd; ?></strong>
                     <br>
