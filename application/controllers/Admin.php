@@ -63,6 +63,57 @@
         }
     }
     
+        
+    function generateRandomString($length = 10) {
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+    }
+    
+    
+    public function templates($templ=false, $lang=false, $action=false)
+    {
+        if ($this->checkPrivilege()){
+            if (!$templ or $templ == false){
+                $files = array_diff(scandir('/var/www/scripts/templates'), array('..', '.'));
+                $entries = array();
+                foreach ($files as $entry){
+                    $entry = '/var/www/scripts/templates/' . $entry;
+                    if (is_dir($entry)){
+                        $langs = array_diff(scandir($entry), array('..', '.'));
+                        $lentries = array();
+                        foreach ($lentries as $lentry){
+                            $lentry = '/var/www/scripts/templates/' . $lentry;
+                            if (is_dir($lentry)){
+                                $langs[] = $lentry;
+                            }
+                        }
+                        $entries[] = array( end((explode('/', $entry))) , $langs );
+                    }
+                }
+                $this->template->templates = $entries;
+                $this->template->render('admin/templates');
+            } elseif ($templ != false and $lang != false and $action != false) {
+                if ($action == 'download'){
+                    
+                    $result = '';
+                            
+                    $output = shell_exec("python2 scripts/manage_templates.py assemble /var/www/scripts/templates/$templ/$lang/". ' 2>&1');
+                    
+                    $file = "http://example.com/go.exe"; 
+
+                    header("Content-Description: File Transfer"); 
+                    header("Content-Type: application/octet-stream"); 
+                    header("Content-Disposition: attachment; filename=\"$file\""); 
+
+                    readfile ($file); 
+
+                }
+            } else {
+                $this->setCurrentFlashmessage('No action, lang or template in URL.', 'danger');
+                $this->template->render('admin/templates');
+            }
+        }
+    }
+    
     
     public function langs($command=false, $par1=false)
     {

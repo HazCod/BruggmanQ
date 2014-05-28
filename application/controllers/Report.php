@@ -99,7 +99,7 @@
                             
                            if ($ok == False){
                                 $this->setFlashmessage($this->lang['scripterror'], 'danger');
-                                $this->redirect('report/generate/' . $userid . '/' . $lang);
+                                $this->redirect('report/generate/' . $userid . '/' . $language);
                             } else {
                                 $results = '/var/www/upload/report.docx';
                                 
@@ -124,12 +124,12 @@
                                 $this->template->output = $output;
                                 
                                 //- Cleanup
-                                delete($raw);
+                                /** delete($raw);
                                 delete($questionnaire);
                                 $files = explode(',', $datastr);
                                 foreach ($datastr as $file){
                                     delete($file);
-                                }
+                                }**/
                                 
                                 $this->template->render('report/result');
                             }

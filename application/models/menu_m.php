@@ -31,18 +31,22 @@ class Menu_m extends Core_db
                 'link' => 'admin/index',
                 'description' => $lang['adminindex'],
             ),            
-			array(
+            array(
                 'link' => 'admin/lists',
                 'description' => $lang['adminlists'],
             ),
-			array(
-                'link' => 'admin/langs',
-                'description' => $lang['adminlangs'],
-            ),
-			array(
+            array(
                 'link' => 'admin/data',
                 'description' => $lang['admindata'],
             ),
+            array(
+                'link' => 'admin/langs',
+                'description' => $lang['adminlangs'],
+            ),
+            array(
+                'link' => 'admin/templates',
+                'description' => 'Templates'
+            )
         );
         return $menuitems;
     }

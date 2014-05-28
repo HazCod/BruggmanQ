@@ -12,7 +12,6 @@ function getLang($controller){
         $lang['submit']     = 'Ga Verder';
         $lang['cancel']     = 'Annuleer';
         $lang['wrongname']  = 'Gelieve uw naam/voornaam correct in te geven.';
-        $lang['accessdenied']='U hebt geen toegang tot deze pagina.';
         $lang['picklist']   = 'Kies hieronder de vragenlijst die u wilt afnemen.';
         $lang['page']       = 'Pagina';
         //-- error messages displayed at start page
@@ -32,6 +31,7 @@ function getLang($controller){
     
       //admin page
       case 'admin':
+          $lang['accessdenied']='U hebt geen toegang tot deze pagina.';
           $lang['adminindex']   = 'Overzicht';
           $lang['adminlists']   = 'Beheer vragenlijsten';
           $lang['admindata']    = 'Beheer data';
@@ -116,6 +116,7 @@ function getLang($controller){
           $lang['name']             = 'Naam';
           $lang['flagcodedescr']    = 'Tweecijferige code voor de taal. (bv. en, fr, nl, ..)';
           $lang['language']         = 'Taal';
+          $lang['notemplates']      = 'Geen templates gevonden in scripts/templates !!';
            //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';
