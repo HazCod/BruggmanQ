@@ -122,6 +122,15 @@
                                 $this->template->result = URL::base_uri() . 'upload/report.docx';
                                 $this->template->name = 'report.docx';
                                 $this->template->output = $output;
+                                
+                                //- Cleanup
+                                delete($raw);
+                                delete($questionnaire);
+                                $files = explode(',', $datastr);
+                                foreach ($datastr as $file){
+                                    delete($file);
+                                }
+                                
                                 $this->template->render('report/result');
                             }
                         } else {
