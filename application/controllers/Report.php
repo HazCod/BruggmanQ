@@ -66,6 +66,7 @@
         if ($this->checkPrivilege()){
             if ($userid){
                 if ($_POST){
+                    $template = $this->form->getPost('template');
                     if (isset($_FILES['files'])){                
                         $files = $this->reArrayFiles($_FILES['files']);
                         $allowedExts = array("html", "txt", "rtf");
@@ -97,7 +98,7 @@
                                 $language = 'nl';
                             }
                             
-                           if ($ok == False){
+                           if ($ok == False or $template == false){
                                 $this->setFlashmessage($this->lang['scripterror'], 'danger');
                                 $this->redirect('report/generate/' . $userid . '/' . $language);
                             } else {
@@ -116,7 +117,7 @@
                                 }
                                 fclose($file);
 
-                                $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --questionnaire $questionnaire --output $results --parameters $parameters --raw $raw $datastr";
+                                $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --questionnaire $questionnaire --output $results --parameters $parameters --raw $raw $template $datastr";
                                 $output = shell_exec($this->template->cmd . ' 2>&1');
 
                                 $this->template->result = URL::base_uri() . 'upload/report.docx';

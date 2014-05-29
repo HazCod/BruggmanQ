@@ -67,9 +67,32 @@
     function generateRandomString($length = 10) {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
     }
+ 
+    function deleteDirectory($dir) {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+
+        }
+
+        return rmdir($dir);
+    }
+
     
-    
-    public function templates($templ=false, $lang=false, $action=false)
+    public function templates($templ=false, $lang=false, $command=false, $nights=1)
     {
         if ($this->checkPrivilege()){
             if (!$templ or $templ == false){
@@ -91,25 +114,74 @@
                 }
                 $this->template->templates = $entries;
                 $this->template->render('admin/templates');
-            } elseif ($templ != false and $lang != false and $action != false) {
-                if ($action == 'download'){
-                    
-                    $result = '';
-                            
-                    $output = shell_exec("python2 scripts/manage_templates.py assemble /var/www/scripts/templates/$templ/$lang/". ' 2>&1');
-                    
-                    $file = "http://example.com/go.exe"; 
-
+            } elseif ($templ != false and $lang != false and $command != false) {
+                if ($command == 'download' and intval($nights) == $nights){
+                    $output = shell_exec("sudo python2 scripts/manage_templates.py assemble /var/www/scripts/templates/$templ/$lang/template_$nights -l $lang -o /var/www/upload/template_$nights.docx". ' 2>&1');
+                    $file = "/var/www/upload/template_$nights.docx";
                     header("Content-Description: File Transfer"); 
                     header("Content-Type: application/octet-stream"); 
-                    header("Content-Disposition: attachment; filename=\"$file\""); 
-
+                    header("Content-Disposition: attachment; filename=\"$templ" . "_$lang" . "_$nights.docx\""); 
                     readfile ($file); 
+                } elseif ($command == 'delete'){
+                    $output = $this->deleteDirectory("/var/www/scripts/templates/$templ");
+                    $this->setFlashmessage($this->lang['templateremoved'] . ' (' . $output . ')');
+                    $this->redirect('admin/templates');
+                } elseif ($command == 'add'){
+                    if ($_POST){
+                        $name = $this->form->getPost('name');
+                        $ok = true;
+                        foreach ($this->template->langs as $key => $lang){
+                            if (!isset($_FILES["file_$lang->flag"])){
+                                $ok = false;
+                            }
+                        }
+                        if (strlen($name) >1 and $ok == true){
+                            $allowedExts = array("docx");
 
+                            $error = 0;
+                            foreach ($_FILES as $file){
+                                $temp = explode(".", $file['name']);
+                                $ext = end($temp);
+                                if (!in_array($ext, $allowedExts)){
+                                    $ok = false;
+                                }
+                            }
+                            if ($ok == true){
+                                mkdir("/var/www/scripts/templates/$name");
+                                chmod("/var/www/scripts/templates/$name", 0777);
+                                foreach ($_FILES as $key => $file){
+                                    $lang = substr($key, 5);
+                                    $tempfile = "/var/www/scripts/templates/$name/$lang.docx";
+                                    if (!move_uploaded_file($file['tmp_name'], $tempfile)){
+                                        error_log('could not move ' . $file['tmp_name'] . ' to ' . $tempfile);
+                                    }
+                                    chmod($tempfile, 0777);
+                                    mkdir("/var/www/scripts/templates/$name/$lang/template_$nights");
+                                    chmod("/var/www/scripts/templates/$name/$lang/template_$nights", 0777);
+                                    $dir = pathinfo($tempfile)['dirname'] . "/$lang";
+                                    $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
+                                    delete($tempfile);
+                                    $this->setCurrentFlashmessage($this->lang['addedtemplate']);
+                                    $this->template->render('admin/templates');
+                                }
+                            } else {
+                                $this->setCurrentFlashmessage($this->lang['templatefileerror'], 'danger');
+                                $this->template->render('admin/templates.add'); 
+                            }
+                        } else {
+                            $this->setCurrentFlashmessage($this->lang['templateadderror'], 'danger');
+                            $this->template->render('admin/templates.add');
+                        }             
+                    } else {
+                        $this->template->render('admin/templates.add');
+                    }
+                } else {
+                    $this->setFlashmessage("Invalid URL: $templ/$lang/$command/$nights", 'danger');
+                    $this->redirect('admin/templates');                   
                 }
             } else {
-                $this->setCurrentFlashmessage('No action, lang or template in URL.', 'danger');
-                $this->template->render('admin/templates');
+                $this->setFlashmessage('No action, lang or template in URL.', 'danger');
+                $this->redirect('admin/templates');
             }
         }
     }

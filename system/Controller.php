@@ -13,8 +13,7 @@ class Controller
     
     public function __construct()
     {
-        $this->parseUri();
-        
+        $this->parseUri(); 
     }
 
     private function parseUri()
@@ -41,7 +40,10 @@ class Controller
         // explode the $path into three parts to get the controller, action and parameters
         // the @-sign is used to supress errors when the function after it fails
         @list($controller, $action, $params) = explode("/", $path, 3);
-        
+        /**
+        if ($controller == 'css' or $controller == 'js' or $controller == 'fonts' or $controller = 'img'){
+            exit;
+        } **/
         $this->setController($controller);
             if (isset($action)) {
                 $this->setAction($action);

@@ -67,9 +67,10 @@ class Usage(Exception):
 
 def main(argv=None):
 # main : This is ran when you start the script.
+	global language
+	global report_file
 	datafile = None
 	command = "assemble"
-	language = "nl"
 
 	#Commandline parameter handling
 	if argv is None:
@@ -81,8 +82,7 @@ def main(argv=None):
 		args = parser.parse_args()
 		if (args.template is not None):
 			datafile = args.template
-			if (args.output is not None):
-				global report_file
+			if (args.output is not None):	
 				report_file = args.output
 			if (args.command is not None):
 				command = args.command
@@ -98,8 +98,10 @@ def main(argv=None):
 
 	if (command == 'extract'):
 		extractFile(datafile, report_file)
-	else:
+	elif (command == 'assemble'):
 		assembleFile(datafile, report_file)
+	else:
+		print "Not a valid command! Quitting.."
 
 
 #==========================#

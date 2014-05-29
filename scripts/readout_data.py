@@ -39,6 +39,7 @@ parameters_file = 'report_parameters'	#where are the parameters (& regexes) save
 results_file = 'report_resultstemp'		#temporary file to store our extracted data
 template_file = 'report_template.docx'	#our template file
 final_file = 'report_result.docx'		#our final report file!
+template = 'Alice/'						#the used template
 templates_dir = 'templates/'			#templates directory
 template_dir = 'template_'				#directory name where our template resides
 log_file = 'readout_log'				#if debugging is set to True, this is where our logs are stored
@@ -211,12 +212,13 @@ def html_decode(s):
 # html_decode : Turns <, > and == html entitites into special characters. Ugly approach, but it works.
 	return s.replace('&lt;','<').replace('&gt;','>').replace('&equiv;','=')
 
-def writeParameters(data, i, template = None):
+def writeParameters(data, i):
 # writeParameters : Extracts the template, replaces the values and zips it back into a docx file.
 	global template_dir
 	single = False
 
 	global lang_dir
+	global template
 	templateVars = {}
 
 	data = addQuestionnaire(data)
@@ -233,10 +235,10 @@ def writeParameters(data, i, template = None):
 	log(templateVars)
 	log(str(i) + ' nights')
 
-	log('Looking in ' + os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
+	log('Looking in ' + os.getcwd() + '/scripts/' + templates_dir + template + lang_dir + template_dir + str(i) + '/')
 	found = False #template found?
 	#WARNING!!!!! change /scripts/ to / for running it without BruggmanQ
-	for file in glob.glob(os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/' + "word/*.xml"):
+	for file in glob.glob(os.getcwd() + '/scripts/' + templates_dir + template + lang_dir + template_dir + str(i) + '/' + "word/*.xml"):
 		found = True
 		contents = u''
 		bckp_contents = u''
@@ -271,8 +273,8 @@ def writeParameters(data, i, template = None):
 			#template stuff
 			templateLoader = jinja2.FileSystemLoader( searchpath='/')
 			templateEnv = jinja2.Environment( undefined=SilentUndefined, loader=templateLoader )
-			template = templateEnv.get_template( file )
-			contents = template.render( templateVars ) #render the report using the variables. This does the magic!
+			t_template = templateEnv.get_template( file )
+			contents = t_template.render( templateVars ) #render the report using the variables. This does the magic!
 			log('Template rendered. ')
 			#log(contents.encode('utf-8'))
 		except Exception as e:
@@ -291,16 +293,16 @@ def writeParameters(data, i, template = None):
 
 	if found == True:
 		#zip it back to a docx
-		log('Zipping report from template back to a docx; ' + os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
+		log('Zipping report from template back to a docx; ' + os.getcwd() + '/scripts/' + templates_dir + template + lang_dir + template_dir + str(i) + '/')
 		zipf = zipfile.ZipFile(final_file, "w", compression=zipfile.ZIP_DEFLATED )
 		try:
-			recursive_zip(zipf, os.getcwd() + '/scripts/' + templates_dir + lang_dir + template_dir + str(i) + '/')
+			recursive_zip(zipf, os.getcwd() + '/scripts/' + templates_dir + template + lang_dir + template_dir + str(i) + '/')
 		finally:
 			zipf.close()
 
 		#cleanup
 		log('Cleaning up .bckp files')
-		for file in glob.glob(os.getcwd() + '/' + templates_dir + lang_dir + template_dir + str(i) + "/word/*.bckp"):
+		for file in glob.glob(os.getcwd() + '/' + templates_dir + template + lang_dir + template_dir + str(i) + "/word/*.bckp"):
 			if (os.path.isfile(file)):
 				move(file, file.rstrip(".bckp"))
 		log('Report written to ' + final_file)
@@ -428,12 +430,15 @@ def main(argv=None):
 	datafile = None
 	global spreadsheet_file
 	global lang_dir
+	global templates_dir
+	global template
 
 	checkOS() #for the docfraq path
 
 	#Commandline parameter handling
 	if argv is None:
 		parser = argparse.ArgumentParser()
+		parser.add_argument("Template", help="The used template. Directory in templates/")
 		parser.add_argument("Datafile", help="The raw data report(s) (.RTF/.HTML/text) to extract data from. file1,file2,file3,...")
 		parser.add_argument("-l","--language", help="Language code to write our template in. (nl/fr)")
 		parser.add_argument("-e","--excel", help="Excel file to write our lines to. (.xls)")
@@ -442,7 +447,8 @@ def main(argv=None):
 		parser.add_argument("-r", "--raw", help="Where to store our temporary RAW datafile with the extracted results.")
 		parser.add_argument("-q", "--questionnaire", help="Extra datafile for parameters, each line; VARIABLE _TAB_ VALUE")
 		args = parser.parse_args()
-		if (args.Datafile is not None):
+		if (args.Datafile is not None and args.Template is not None):
+			template = args.Template + '/'
 			datafile = args.Datafile.split(',')
 			if (args.language is not None):
 				lang_dir = args.language + '/'
@@ -461,7 +467,7 @@ def main(argv=None):
 				global questionnaire
 				questionnaire = args.questionnaire
 		else:
-			raise Exception("Must provide an argument!")
+			raise Exception("Must provide two arguments!")
 			Usage()
 	else:
 		lang_dir = argv[1] + '/'
@@ -469,13 +475,20 @@ def main(argv=None):
 		datafile = argv[3].split(',')
 
 	#-- Start Script
+
+	#basic check
+	url = os.getcwd() + '/scripts/' + templates_dir + template
+	if (not os.path.isdir(url)):
+		log("ERROR: " + url + " not found! Quitting..")
+		quit()
+
 	#convert and read RTF file.
 	c = ''
 	data = []
 	resize(data, len(datafile))
 
 	global templatedir
-	templatedir = 'template' + str(len(datafile)) + '/'
+	templatedir = 'template_' + str(len(datafile)) + '/'
 
 	log("Reading file(s)")
 	i = 0 #counter for data[i]

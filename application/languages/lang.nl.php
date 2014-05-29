@@ -117,6 +117,12 @@ function getLang($controller){
           $lang['flagcodedescr']    = 'Tweecijferige code voor de taal. (bv. en, fr, nl, ..)';
           $lang['language']         = 'Taal';
           $lang['notemplates']      = 'Geen templates gevonden in scripts/templates !!';
+          $lang['templateremoved']  = 'Template is verwijdert.';
+          $lang['uploadtemplate']   = 'Template uploaden';
+          $lang['templatelang']     = 'Template voor taal';
+          $lang['templateadderror'] = 'Gelieve uw parameters te checken en dat de naam en alle talen ingevuld is.';
+          $lang['templatefileerror']= 'Gelieve te checken of al uw bestanden niet corrupt zijn en in het juiste formaat.';
+          $lang['addedtemplate']    = 'Template is toegevoegd.';
            //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';

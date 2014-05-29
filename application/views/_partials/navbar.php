@@ -1,4 +1,4 @@
-<?php
+    <?php
     function getLangName($arr, $code){
         $result = '';
         for ($i=0; $i < $arr and $result == ''; $i++){
@@ -35,7 +35,7 @@
               <a href="" class="dropdown-toggle" data-toggle="dropdown"><img alt="<?= $_SESSION['lang']; ?>" src="<?= URL::base_uri(); ?>img/flags/<?= $_SESSION['lang']; ?>.png" />&nbsp;<?= getLangName($this->langs, $_SESSION['lang']); ?><b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <?php foreach ($this->langs as $key => $lang): ?>
-                <li><a href="<?= URL::base_uri() . URL::getCurrentPath() . '?lang=' . $lang->flag; ?>"><img alt="<?= $lang->name; ?>" src="<?= URL::base_uri(); ?>img/flags/<?= $lang->flag; ?>.png" />&nbsp;<?= $lang->name; ?></a></li>
+                <li><a href="<?= URL::base_uri() .'home/index?lang=' . $lang->flag; ?>"><img alt="<?= $lang->name; ?>" src="<?= URL::base_uri(); ?>img/flags/<?= $lang->flag; ?>.png" />&nbsp;<?= $lang->name; ?></a></li>
                 <?php endforeach; ?>
               </ul>
             </li>
