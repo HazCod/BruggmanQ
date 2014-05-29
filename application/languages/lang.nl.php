@@ -123,6 +123,8 @@ function getLang($controller){
           $lang['templateadderror'] = 'Gelieve uw parameters te checken en dat de naam en alle talen ingevuld is.';
           $lang['templatefileerror']= 'Gelieve te checken of al uw bestanden niet corrupt zijn en in het juiste formaat.';
           $lang['addedtemplate']    = 'Template is toegevoegd.';
+          $lang['newtemplate']      = 'Nieuw Templatebestand';
+          $lang['templatereplaced'] = 'Template is vervangen door het nieuwe bestand.';
            //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';

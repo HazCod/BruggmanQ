@@ -72,11 +72,9 @@
         if (!file_exists($dir)) {
             return true;
         }
-
         if (!is_dir($dir)) {
             return unlink($dir);
         }
-
         foreach (scandir($dir) as $item) {
             if ($item == '.' || $item == '..') {
                 continue;
@@ -85,12 +83,13 @@
             if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
-
         }
-
         return rmdir($dir);
     }
-
+    
+    function chownTemplates(){
+        shell_exec('sudo chown -R www-data:www-data /var/www/scripts/templates');
+    }
     
     public function templates($templ=false, $lang=false, $command=false, $nights=1)
     {
@@ -123,6 +122,7 @@
                     header("Content-Disposition: attachment; filename=\"$templ" . "_$lang" . "_$nights.docx\""); 
                     readfile ($file); 
                 } elseif ($command == 'delete'){
+                    $this->chmod_r('/var/www/scripts/templates');
                     $output = $this->deleteDirectory("/var/www/scripts/templates/$templ");
                     $this->setFlashmessage($this->lang['templateremoved'] . ' (' . $output . ')');
                     $this->redirect('admin/templates');
@@ -137,7 +137,6 @@
                         }
                         if (strlen($name) >1 and $ok == true){
                             $allowedExts = array("docx");
-
                             $error = 0;
                             foreach ($_FILES as $file){
                                 $temp = explode(".", $file['name']);
@@ -148,7 +147,7 @@
                             }
                             if ($ok == true){
                                 mkdir("/var/www/scripts/templates/$name");
-                                chmod("/var/www/scripts/templates/$name", 0777);
+                                chmod("/var/www/scripts/templates/", 0777);
                                 foreach ($_FILES as $key => $file){
                                     $lang = substr($key, 5);
                                     $tempfile = "/var/www/scripts/templates/$name/$lang.docx";
@@ -161,6 +160,7 @@
                                     $dir = pathinfo($tempfile)['dirname'] . "/$lang";
                                     $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
                                     delete($tempfile);
+                                    $this->chownTemplates();
                                     $this->setCurrentFlashmessage($this->lang['addedtemplate']);
                                     $this->template->render('admin/templates');
                                 }
@@ -174,6 +174,32 @@
                         }             
                     } else {
                         $this->template->render('admin/templates.add');
+                    }
+                } elseif ($command == 'replace'){
+                    if ($_POST){
+                        $file = $_FILES['file'];
+                        if ($file['error'] == '0'){
+                            $this->chmod_r("/var/www/scripts/templates/$templ");
+                            $this->chownTemplates();
+                            
+                            $tempfile = $file['tmp_name'];
+                            $dir = "/var/www/scripts/templates/$templ/$lang/template_$nights";
+                            $this->deleteDirectory($dir);
+                            $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
+                            $this->setFlashmessage($this->lang['templatereplaced']);
+                            $this->redirect('admin/templates');
+                        } else {
+                            $this->template->templ = $templ;
+                            $this->template->tlang = $lang;
+                            $this->template->nights = $nights;
+                            $this->setCurrentFlashmessage($this->lang['templateadderror'], 'danger');
+                            $this->template->render('admin/templates.replace'); 
+                        }
+                    } else {
+                        $this->template->templ = $templ;
+                        $this->template->tlang = $lang;
+                        $this->template->nights = $nights;
+                        $this->template->render('admin/templates.replace');
                     }
                 } else {
                     $this->setFlashmessage("Invalid URL: $templ/$lang/$command/$nights", 'danger');
