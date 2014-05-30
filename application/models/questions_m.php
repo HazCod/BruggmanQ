@@ -21,11 +21,12 @@ class Questions_m extends Core_db
         $query = "DELETE FROM questionlists WHERE (question = ?)";
         $this->db->query($query, $id);
         $answers = $this->answers_m->getAnswers($id);
-        foreach ($answers as $answer){
-            $this->answers_m->deleteAnswer($answer->id);
-            $this->db->query("DELETE FROM answerlists WHERE (answer = $answer->id);");
+        if ($answers){
+            foreach ($answers as $answer){
+                $this->answers_m->deleteAnswer($answer->id);
+                $this->db->query("DELETE FROM answerlists WHERE (answer = $answer->id);");
+            }
         }
-        
     }
     
     public function getQuestion($id) {

@@ -18,8 +18,10 @@ class Lists_m extends Core_db
         $query = "DELETE FROM lists WHERE (id = ?);";
         $this->db->query($query, $id);
         $pages = $this->page_m->getPages($id);
-        foreach ($pages as $page){
-            $this->page_m->deletePage($id);
+        if ($pages){
+            foreach ($pages as $page){
+                $this->page_m->deletePage($id);
+            }
         }
     }
 

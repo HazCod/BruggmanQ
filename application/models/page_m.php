@@ -18,9 +18,11 @@ class Page_m extends Core_db
         $query = "DELETE FROM page WHERE (id = ?)";
         $this->db->query($query, $id);
         $questions = $this->questions_m->getQuestions($id);
-        foreach ($questions as $question){
-            $this->questions_m->deleteQuestion($question->id);
-            $this->db->query("DELETE FROM questionlists WHERE (question = $question->id);");
+        if ($questions){
+            foreach ($questions as $question){
+                $this->questions_m->deleteQuestion($question->id);
+                $this->db->query("DELETE FROM questionlists WHERE (question = $question->id);");
+            }
         }
     }
 
