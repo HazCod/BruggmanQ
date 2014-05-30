@@ -12,10 +12,10 @@
 	<?php $this->renderPartial('flashmessage'); ?>
         </div>
         <div class="row-fluid">
-          <div class="span4">'Are you sure?'
+          <div class="span4">
              <h2>Templates</h2>
              <div class="pull-right">
-                <button type="button" class="btn btn-default">
+                <button type="button" class="btn btn-primary">
                     <a href="<?= URL::base_uri() . 'admin/templates/x/x/add' ?>"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['add']; ?></a>
                 </button>
              </div>
