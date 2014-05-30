@@ -14,7 +14,7 @@
             <?php foreach ($this->langs as $key => $lang): ?>
             <div class="form-group">
                 <label for="file_<?= $lang->flag; ?>"><?= $this->lang['templatelang']; ?>&nbsp;<strong><?= $lang->name; ?></strong>&nbsp;(.docx)</label>
-                <input class="form-control" type="file" name="file_<?= $lang->flag; ?>" id="file_<?= $lang->flag; ?>"><br>
+                <input class="form-control" type="file" name="file_<?= $lang->flag; ?>[]" id="file_<?= $lang->flag; ?>" multiple="multiple"><br>
             </div>
             <?php endforeach; ?>
             <div class="form-group">       

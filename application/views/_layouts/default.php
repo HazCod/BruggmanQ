@@ -7,6 +7,7 @@
         <script src="<?= URL::base_uri(); ?>js/bootswatch.js"></script>
         <script src="<?= URL::base_uri(); ?>js/bootstrap-datepicker.js"></script>
         <script src="<?= URL::base_uri(); ?>js/jquery.spinner.min.js"></script>
+        <script src="<?= URL::base_uri(); ?>js/bootstrap-timepicker.min.js"></script>
     </head>
     <body>
         <?php $this->renderPartial('navbar'); ?>

@@ -2,7 +2,7 @@
 
 function getLang($controller){
     //Change this to yes if this is for a language that reads from the right to the left.
-    $lang['rtl'] = 'yes';
+    $lang['rtl'] = 'no';
     
     switch ($controller) {  
        //login page  
@@ -121,12 +121,13 @@ function getLang($controller){
           $lang['notemplates']      = 'Geen templates gevonden in scripts/templates !!';
           $lang['templateremoved']  = 'Template is verwijdert.';
           $lang['uploadtemplate']   = 'Template uploaden';
-          $lang['templatelang']     = 'Template voor taal';
+          $lang['templatelang']     = '(template_1, template_2, ...) 4 Templates voor taal';
           $lang['templateadderror'] = 'Gelieve uw parameters te checken en dat de naam en alle talen ingevuld is.';
           $lang['templatefileerror']= 'Gelieve te checken of al uw bestanden niet corrupt zijn en in het juiste formaat.';
           $lang['addedtemplate']    = 'Template is toegevoegd.';
           $lang['newtemplate']      = 'Nieuw Templatebestand';
           $lang['templatereplaced'] = 'Template is vervangen door het nieuwe bestand.';
+          $lang['invalidtemplatename'] = 'Benaming; template_1.docx, template_2.docx, ...';
            //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';

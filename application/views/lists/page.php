@@ -78,14 +78,15 @@
                         <?php 
                             $extras = explode(';', $question['extra']);
                             //min;max;step;prefix
-                            if (sizeof($extras) < 1){
+                            if (!$extras or sizeof($extras) < 2){
+                                $extras = array();
                                 $extras[0] = 0;
-                                if (sizeof($extras) < 2){
-                                    $extras[1] = 100;
-                                    if (sizeof($extras) < 3){
-                                        $extras[2] = 1;
-                                    }
-                                }
+                            }
+                            if (sizeof($extras) < 2){
+                                $extras[1] = 100;
+                            }
+                            if (sizeof($extras) < 3){
+                                $extras[2] = 1;
                             }
                         ?>
                         <script type="text/javascript">
@@ -93,12 +94,30 @@
                                     min: <?= $extras[0] ?>,
                                     max: <?= $extras[1] ?>,
                                     stepinterval: <?= $extras[2] ?>,
-                                    <?php if (sizeof($extras) > 2): ?> //prefix is not required.
+                                    <?php if (sizeof($extras) > 3): ?> //prefix is not required.
                                     postfix: '<?= $extras[3] ?>'
                                     <?php endif; ?>
                             });
                         </script>
                       </div>
+                      <?php elseif ($question['type'] == 'TIMEINPUT'): ?>
+                      <label for="d" class="col-sm-4 control-label"><?= $question['question']; ?></label>
+                      <div class="col-sm-8">
+                        <div class="input-group input-append bootstrap-timepicker">
+                            <input id="<?= $question['id']; ?>" name="<?= $this->question['id']; ?>" type="text" class="form-control input-small">
+                            <i class="input-group-addon glyphicon glyphicon-time"></i>
+                        </div>
+                      </div>
+                        <script type="text/javascript">
+                            $('#<?= $question['id']; ?>').timepicker({
+                                minuteStep: 15,
+                                template: 'dropdown',
+                                appendWidgetTo: 'body',
+                                showSeconds: false,
+                                showMeridian: false,
+                                defaultTime: 'current',
+                            });
+                        </script>
                       <?php endif; ?>
                   </div>
                 <?php endforeach; ?>

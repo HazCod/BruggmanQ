@@ -37,7 +37,7 @@
     }
 
     public function index()
-    {
+    { //show the overview admin page
         if ($this->checkPrivilege() == true){
             $this->template->lists = $this->lists_m->getLists();
             $this->template->lastusers = $this->lists_m->getLastUsers();
@@ -46,7 +46,7 @@
     }
     
     function in_array_case_insensitive($needle, $haystack, $objProperty) 
-    {
+    { // in_array(), but with case insensitivity
         if (!is_null($haystack) && !empty($haystack)){
             $needle = (string)$needle;
             $newhay = array();
@@ -63,12 +63,30 @@
         }
     }
     
-        
+    
+    function reArrayFiles(&$file_post) {
+    // Make the $_FILES array a bit easier to work with
+        $file_ary = array();
+        $file_count = count($file_post['name']);
+        $file_keys = array_keys($file_post);
+
+        for ($i=0; $i<$file_count; $i++) {
+            foreach ($file_keys as $key) {
+                $file_ary[$i][$key] = $file_post[$key][$i];
+            }
+        }
+
+        return $file_ary;
+    }
+    
+    
     function generateRandomString($length = 10) {
+    // Generate random string with given length
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
     }
  
     function deleteDirectory($dir) {
+    // Recursively delete a directory and it's contents
         if (!file_exists($dir)) {
             return true;
         }
@@ -88,87 +106,103 @@
     }
     
     function fixPermissions(){
+    // We can only run python in sudo, so fix our files using Python!
         shell_exec('sudo python2 scripts/fixpermissions.py /var/www/scripts/templates');
     }
     
     public function templates($templ=false, $lang=false, $command=false, $nights=1)
     {
         if ($this->checkPrivilege()){
-            if (!$templ or $templ == false){
-                $files = array_diff(scandir('/var/www/scripts/templates'), array('..', '.'));
+            if (!$templ or $templ == false){ //template given?
+                $files = array_diff(scandir('/var/www/scripts/templates'), array('..', '.')); //get list of templates, substract . and ..
                 $entries = array();
                 foreach ($files as $entry){
-                    $entry = '/var/www/scripts/templates/' . $entry;
-                    if (is_dir($entry)){
-                        $langs = array_diff(scandir($entry), array('..', '.'));
+                    $entry = '/var/www/scripts/templates/' . $entry; //Every template
+                    if (is_dir($entry)){ //Is it a directory?
+                        $langs = array_diff(scandir($entry), array('..', '.')); //Exclude . and ..
                         $lentries = array();
-                        foreach ($lentries as $lentry){
+                        foreach ($lentries as $lentry){ //get languages
                             $lentry = '/var/www/scripts/templates/' . $lentry;
-                            if (is_dir($lentry)){
-                                $langs[] = $lentry;
+                            if (is_dir($lentry)){ //Is it a dir?
+                                $langs[] = $lentry; //Include the language
                             }
                         }
-                        $entries[] = array( end((explode('/', $entry))) , $langs );
+                        $entries[] = array( end((explode('/', $entry))) , $langs ); //Put them in an array
                     }
                 }
                 $this->template->templates = $entries;
                 $this->template->render('admin/templates');
-            } elseif ($templ != false and $lang != false and $command != false) {
-                if ($command == 'download' and intval($nights) == $nights){
-                    $output = shell_exec("sudo python2 scripts/manage_templates.py assemble /var/www/scripts/templates/$templ/$lang/template_$nights -l $lang -o /var/www/upload/template_$nights.docx". ' 2>&1');
-                    $file = "/var/www/upload/template_$nights.docx";
+            } elseif ($templ != false and $lang != false and $command != false) { //All parameters given
+                if ($command == 'download' and intval($nights) == $nights){ //download a template
+                    //- Run the script
+                    $output = shell_exec("sudo python2 scripts/manage_templates.py assemble /var/www/scripts/templates/$templ/$lang/template_$nights -l $lang -o /var/www/upload/template_$nights.docx". ' 2>&1'); //Run the script
+                    $file = "/var/www/upload/template_$nights.docx"; //result file
+                    //- Headers to anounce a file is being offered to the browser
                     header("Content-Description: File Transfer"); 
                     header("Content-Type: application/octet-stream"); 
                     header("Content-Disposition: attachment; filename=\"$templ" . "_$lang" . "_$nights.docx\""); 
-                    readfile ($file); 
-                } elseif ($command == 'delete'){
-                    $this->fixPermissions();
-                    shell_exec("sudo python2 scripts/manage_templates.py delete /var/www/scripts/templates/$templ");
+                    readfile ($file); //Now send it
+                } elseif ($command == 'delete'){ //Delete a template folder
+                    $this->fixPermissions(); //Make sure we have access to the folder
+                    shell_exec("sudo python2 scripts/manage_templates.py delete /var/www/scripts/templates/$templ"); //Run the script
                     $this->setFlashmessage($this->lang['templateremoved']);
                     $this->redirect('admin/templates');
-                } elseif ($command == 'add'){
-                    if ($_POST){
-                        $name = $this->form->getPost('name');
+                } elseif ($command == 'add'){ //Add a new template
+                    if ($_POST){ //Show the upload page or it is being uploaded
+                        $name = $this->form->getPost('name'); //Get the template name
                         $ok = true;
                         foreach ($this->template->langs as $key => $lang){
-                            if (!isset($_FILES["file_$lang->flag"])){
+                            if (!isset($_FILES["file_$lang->flag"])){ //Check if there is a template for every language
                                 $ok = false;
                             }
                         }
-                        if (strlen($name) >1 and $ok == true){
-                            $allowedExts = array("docx");
-                            $error = 0;
-                            foreach ($_FILES as $file){
-                                $temp = explode(".", $file['name']);
-                                $ext = end($temp);
-                                if (!in_array($ext, $allowedExts)){
-                                    $ok = false;
-                                }
-                            }
-                            if ($ok == true){
-                                mkdir("/var/www/scripts/templates/$name");
-                                $this->fixPermissions();
-                                foreach ($_FILES as $key => $file){
-                                    $lang = substr($key, 5);
-                                    $dir = "/var/www/scripts/templates/$name/$lang/template_$nights";
-                                    mkdir("/var/www/scripts/templates/$name/$lang");
-                                    mkdir($dir);
-                                    $tempfile = "/var/www/scripts/templates/$name/$lang.docx";
-                                    if (!move_uploaded_file($file['tmp_name'], $tempfile)){
-                                        error_log('could not move ' . $file['tmp_name'] . ' to ' . $tempfile);
+                        if (strlen($name) >1 and $ok == true){ //If name is OK and every language has a template
+                            mkdir("/var/www/scripts/templates/$name"); //create the template folder
+                            $this->fixPermissions(); //Make sure we have access to it
+                            foreach ($_FILES as $key => $file){ //Process every template
+                                $lang = substr($key, 5); //Extract the language (input names are file_nl, file_fr, ...)
+
+                                $files = $this->reArrayFiles($_FILES[$key]); //The templates for all nights
+                                $allowedExts = array("docx"); //Only accept docx
+                                $allowedNames = array("template_1.docx", "template_2.docx", "template_3.docx", "template_4.docx"); //Patients can stay for 4 nights
+
+                                $ok = true;
+                                $error = 0;
+                                foreach ($files as $file){ //check every nights template
+                                    $temp = explode(".", $file["name"]);
+                                    $ext = end($temp);
+                                    if (!in_array($ext, $allowedExts) or !in_array($file['name'], $allowedNames) or$file['error'] > 0){ //Is the file allowed/bugged/wrongly named?
+                                        $ok = false; //no! Don't generate a report!
+                                        $error = $file['error']; //Save the file error to show afterwards
                                     }
-                                    chmod($tempfile, 0777);
-                                    $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
-                                    $this->fixPermissions();
-                                    unlink($tempfile);
                                 }
-                                $this->fixPermissions();
-                                $this->setFlashmessage($this->lang['addedtemplate']);
-                                $this->redirect('admin/templates');
-                            } else {
-                                $this->setCurrentFlashmessage($this->lang['templatefileerror'], 'danger');
-                                $this->template->render('admin/templates.add'); 
+
+                                if ($ok){ //Everything is OK, start!
+                                    mkdir("/var/www/scripts/templates/$name/$lang"); //language directory
+                                    foreach ($files as $file){
+                                        $tname = substr($file['name'], 0, -5);
+                                        $dir = "/var/www/scripts/templates/$name/$lang"; //template location
+                                        //error_log($dir);
+                                        mkdir("$dir/$tname");
+                                        $tempfile = "/var/www/scripts/templates/$name/$lang/$tname.docx";
+                                        if (!move_uploaded_file($file['tmp_name'], $tempfile)){
+                                            error_log('could not move ' . $file['tmp_name'] . ' to ' . $tempfile);
+                                        }
+                                        chmod($tempfile, 0777);
+                                        $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
+                                        $this->fixPermissions();
+                                        unlink($tempfile);
+                                    }
+                                } else {
+                                    //Remove template
+                                    shell_exec("sudo python2 scripts/manage_templates.py delete /var/www/scripts/templates/$name"); //Run the script
+                                    $this->setCurrentFlashmessage('Not OK: ' . $this->lang['invalidfile'] . $this->lang['invalidtemplatename'] . ' (' . $error . ')', 'danger');
+                                    $this->template->render('admin/templates.add'); 
+                                }
                             }
+                            //$this->fixPermissions();
+                            $this->setFlashmessage($this->lang['addedtemplate']);
+                            $this->redirect('admin/templates');   
                         } else {
                             $this->setCurrentFlashmessage($this->lang['templateadderror'], 'danger');
                             $this->template->render('admin/templates.add');

@@ -1,10 +1,14 @@
 TODO:
 -------
-- Fix/check delete page/list
+From most to least important.
 - Fix/check multiple checkboxes
-- Add back button in questionlist
+- Fix/check delete page/list
+- Document code
+- Automatically fix 'broken' docx templates (history syntax polution)
+- Add back button on pages
 - Add editing support
 - Add multiple admin user support
+- Check if we need more cleanup
 
 Repository
 -----------
