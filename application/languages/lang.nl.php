@@ -1,9 +1,11 @@
 <?php
 
 function getLang($controller){
+    //Change this to yes if this is for a language that reads from the right to the left.
+    $lang['rtl'] = 'yes';
     
-    switch ($controller) {
-      //login page
+    switch ($controller) {  
+       //login page  
       case 'start':
         $lang['start']      = 'Om te beginnen, kies rechtsboven uw taal en voer hier uw naam in.';
         $lang['loggedout']  = 'U bent uitgelogd.';

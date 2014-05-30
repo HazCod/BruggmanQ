@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $_SESSION['lang']; ?>">
     <head>
         <?php $this->renderPartial('headermeta'); ?>
         <script src="<?= URL::base_uri(); ?>js/jquery.js"></script>
