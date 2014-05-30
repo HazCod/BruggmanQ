@@ -10,7 +10,7 @@
                 <?= $this->page->descr; ?>
             </p>
             <div class="progress progress-striped active">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?= intval($this->pagenr * 100 / $this->pagestotal); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= intval($this->pagenr * 100 / $this->pagestotal); ?>%">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?= intval($this->pagenr * 100 / ($this->pagestotal + 1)); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= intval($this->pagenr * 100 / $this->pagestotal); ?>%">
                  <!--   <span><?= $this->lang['page']; ?> <?= $this->pagenr; ?>/<?= $this->pagestotal; ?></span> -->
                 </div>
             </div>

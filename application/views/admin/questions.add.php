@@ -22,13 +22,13 @@
 
                 <div class="form-group">
                     <label for="code"><?= $this->lang['code']; ?></label>
-                    <input type="text" id="code" name="code" value="QL_" />
+                    <input class="form-control" type="text" id="code" name="code" value="QL_" />
                 </div>
                 
                 <div class="form-group">
                     <label for="type"><?= $this->lang['extra']; ?></label>
                     <p>NUMBERINPUT: min;max;step;prefix</p>
-                    <input type="text" id="extra" name="extra" placeholder="/" />
+                    <input class="form-control" type="text" id="extra" name="extra" placeholder="/" />
                 </div>
                 
                 <div style="display:none;"> <!-- hidden textfield, generated automatically -->

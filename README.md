@@ -3,7 +3,6 @@ TODO:
 From most to least important.
 - Fix/check multiple checkboxes
 - Fix/check delete page/list
-- Document code
 - Automatically fix 'broken' docx templates (history syntax polution)
 - Add back button on pages
 - Add editing support
