@@ -183,4 +183,5 @@ INSERT INTO `types` (`id`, `type`, `answers_possible`) VALUES
 (6, 'DATEINPUT', 0),
 (7, 'NUMBERINPUT', 0),
 (8, 'TITLE', 0),
-(9, 'LINEINPUT', 0);
+(9, 'LINEINPUT', 0),
+(10, 'TIMEINPUT', 0);
