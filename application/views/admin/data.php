@@ -26,7 +26,7 @@
                   <td>
                       <a href="<?= URL::base_uri(); ?>admin/data/<?= $list->id; ?>"><i class="glyphicon glyphicon-file"></i><?= $this->lang['view']; ?></a>
                       &nbsp;
-                      <a href="<?= URL::base_uri(); ?>admin/data/<?= $list->id; ?>/delete" onclick="return confirm('Are you sure?')"><i class="glyphicon glyphicon-remove"></i><?= $this->lang['delete']; ?></a>
+                      <a href="<?= URL::base_uri(); ?>admin/data/<?= $list->id; ?>/delete" onclick="return confirm(<?= $this->lang['areyousure']; ?>)"><i class="glyphicon glyphicon-remove"></i><?= $this->lang['delete']; ?></a>
                       &nbsp;
                       <a href="<?= URL::base_uri(); ?>report/generate/<?= $list->id; ?>/<?= $this->langcode; ?>"><i class="glyphicon glyphicon-circle-arrow-down"></i><?= $this->lang['generatereport']; ?></a>
                   </td>

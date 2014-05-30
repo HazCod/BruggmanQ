@@ -12,7 +12,7 @@
 	<?php $this->renderPartial('flashmessage'); ?>
         </div>
         <div class="row-fluid">
-          <div class="span4">
+          <div class="span4">'Are you sure?'
              <h2>Templates</h2>
              <div class="pull-right">
                 <button type="button" class="btn btn-default">
@@ -60,7 +60,7 @@
                   </td>
                   <?php endforeach; ?>
                   <td>
-                      <a href="<?= URL::base_uri(); ?>admin/templates/<?= $list[0]; ?>/x/delete" onClick="return confirm('Are you sure?')"><i class="glyphicon glyphicon-remove"></i><?= $this->lang['delete']; ?></a>
+                      <a href="<?= URL::base_uri(); ?>admin/templates/<?= $list[0]; ?>/x/delete" onClick="return confirm(<?= $this->lang['areyousure']; ?>)"><i class="glyphicon glyphicon-remove"></i><?= $this->lang['delete']; ?></a>
                   </td>
                 </tr>
                 <?php endforeach; ?>
