@@ -7,7 +7,7 @@
           <div class="span4">
               <h2><?= $this->lang['newanswer']; ?></h2>
               <p class="lead"><?= $this->question->question; ?></p>
-              <form method="post" action="<?= URL::base_uri(); ?>admin/answers/<?= $this->question; ?>/add">
+              <form method="post" action="<?= URL::base_uri(); ?>admin/answers/<?= $this->question->id; ?>/add">
                 <div class="form-group">
                     <textarea class="form-control" name="descr" id="descr" rows="6" placeholder="<?= $this->lang['answerdescr']; ?>"><?php if ($this->formdata){ echo $this->formdata->descr; } ?></textarea>
                 </div><!-- /input-group -->
@@ -21,7 +21,7 @@
                     <input type="text" id="nr" name="nr" value="<?= sizeof($this->answers); ?>" />
                 </div><!-- /input-group -->
                     
-                <button class="btn btn-default" type="submit"><?= $this->lang['next']; ?></button>
+                <button class="btn btn-primary" type="submit"><?= $this->lang['next']; ?></button>
               </form>
           </div>
         </div>
