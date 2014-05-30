@@ -6,6 +6,7 @@ class Questions_m extends Core_db
     {
         parent::__construct();
         $this->table = 'questions';
+        $this->answers_m = Load::model('answers_m');
     }
     
     public function addQuestion($question, $type, $nr, $extra, $code, $page) {
@@ -13,18 +14,18 @@ class Questions_m extends Core_db
                   INSERT INTO questionlists(page, question) VALUES (?, LAST_INSERT_ID());";
         $this->db->query($query, array($question, $type, $nr, $extra, $code, $page));
     }
-   
-    /**
-        $query = "INSERT INTO questionlists (page, question) VALUES ('$page', '$question')";
-        $this->db->query($query);
-    }
-     */
     
     public function deleteQuestion($id) {
         $query = "DELETE FROM questions WHERE (id = ?)";
         $this->db->query($query, $id);
         $query = "DELETE FROM questionlists WHERE (question = ?)";
         $this->db->query($query, $id);
+        $answers = $this->answers_m->getAnswers($id);
+        foreach ($answers as $answer){
+            $this->answers_m->deleteAnswer($answer->id);
+            $this->db->query("DELETE FROM answerlists WHERE (answer = $answer->id);");
+        }
+        
     }
     
     public function getQuestion($id) {

@@ -6,6 +6,7 @@ class Page_m extends Core_db
     {
         parent::__construct();
         $this->table = 'page';
+        $this->questions_m = Load::model('questions_m');
     }
     
     public function addPage($list, $nr, $descr, $title) {
@@ -16,6 +17,11 @@ class Page_m extends Core_db
     public function deletePage($id) {
         $query = "DELETE FROM page WHERE (id = ?)";
         $this->db->query($query, $id);
+        $questions = $this->questions_m->getQuestions($id);
+        foreach ($questions as $question){
+            $this->questions_m->deleteQuestion($question->id);
+            $this->db->query("DELETE FROM questionlists WHERE (question = $question->id);");
+        }
     }
 
     public function getPages($listid)

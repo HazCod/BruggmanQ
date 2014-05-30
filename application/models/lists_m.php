@@ -6,8 +6,8 @@ class Lists_m extends Core_db
     {
         parent::__construct();
         $this->table = 'lists';
-    } 
-    
+        $this->page_m = Load::model('page_m');
+    }  
     
     public function addList($name, $language) {
         $query = "INSERT INTO lists (id, name, language) VALUES ('', ?, ?);";  
@@ -17,6 +17,10 @@ class Lists_m extends Core_db
     public function deleteList($id) {
         $query = "DELETE FROM lists WHERE (id = ?);";
         $this->db->query($query, $id);
+        $pages = $this->page_m->getPages($id);
+        foreach ($pages as $page){
+            $this->page_m->deletePage($id);
+        }
     }
 
     public function getLists()
