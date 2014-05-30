@@ -87,8 +87,8 @@
         return rmdir($dir);
     }
     
-    function chownTemplates(){
-        shell_exec('sudo chown -R www-data:www-data /var/www/scripts/templates');
+    function fixPermissions(){
+        shell_exec('sudo python2 scripts/fixpermissions.py /var/www/scripts/templates');
     }
     
     public function templates($templ=false, $lang=false, $command=false, $nights=1)
@@ -122,9 +122,9 @@
                     header("Content-Disposition: attachment; filename=\"$templ" . "_$lang" . "_$nights.docx\""); 
                     readfile ($file); 
                 } elseif ($command == 'delete'){
-                    $this->chmod_r('/var/www/scripts/templates');
-                    $output = $this->deleteDirectory("/var/www/scripts/templates/$templ");
-                    $this->setFlashmessage($this->lang['templateremoved'] . ' (' . $output . ')');
+                    $this->fixPermissions();
+                    shell_exec("sudo python2 scripts/manage_templates.py delete /var/www/scripts/templates/$templ");
+                    $this->setFlashmessage($this->lang['templateremoved']);
                     $this->redirect('admin/templates');
                 } elseif ($command == 'add'){
                     if ($_POST){
@@ -147,23 +147,24 @@
                             }
                             if ($ok == true){
                                 mkdir("/var/www/scripts/templates/$name");
-                                chmod("/var/www/scripts/templates/", 0777);
+                                $this->fixPermissions();
                                 foreach ($_FILES as $key => $file){
                                     $lang = substr($key, 5);
+                                    $dir = "/var/www/scripts/templates/$name/$lang/template_$nights";
+                                    mkdir("/var/www/scripts/templates/$name/$lang");
+                                    mkdir($dir);
                                     $tempfile = "/var/www/scripts/templates/$name/$lang.docx";
                                     if (!move_uploaded_file($file['tmp_name'], $tempfile)){
                                         error_log('could not move ' . $file['tmp_name'] . ' to ' . $tempfile);
                                     }
                                     chmod($tempfile, 0777);
-                                    mkdir("/var/www/scripts/templates/$name/$lang/template_$nights");
-                                    chmod("/var/www/scripts/templates/$name/$lang/template_$nights", 0777);
-                                    $dir = pathinfo($tempfile)['dirname'] . "/$lang";
                                     $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
-                                    delete($tempfile);
-                                    $this->chownTemplates();
-                                    $this->setCurrentFlashmessage($this->lang['addedtemplate']);
-                                    $this->template->render('admin/templates');
+                                    $this->fixPermissions();
+                                    unlink($tempfile);
                                 }
+                                $this->fixPermissions();
+                                $this->setFlashmessage($this->lang['addedtemplate']);
+                                $this->redirect('admin/templates');
                             } else {
                                 $this->setCurrentFlashmessage($this->lang['templatefileerror'], 'danger');
                                 $this->template->render('admin/templates.add'); 
@@ -179,14 +180,14 @@
                     if ($_POST){
                         $file = $_FILES['file'];
                         if ($file['error'] == '0'){
-                            $this->chmod_r("/var/www/scripts/templates/$templ");
-                            $this->chownTemplates();
+                            $this->fixPermissions();
                             
                             $tempfile = $file['tmp_name'];
                             $dir = "/var/www/scripts/templates/$templ/$lang/template_$nights";
                             $this->deleteDirectory($dir);
                             $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
                             $this->setFlashmessage($this->lang['templatereplaced']);
+                            $this->fixPermissions();
                             $this->redirect('admin/templates');
                         } else {
                             $this->template->templ = $templ;
@@ -201,6 +202,8 @@
                         $this->template->nights = $nights;
                         $this->template->render('admin/templates.replace');
                     }
+                } elseif ($command == 'chmod'){ //temp
+                    $this->fixPermissions();
                 } else {
                     $this->setFlashmessage("Invalid URL: $templ/$lang/$command/$nights", 'danger');
                     $this->redirect('admin/templates');                   

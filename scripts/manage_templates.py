@@ -52,7 +52,7 @@ def extractFile( input, folder):
 		if (os.path.isdir(folder)):
 			rmtree(folder)
 		os.makedirs(folder)
-		copyfile(input, folder + '/' + os.path.basename(input))
+		copyfile(input, folder + '/' + os.path.basename(input))	
 		os.chdir(folder)
 		zipfile.ZipFile(os.path.basename(input)).extractall()
 		#os.remove(input)
@@ -60,6 +60,11 @@ def extractFile( input, folder):
 
 	except Exception, e:
 		print('Error while unzipping template ' + input + '; ' + str(e))
+
+def removeTemplate(template):
+	rmtree(template)
+
+
 
 class Usage(Exception):
     def __init__(self, msg):
@@ -100,6 +105,8 @@ def main(argv=None):
 		extractFile(datafile, report_file)
 	elif (command == 'assemble'):
 		assembleFile(datafile, report_file)
+	elif (command == 'delete'):
+		removeTemplate(datafile)
 	else:
 		print "Not a valid command! Quitting.."
 

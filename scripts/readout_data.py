@@ -28,7 +28,7 @@ from jinja2 import Undefined
 #from xlwt3 import utils  #Python3
 from xlwt import Utils
 from xlutils.copy import copy
-from shutil import copyfile, rmtree, move
+from shutil import copyfile, move
 
 #== constants and global variables
 standarddev_str = 'sd_'					#Norm variable prefix

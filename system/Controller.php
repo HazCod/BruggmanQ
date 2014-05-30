@@ -45,12 +45,12 @@ class Controller
             exit;
         } **/
         $this->setController($controller);
-            if (isset($action)) {
-                $this->setAction($action);
-                if (isset($params)) {
-                    $this->setParams(explode("/", $params));
-                }
+        if (isset($action)) {
+            $this->setAction($action);
+            if (isset($params)) {
+                $this->setParams(explode("/", $params));
             }
+        }
     }
 
     private function setController($controller)
@@ -60,12 +60,12 @@ class Controller
         $controllerfile = APPLICATION_PATH . self::CONTROLLERPATH . ucfirst(strtolower($controller)) . '.php';
 
         // check if controller file exists
-        if (!file_exists($controllerfile)) {
-            error_log("Controller '$controller' could not be found.");
-            exit;
-        } else {
+        if (file_exists($controllerfile)) {
             require_once($controllerfile);
             $this->controller = $controller;
+        } else {
+            error_log("Controller '$controller' not found.");
+            exit;
         }
 
         return $this;
