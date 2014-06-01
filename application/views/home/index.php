@@ -12,7 +12,7 @@
                   <div class="form-group <?= $this->form->getFieldStatus('firstname'); ?>">
                     <label for="firstname" class="col-lg-2 control-label"><?= $this->lang['firstname']; ?></label>
                     <div class="col-lg-10">
-                      <input type="text" class="form-control" name="firstname" id="firstname" placeholder="<?= $this->lang['firstname']; ?>" value="<? if (isset($this->formdata)) echo $this->formdata->firstname; ?>">
+                        <input type="text" class="form-control" name="firstname" id="firstname" placeholder="<?= $this->lang['firstname']; ?>" value="<? if (isset($this->formdata)) echo $this->formdata->firstname; ?>" autocomplete="off">
 		      <? if ($this->formdata): ?>
 		      <span class="help-inline"><?= $this->form->getFieldMessage('firstname'); ?></span>
 		      <? endif; ?>
@@ -21,7 +21,7 @@
                   <div class="form-group <?= $this->form->getFieldStatus('lastname'); ?>">
                     <label for="lastname" class="col-lg-2 control-label"><?= $this->lang['lastname']; ?></label>
                     <div class="col-lg-10">
-                      <input type="text" name="lastname" class="form-control" id="lastname" placeholder="<?= $this->lang['lastname']; ?>" value="<? if (isset($this->formdata)) echo $this->formdata->lastname; ?>">
+                        <input type="text" name="lastname" class="form-control" id="lastname" placeholder="<?= $this->lang['lastname']; ?>" value="<? if (isset($this->formdata)) echo $this->formdata->lastname; ?>" autocomplete="off">
 		      <? if ($this->formdata): ?>
 		      <span class="help-inline"><?= $this->form->getFieldMessage('lastname'); ?></span>
 		      <? endif; ?>
@@ -30,7 +30,7 @@
                   <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">
                       <button type="submit" class="btn btn-primary"><?= $this->lang['submit']; ?></button> 
-                      <button type="reset" class="btn btn-default"><?= $this->lang['cancel']; ?></button>
+                      <button type="reset" class="btn btn-primary"><?= $this->lang['cancel']; ?></button>
                     </div>
                   </div>
                 </fieldset>

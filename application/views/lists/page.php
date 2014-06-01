@@ -123,7 +123,7 @@
                 <?php endforeach; ?>
                   <div class="form-group">
                     <div class="btn pull-right">
-                        <button type="submit" class="btn btn-default"><?= $this->lang['next']; ?></button>
+                        <button type="submit" class="btn btn-primary"><?= $this->lang['next']; ?></button>
                     </div>
                   </div>    
                 </form>
@@ -135,7 +135,7 @@
                     <input type="text" style="display:none;" name="skip" value="1" />
                     <div class="form-group">
                         <div class="btn pull-right">
-                            <button type="submit" class="btn btn-default"><?= $this->lang['next']; ?></button>
+                            <button type="submit" class="btn btn-primary"><?= $this->lang['next']; ?></button>
                         </div>
                     </div>  
                 </form>

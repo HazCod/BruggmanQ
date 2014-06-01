@@ -35,7 +35,7 @@
                     <input type="text" id="nr" name="nr" value="<? if ($this->questions == false){ echo '1'; } else { echo intval(sizeof($this->questions) +1); } ?>" />
                 </div><!-- /input-group -->
                     
-                <button class="btn btn-default" type="submit"><?= $this->lang['next']; ?></button>
+                <button class="btn btn-primary" type="submit"><?= $this->lang['next']; ?></button>
               </form>
           </div>
         </div>

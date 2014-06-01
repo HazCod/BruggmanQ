@@ -17,7 +17,7 @@
                     <input type="text" class="form-control" id="flag" name="flag" placeholder="<?= $this->lang['flagcodedescr']; ?>" value="<?php if ($this->formdata){ echo $this->formdata->flag; } ?>">
                 </div><!-- /input-group -->
                 
-                <button class="btn btn-default" type="submit"><?= $this->lang['add']; ?></button>
+                <button class="btn btn-primary" type="submit"><?= $this->lang['add']; ?></button>
               </form>
           </div>
         </div>

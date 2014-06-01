@@ -21,7 +21,7 @@
           <div class="span4">
              <h2><?= $this->lang['lists']; ?></h2>
              <div class="pull-right">
-                <button type="button" class="btn btn-default">
+                <button ype="button" class="btn btn-primary">
                     <a href="<?= URL::base_uri() . 'admin/lists/add' ?>"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['addlist']; ?></a>
                 </button>
              </div>

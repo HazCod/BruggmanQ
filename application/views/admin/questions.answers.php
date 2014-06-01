@@ -24,7 +24,7 @@
               <p><?= $this->lang[getTypeStr($this->types, $this->question->type) . 'desc']; ?></p>
               <p class="lead"><?= $this->lang['question']; ?>: "<?= $this->question->question; ?>"</p>
              <div class="pull-right">
-                <button type="button" class="btn btn-default">
+                <button type="button" class="btn btn-primary">
                     <a href="<?= URL::base_uri(); ?>admin/answers/<?= $this->question->id; ?>/add"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['addanswer']; ?></a>
                 </button>
              </div>

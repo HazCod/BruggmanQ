@@ -18,7 +18,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="pagename" name="pagename" placeholder="<?= $this->lang['pagetitle']; ?>" value="<?= $this->pagename; ?>">
                   <span class="input-group-btn">
-                      <button class="btn btn-default" type="submit"><?= $this->lang['next']; ?></button>
+                      <button class="btn btn-primary" type="submit"><?= $this->lang['next']; ?></button>
                   </span>
                 </div><!-- /input-group -->
               </form>

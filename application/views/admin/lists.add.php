@@ -18,7 +18,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="listname" name="listname" placeholder="<?= $this->lang['namenewlist']; ?>" value="<?php if($this->formdata){ echo $this->formdata->listname; } ?>">
                   <span class="input-group-btn">
-                      <button class="btn btn-default" type="submit"><?= $this->lang['add']; ?></button>
+                      <button class="btn btn-primary" type="submit"><?= $this->lang['add']; ?></button>
                   </span>
                 </div><!-- /input-group -->
               </form>
