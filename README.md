@@ -5,7 +5,6 @@ From most to least important.
 - Add back button on pages
 - Add editing support
 - Add multiple admin user support
-- Change /var/www to a Setting
 - Check if we need more cleanup
 
 Repository
