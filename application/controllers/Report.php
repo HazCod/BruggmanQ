@@ -57,10 +57,10 @@
     function transformQuestionnaire($arr) {
         $new_arr = array();
         foreach ($arr as $array){
-            if (!in_array($array['code'], array_keys($new_arr))){ //not a double
-                $new_arr[$array['code']] = $array['answer'];
+            if (!in_array($array->code, array_keys($new_arr))){ //not a double
+                $new_arr[$array->code] = $array->answer;
             } else { //Append it to the existing value
-                $new_arr[$array['code']] .= '|' . $array['answer'];
+                $new_arr[$array->code] .= '|' . $array->answer;
             }
         }
         return $new_arr;
@@ -143,11 +143,11 @@
                                 $this->template->output = $output;
                                 
                                 //- Cleanup
-                                delete($raw);
-                                delete($questionnaire);
+                                unlink($raw);
+                                unlink($questionnaire);
                                 $files = explode(',', $datastr);
                                 foreach ($datastr as $file){
-                                    delete($file);
+                                    unlink($file);
                                 }
                                 
                                 $this->template->render('report/result');
