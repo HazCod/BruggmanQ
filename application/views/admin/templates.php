@@ -45,7 +45,7 @@
                   <?php
                     if (is_array($data)){
                         foreach ($data as $part){
-                            if (is_dir(preg_replace("/\\.docx$/", "", "/var/www/scripts/templates/$list[0]/$part"))){
+                            if (is_dir(preg_replace("/\\.docx$/", "", $_SERVER['DOCUMENT_ROOT'] . "/scripts/templates/$list[0]/$part"))){
                                 $imgu = URL::base_uri() . 'img/flags/';
                                 $url = URL::base_uri() . 'admin/templates';
                                 echo "&nbsp;&nbsp;&nbsp;&nbsp;<img src='$imgu$part.png' alt='$part' />&nbsp;&nbsp;";

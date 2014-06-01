@@ -78,6 +78,9 @@
     public function generate($userid=false, $language=false)
     {
         if ($this->checkPrivilege()){
+            
+            $root_path = $_SERVER['DOCUMENT_ROOT'] . '/';
+            
             if ($userid){ //User given (We suppose admins don't have to fiddle with user ids in the URLs)
                 if ($_POST){
                     $template = $this->form->getPost('template');
@@ -116,7 +119,7 @@
                                 $this->setFlashmessage($this->lang['scripterror'], 'danger');
                                 $this->redirect('report/generate/' . $userid . '/' . $language);
                             } else { //begin!
-                                $results = '/var/www/upload/report.docx'; //This will be our result
+                                $results = $root_path . 'upload/report.docx'; //This will be our result
                                 
                                 $parameters = URL::base_uri() . 'scripts/report_parameters'; //Here are our parameters
                                 $raw = "/tmp/" . $this->generateRandomString(8); //Temporary file where we store our raw file

@@ -11,7 +11,7 @@
                 <label for="template">Template</label>
                 <select class="form-control" name="template">
                     <?php
-                    $scanned_directory = array_diff(scandir('/var/www/scripts/templates'), array('..', '.'));
+                    $scanned_directory = array_diff(scandir( $_SERVER['DOCUMENT_ROOT'] . '/scripts/templates'), array('..', '.'));
                     foreach ($scanned_directory as $dir): ?>
                     <option value='<?= $dir; ?>'><?= $dir; ?></option>
                     <?php endforeach; ?>
