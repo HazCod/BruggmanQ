@@ -54,6 +54,18 @@
         return $file_ary;
     }
     
+    function transformQuestionnaire($arr) {
+        $new_arr = array();
+        foreach ($arr as $array){
+            if (!in_array($array['code'], array_keys($new_arr))){ //not a double
+                $new_arr[$array['code']] = $array['answer'];
+            } else { //Append it to the existing value
+                $new_arr[$array['code']] .= '|' . $array['answer'];
+            }
+        }
+        return $new_arr;
+    }
+    
     public function index()
     { // Rather a placeholder
         if ($this->checkPrivilege() == true){
@@ -111,11 +123,12 @@
 
                                 $questionnaire = '/tmp/' . $this->generateRandomString(8); //Temporary file where we store our questionnaire data
                                 $q_data = $this->data_m->getUserAnswers($userid); //Get our questionnaire data
-                                
-                                $file = fopen($questionnaire, 'w'); //Write the questionnaire to the file
-                                foreach ($q_data as $question)
+
+                                $q_data = $this->transformQuestionnaire($q_data); //Get rid of the double values
+                                $file = fopen($questionnaire, 'w'); //Write the questionnaire to the file                              
+                                foreach ($q_data as $question => $answer)
                                 {
-                                    fwrite($file, $question->code . "\t" . $question->answer . "\n");
+                                    fwrite($file, $question . "\t" . $answer . "\n");
                                 }
                                 fclose($file);
                                 //- Run the script!
@@ -127,12 +140,12 @@
                                 $this->template->output = $output;
                                 
                                 //- Cleanup
-                                /** delete($raw);
+                                delete($raw);
                                 delete($questionnaire);
                                 $files = explode(',', $datastr);
                                 foreach ($datastr as $file){
                                     delete($file);
-                                }**/
+                                }
                                 
                                 $this->template->render('report/result');
                             }
