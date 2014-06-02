@@ -198,6 +198,7 @@ def readParameters(c):
 	finally:
 		if f_result is not None:
 				f_result.close()
+                                os.remove(f_result)
 
 	return data
 
