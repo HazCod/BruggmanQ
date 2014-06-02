@@ -41,7 +41,7 @@ def main(argv=None):
 	for root, dirs, files in os.walk(folder):   # for everything in the folder
 		for momo in dirs:                   
 			os.chown(os.path.join(root, momo), userID, groupID) #chown a directory
-			os.chmod(os.path.j1oin(root, momo), 0777)           #chmod a directory
+			os.chmod(os.path.join(root, momo), 0777)           #chmod a directory
 			for momo in files:                                  #now do all files
 				os.chown(os.path.join(root, momo), userID, groupID)
 				os.chmod(os.path.join(root, momo), 0777)
