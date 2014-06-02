@@ -122,15 +122,19 @@
                 foreach ($files as $entry){
                     $entry = $root_path . 'scripts/templates/' . $entry; //Every template
                     if (is_dir($entry)){ //Is it a directory?
-                        $langs = array_diff(scandir($entry), array('..', '.')); //Exclude . and ..
+                        $tmpl_langs = array();
+                        foreach ($this->langs_m->getLangs() as $lang){
+                            $lang_entries[] = $entry  . '/' . $lang->flag;
+                        }
+                        /** $langs = array_diff(scandir($entry), array('..', '.')); //Exclude . and ..
                         $lentries = array();
                         foreach ($lentries as $lentry){ //get languages
                             $lentry = $root_path . 'scripts/templates/' . $lentry;
                             if (is_dir($lentry)){ //Is it a dir?
                                 $langs[] = $lentry; //Include the language
                             }
-                        }
-                        $entries[] = array( end((explode('/', $entry))) , $langs ); //Put them in an array
+                        } **/
+                        $entries[] = array( end((explode('/', $entry))) , $lang_entries ); //Put them in an array
                     }
                 }
                 $this->template->templates = $entries;
@@ -173,7 +177,7 @@
                                 $error = 0;
                                 foreach ($files as $file){ //check every nights template
                                     $temp = explode(".", $file["name"]);
-                                    $ext = end($temp);
+                                    $ext = end($temp); //get last portion, the extension
                                     if (!in_array($ext, $allowedExts) or !in_array($file['name'], $allowedNames) or$file['error'] > 0){ //Is the file allowed/bugged/wrongly named?
                                         $ok = false; //no! Don't generate a report!
                                         $error = $file['error']; //Save the file error to show afterwards
@@ -188,13 +192,14 @@
                                         //error_log($dir);
                                         mkdir("$dir/$tname");
                                         $tempfile = $root_path . "scripts/templates/$name/$lang/$tname.docx";
-                                        if (!move_uploaded_file($file['tmp_name'], $tempfile)){
+                                        if (!move_uploaded_file($file['tmp_name'], $tempfile)){ //Move to temp location
                                             error_log('could not move ' . $file['tmp_name'] . ' to ' . $tempfile);
                                         }
                                         chmod($tempfile, 0777);
                                         $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
                                         $this->fixPermissions();
                                         unlink($tempfile);
+                                        unlink($file['tmp_name']);
                                     }
                                 } else {
                                     //Remove template
@@ -257,6 +262,7 @@
     {
         if ($this->checkPrivilege() == true){
             if (!$command or $command == false){
+                $this->setCurrentFlashmessage($this->lang['langsnotice'], 'info');
                 $this->template->render('admin/langs');
             } elseif ($command == 'add'){
                 if ($_POST){

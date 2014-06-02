@@ -130,6 +130,7 @@ function getLang($controller){
           $lang['invalidtemplatename'] = 'Naming convention; template_1.docx, template_2.docx, ...';
           $lang['areyousure']       = 'Are you sure?';
           $lang['code']             = 'Identification code (for the report)';
+          $lang['langsnotice']      = 'Notice: When adding a new language, don\'t forget to add the templates for this language.';
            //- description of every type
           $lang['COMBOBOXdesc']  = 'This is a dropdown where people can pick one value.';
           $lang['RADIOBOXdesc']  = 'This is a list of bullets where people can choose one item.';

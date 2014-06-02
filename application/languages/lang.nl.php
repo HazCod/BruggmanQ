@@ -130,6 +130,7 @@ function getLang($controller){
           $lang['invalidtemplatename'] = 'Benaming; template_1.docx, template_2.docx, ...';
           $lang['areyousure']       = 'Bent u zeker?';
           $lang['code']             = 'Identificatiecode (voor het rapport)';
+          $lang['langsnotice']      = 'Opmerking: Bij het toevoegen van een nieuwe taal mag u niet vergeten het template voor deze taal toe te voegen.';
            //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';
