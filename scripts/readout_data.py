@@ -50,6 +50,7 @@ contents = None 						#leave this to None
 lang_dir = 'nl/' 						#language defaults to nl (=Dutch)
 questionnaire = None 					#datafile where questionnaire data is stored (if not None)
 ql_prefix = 'QL_'						#prefix for the questionnaire variables
+ql_split = '|'                                                  #the character used for splitting multiple answers
 #==
 
 def log( logmsg ):
@@ -391,6 +392,7 @@ def updateSpreadsheet( data ):
 
 def addQuestionnaire( data ):
 	# add questionnaire data
+        global ql_split
 	data_t = data[0]
 	global questionnaire
 	if questionnaire is not None:
@@ -401,6 +403,8 @@ def addQuestionnaire( data ):
 			if (len(line) > 1):
 				parts = line.split("\t")
 				if (len(parts) == 2):
+                                        if (ql_split in parts[1]):
+                                            data_t[parts[0]] = parts[1].split(ql_split)
 					data_t[parts[0]] = parts[1]
 					log('QL; ' + parts[0] + ' : ' + parts[1])
 				else:
