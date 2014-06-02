@@ -124,16 +124,9 @@
                     if (is_dir($entry)){ //Is it a directory?
                         $tmpl_langs = array();
                         foreach ($this->langs_m->getLangs() as $lang){
+                            //Add a language directory that 'should be there'.
                             $lang_entries[] = $entry  . '/' . $lang->flag;
                         }
-                        /** $langs = array_diff(scandir($entry), array('..', '.')); //Exclude . and ..
-                        $lentries = array();
-                        foreach ($lentries as $lentry){ //get languages
-                            $lentry = $root_path . 'scripts/templates/' . $lentry;
-                            if (is_dir($lentry)){ //Is it a dir?
-                                $langs[] = $lentry; //Include the language
-                            }
-                        } **/
                         $entries[] = array( end((explode('/', $entry))) , $lang_entries ); //Put them in an array
                     }
                 }
@@ -195,9 +188,10 @@
                                         if (!move_uploaded_file($file['tmp_name'], $tempfile)){ //Move to temp location
                                             error_log('could not move ' . $file['tmp_name'] . ' to ' . $tempfile);
                                         }
-                                        chmod($tempfile, 0777);
-                                        $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
-                                        $this->fixPermissions();
+                                        chmod($tempfile, 0777); //just to be sure
+                                        $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1'); //Do the stuff
+                                        $this->fixPermissions(); //Fix permissions
+                                        //Cleanup
                                         unlink($tempfile);
                                         unlink($file['tmp_name']);
                                     }
@@ -208,7 +202,6 @@
                                     $this->template->render('admin/templates.add'); 
                                 }
                             }
-                            //$this->fixPermissions();
                             $this->setFlashmessage($this->lang['addedtemplate']);
                             $this->redirect('admin/templates');   
                         } else {
@@ -218,34 +211,32 @@
                     } else {
                         $this->template->render('admin/templates.add');
                     }
-                } elseif ($command == 'replace'){
-                    if ($_POST){
+                } elseif ($command == 'replace'){ //Replace existing template
+                    if ($_POST){ //Template has been posted, start upload!
                         $file = $_FILES['file'];
-                        if ($file['error'] == '0'){
-                            $this->fixPermissions();
+                        if ($file['error'] == '0'){ //No errors during upload
+                            $this->fixPermissions(); //Fix permissions prior to upload
                             
-                            $tempfile = $file['tmp_name'];
-                            $dir = $root_path . "scripts/templates/$templ/$lang/template_$nights";
-                            $this->deleteDirectory($dir);
-                            $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1');
+                            $tempfile = $file['tmp_name']; //tmp file name
+                            $dir = $root_path . "scripts/templates/$templ/$lang/template_$nights"; //Output path
+                            $this->deleteDirectory($dir); //remove old template
+                            $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1'); //Do the stuff
                             $this->setFlashmessage($this->lang['templatereplaced']);
-                            $this->fixPermissions();
+                            $this->fixPermissions(); //Fix permissions
                             $this->redirect('admin/templates');
                         } else {
-                            $this->template->templ = $templ;
-                            $this->template->tlang = $lang;
-                            $this->template->nights = $nights;
+                            $this->template->templ = $templ; //template 
+                            $this->template->tlang = $lang; //language
+                            $this->template->nights = $nights; //amount of nights (template_1 e.g.)
                             $this->setCurrentFlashmessage($this->lang['templateadderror'], 'danger');
                             $this->template->render('admin/templates.replace'); 
                         }
                     } else {
-                        $this->template->templ = $templ;
-                        $this->template->tlang = $lang;
-                        $this->template->nights = $nights;
+                        $this->template->templ = $templ; //template
+                        $this->template->tlang = $lang; //language
+                        $this->template->nights = $nights; //amount of nights
                         $this->template->render('admin/templates.replace');
                     }
-                } elseif ($command == 'chmod'){ //temp
-                    $this->fixPermissions();
                 } else {
                     $this->setFlashmessage("Invalid URL: $templ/$lang/$command/$nights", 'danger');
                     $this->redirect('admin/templates');                   
@@ -259,29 +250,30 @@
     
     
     public function langs($command=false, $par1=false)
+    // Manage languages
     {
         if ($this->checkPrivilege() == true){
-            if (!$command or $command == false){
+            if (!$command or $command == false){ //Show languages overview
                 $this->setCurrentFlashmessage($this->lang['langsnotice'], 'info');
                 $this->template->render('admin/langs');
-            } elseif ($command == 'add'){
-                if ($_POST){
-                    $formdata = $this->form->getPost();
-                    $this->form->validateLength('name', 3);
-                    $this->form->validateLength('flag', 2);
-                    if ($this->form->isFormValid() and !$this->in_array_case_insensitive($formdata->name, $this->template->langs, 'name')){
-                        $this->langs_m->addLang($formdata->name, htmlentities($formdata->flag));
+            } elseif ($command == 'add'){ //add new language
+                if ($_POST){ //language is being sent
+                    $formdata = $this->form->getPost(); //get the POST data
+                    $this->form->validateLength('name', 3); //name minimum 3 chars?
+                    $this->form->validateLength('flag', 2); //flagcode minimum 2 chars?
+                    if ($this->form->isFormValid() and !$this->in_array_case_insensitive($formdata->name, $this->template->langs, 'name')){ //Name not already existant and form correct?
+                        $this->langs_m->addLang($formdata->name, htmlentities($formdata->flag)); //Add it!
                         $this->setFlashmessage($this->lang['addedlang']);
                         $this->redirect('admin/langs');
                     } else {
                         $this->template->formdata = $formdata;
-                        $this->setCurrentFlashmessage($this->lang['erroraddinglang'], 'danger');
+                        $this->setCurrentFlashmessage($this->lang['erroraddinglang'], 'danger'); //Some error
                         $this->template->render('admin/langs.add');
                     }
                 } else {
                     $this->template->render('admin/langs.add');
                 }
-            } elseif ($command == 'delete'){
+            } elseif ($command == 'delete'){ //Remove language from database
                 $this->langs_m->deleteLang($par1);
                 $this->setCurrentFlashmessage($this->lang['deletedlang']);
                 $this->template->render('admin/langs');
@@ -294,50 +286,51 @@
     
     
     public function answers($question=false, $command=false, $par1=false)
+    // Manage question answers
     {
         if ($this->checkPrivilege() == true){
-            if ($question){
-               if (!$command or $command == false){
+            if ($question){ //Is the question is existant
+               if (!$command or $command == false){ //Question overview
                     $this->template->answers = $this->answers_m->getAnswers($question);
                     $this->template->question = $this->questions_m->getQuestion($question);
                     $this->template->types = $this->questions_m->getTypes();
                     $this->template->render('admin/questions.answers');
-                } elseif ($command == 'add'){
-                    if ($_POST){
+                } elseif ($command == 'add'){ //Add new question
+                    if ($_POST){ //Question is being posted
                         $formdata = $this->form->getPost();
-                        $this->form->validateLength('descr', 1);
-                        $this->form->validateLength('code', 1);
+                        $this->form->validateLength('descr', 1); //question description
+                        $this->form->validateLength('code', 1);  // question identification code for reports
                         if (!$formdata->nr){
-                            $formdata->nr = 0;
+                            $formdata->nr = 0; //If no number is given, just set zero
                         }
-                        if ($this->form->isFormValid()){
+                        if ($this->form->isFormValid()){ //answer is valid
                             $this->setFlashmessage($this->lang['addedanswer']);
                             $this->answers_m->addAnswer(htmlentities($formdata->descr), htmlentities($question), $formdata->nr, $formdata->code);
                             $this->redirect('admin/answers/' . $question);
-                        } else {
+                        } else { //some error
                             $this->setCurrentFlashmessage($this->lang['erroraddinganswer'], 'danger');
                             $this->template->formdata = $formdata;
                             $this->template->answers = $this->answers_m->getAnswers($question);
                             $this->template->question = $question;
                             $this->template->render('admin/questions.answers.add');
                         }
-                    } else {
+                    } else { //Show add answer page
                         $this->template->question = $this->questions_m->getQuestion($question);
                         $this->template->answers = $this->answers_m->getAnswers($question);
                         $this->template->render('admin/questions.answers.add');
                     }
-                } elseif ($command == 'delete'){
+                } elseif ($command == 'delete'){ //delete it
                     $this->answers_m->deleteAnswer($par1);
                     $this->setFlashmessage($this->lang['deletedanswer']);
                     $this->redirect('admin/answers/' . $question);
-                } elseif ($command == 'up'){
+                } elseif ($command == 'up'){ //move it up the list
                     $this->answers_m->moveAnswerUp($par1);
                     $this->redirect('admin/answers/' . $question);
-                } elseif ($command == 'down'){
+                } elseif ($command == 'down'){ //move it down the list
                     $this->answers_m->moveAnswerDown($par1);
                     $this->redirect('admin/answers/' . $question);
                 }
-            } else {
+            } else { //URL not recognized
                $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                $this->template->render('admin/index');   
             }
@@ -345,53 +338,54 @@
     }
     
     public function questions($page=false, $command=false, $par1=false)
+    // Manage questions
     {
         if ($this->checkPrivilege() == true){
             if ($page){
-                if (!$command or $command == false){
+                if (!$command or $command == false){ //Question overview
                     $this->template->questions = $this->questions_m->getQuestions($page);
                     $this->template->types = $this->questions_m->getTypes();
                     $this->template->page = $page;
                     $this->template->render('admin/questions');
-                } elseif ($command == 'add'){
-                    if ($_POST){
+                } elseif ($command == 'add'){ //Add new question
+                    if ($_POST){ //Question data has been posted
                         $formdata = $this->form->getPost();
-                        $this->form->validateLength('descr', 3);
-                        $this->form->validateLength('code', 2);
+                        $this->form->validateLength('descr', 3); //description
+                        $this->form->validateLength('code', 2); // question identification in the report
                         if (!$formdata->nr){
-                            $formdata->nr = 0;
+                            $formdata->nr = 0; //If no number given, just set zero
                         }
-                        if ($this->form->isFormValid()){
+                        if ($this->form->isFormValid()){ //Everything is correct, add it!
                             $this->setFlashmessage($this->lang['addedquestion']);
                             $this->questions_m->addQuestion(htmlentities($formdata->descr), $formdata->type, $formdata->nr, $formdata->extra, $formdata->code, $page);
                             $this->redirect('admin/questions/' . $page);
-                        } else {
+                        } else { //Some error
                             $this->setCurrentFlashmessage($this->lang['erroraddingquestion'], 'danger');
                             $this->template->formdata = $formdata;
                             $this->template->page = $page;
                             $this->template->render('admin/questions.add');
                         }
-                    } else {
+                    } else { //Show question overview
                         $this->template->questions = $this->questions_m->getQuestions($page);
                         $this->template->types = $this->questions_m->getTypes();
                         $this->template->page = $page;
                         $this->template->render('admin/questions.add');
                     }
-                } elseif ($command == 'delete') {
+                } elseif ($command == 'delete') { //Remove question
                     $this->questions_m->deleteQuestion($par1);
                     $this->setFlashmessage($this->lang['deletedquestion']);
                     $this->redirect('admin/questions/' . $page);
-                } elseif ($command == 'up'){
+                } elseif ($command == 'up'){ //Move question up
                     $this->questions_m->moveQuestionUp($par1);
                     $this->redirect('admin/questions/' . $page);
-                } elseif ($command == 'down'){
+                } elseif ($command == 'down'){ //Move question down
                     $this->questions_m->moveQuestionDown($par1);
                     $this->redirect('admin/questions/' . $page);
-                } else {
+                } else { //Wrong action in URL
                     $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                     $this->template->render('admin/lists');    
                 }
-            } else {
+            } else { //Wrong action in URL
                $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                $this->template->render('admin/lists');   
             }
@@ -399,23 +393,24 @@
     }
     
     public function data($usr=false, $command=false, $par1=false)
+    // Manage submitted data
     {
         if ($this->checkPrivilege() == true){
-            if (!$usr){
+            if (!$usr){ //user not given, so show all data overview
                 $this->template->datas = $this->data_m->getAllData();
                 $t = $this->data_m->getUserAnswers($usr);
-                if (!$t){
+                if (!$t){ //default language is nl
                     $this->template->langcode = 'nl';
-                } else {
+                } else { //if found, get user questionnaire language
                     $this->template->langcode = $t[0]->lang;                 
                 }        
                 $this->template->render('admin/data');
             } else {
-                if ($command == 'delete'){
+                if ($command == 'delete'){ //Remove user data !Everything is lost!
                     $this->data_m->deleteUserData($usr);
                     $this->setFlashmessage($this->lang['removeddata']);
                     $this->redirect('admin/data');
-                } else {
+                } else { //just show user answers
                     $this->template->datas = $this->data_m->getUserAnswers($usr);
                     $this->template->render('admin/datalist');
                 }
@@ -424,52 +419,52 @@
     }
     
     public function pages($list=false, $command=false, $par1=false)
+    // Manage pages of the questionnaire
     {
         if ($this->checkPrivilege() == true){
             if ($list){
-                if (!$command or $command == false){
-                    //Show all pages of list $list
+                if (!$command or $command == false){ //Show all pages of list $list
                     $this->template->pages = $this->page_m->getPages($list);
                     $this->template->list = $list;
                     $this->template->render('admin/pages');
-                } else if ($command == 'add'){
-                    if ($_POST){
+                } else if ($command == 'add'){ //Add a new page
+                    if ($_POST){ //Post data given, so request for adding page
                         $formdata = $this->form->getPost();
                         $this->form->validateLength('pagename', 3);
                         $this->form->validateLength('descr', 3);
                         if (!$formdata->nr){
-                            $formdata->nr = 1;
+                            $formdata->nr = 0; //If no nr given, set to zero
                         }
-                        if ($this->form->isFormValid()){
+                        if ($this->form->isFormValid()){ //Everything is valid, add it!
                             $this->page_m->addPage($list, $formdata->nr, htmlentities($formdata->descr), htmlentities($formdata->pagename));
                             $this->setFlashmessage($this->lang['addedpage']);
                             $this->redirect('admin/pages/' . $list);
-                        } else {
+                        } else { //Some error
                             $this->setCurrentFlashmessage($this->lang['erroraddingpage'], 'danger');
                             $this->template->formdata = $formdata;
                             $this->template->list = $list;
                             $this->template->render('admin/lists.add');
                         }
-                    } else {
+                    } else { //Show pages overview
                         $this->template->pages = $this->page_m->getPages($list);
                         $this->template->list = $list;
                         $this->template->render('admin/pages.add');
                     }
-                } elseif ($command == 'delete'){
+                } elseif ($command == 'delete'){ //delete this page (and all question, answers, ..  NOT data tough)
                     $this->page_m->deletePage($par1);
                     $this->setFlashmessage($this->lang['deletedpage']);
                     $this->redirect('admin/pages/' . $list);
-                } elseif ($command == 'up'){
+                } elseif ($command == 'up'){ //move page up in the list
                     $this->page_m->movePageUp($par1);
                     $this->redirect('admin/pages/' . $list);
-                } elseif ($command == 'down'){
+                } elseif ($command == 'down'){ //move page down in the list
                     $this->page_m->movePageDown($par1);
                     $this->redirect('admin/pages/' . $list);
-                } else {
+                } else { //Wrong action in URL
                     $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                     $this->template->render('admin/lists'); 
                 }
-            } else {
+            } else { //Wrong action in URL
                $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                $this->template->render('admin/lists'); 
             }
@@ -477,28 +472,28 @@
     }
     
     public function lists($command=false, $par1=false)
+    // Manage questionnaires
     {
         if ($this->checkPrivilege() == true){
-            if ($command == false){
+            if ($command == false){ //Show questionnaire overview
                 $this->template->lists = $this->lists_m->getLists();
                 $this->template->render('admin/lists');
             } else {
-                if ($command == 'add'){
-                    if ($_POST){
+                if ($command == 'add'){ //Add new questionnaire
+                    if ($_POST){ //Post data has been given, add it
                         $formdata = $this->form->getPost();
                         $this->form->validateLength('listname', 3);
-                        if ($this->form->isFormValid()) {
-                            //var_dump($this->lists_m->getLists()); quit();
-                            if (!$this->in_array_case_insensitive($formdata->listname, $this->lists_m->getLists(), 'name')){
+                        if ($this->form->isFormValid()) { //It's Okay, add it!
+                            if (!$this->in_array_case_insensitive($formdata->listname, $this->lists_m->getLists(), 'name')){ #valid parameters and name not existant
                                 $this->lists_m->addList(htmlentities($formdata->listname), $formdata->lang);
                                 $this->setFlashmessage($this->lang['addedlist']);
                                 $this->redirect('admin/lists');
-                            } else {
+                            } else { #Some error
                                 $this->setCurrentFlashmessage($this->lang['erroraddinglist'], 'danger');
                                 $this->template->listname = $formdata->listname;
                                 $this->template->render('admin/lists.add');
                             }
-                        } else {
+                        } else { #some error
                             $this->template->formdata = $formdata;
                             $this->setCurrentFlashmessage($this->lang['wronglistname'], 'danger');
                             $this->template->render('admin/lists'); 
@@ -506,11 +501,11 @@
                     } else {
                         $this->template->render('admin/lists.add');
                     }
-                } elseif ($command == 'delete' && $par1) {
+                } elseif ($command == 'delete' && $par1) { #remove questionnaire
                     $this->lists_m->deleteList($par1);
                     $this->setFlashmessage($this->lang['listremoved']);
                     $this->redirect('admin/lists');
-                } else {
+                } else { #wrong action in URL
                     $this->setCurrentFlashmessage($this->lang['wrongaction'], 'danger');
                     $this->template->render('admin/lists');
                 }

@@ -7,7 +7,7 @@
 #  Usage: run "python2 readout_data.py --help" (without the quotes) in terminal
 #  Root/Administrator privileges required: no
 #  Author: Niels Hofmans (hazcod[|__apostrofe__|]outlook.be)
-#  Want to make this better? -> https://github.com/HazCod/Bruggman
+#  Want to make this better? -> https://github.com/HazCod/BruggmanQ
 
 # imported modules
 import re

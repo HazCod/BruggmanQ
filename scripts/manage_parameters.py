@@ -6,7 +6,10 @@
 #  Usage: None. It is used by the GUI.
 #  Root privileges required: no
 #  Author: Niels Hofmans (hazcod[|__apostrofe__|]outlook.be)
-#  Want to make this better? -> https://github.com/HazCod/Bruggman
+#  Want to make this better? -> https://github.com/HazCod/BruggmanQ
+
+
+###!!!! =>  DEPRECATED. Functionality has been added in readout_data.py
 
 import os
 # everything is imported from readout_data, so sit back and relax!

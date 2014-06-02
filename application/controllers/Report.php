@@ -55,9 +55,10 @@
     }
     
     function transformQuestionnaire($arr) {
+    // Make sure that double keys in the array are transformed to a single key with value1|value2 etcetera..
         $new_arr = array();
         foreach ($arr as $array){
-            if (!in_array($array->code, array_keys($new_arr))){ //not a double
+            if (!in_array($array->code, array_keys($new_arr))){ //not a double value
                 $new_arr[$array->code] = $array->answer;
             } else { //Append it to the existing value
                 $new_arr[$array->code] .= '|' . $array->answer;
@@ -146,7 +147,7 @@
                                 unlink($raw);
                                 unlink($questionnaire);
                                 $files = explode(',', $datastr);
-                                foreach ($datastr as $file){
+                                foreach ($files as $file){
                                     unlink($file);
                                 }
                                 
