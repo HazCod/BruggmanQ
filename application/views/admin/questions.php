@@ -12,6 +12,11 @@
         return $result;
     }
 ?>
+<script>
+function goBack() {
+    window.history.back()
+}
+</script>
 <br><br><br>
 <div class="bs-docs-section">
         <div class="row">
@@ -20,7 +25,7 @@
         <div class="row-fluid">
           <div class="span4">
              <h2><?= $this->lang['questions']; ?></h2>
-             <a href="<?= URL::base_uri(); ?>admin/pages/<?= $this->page; ?>"><?= $this->lang['gobacktopage']; ?>&nbsp;<?= $this->page; ?>&nbsp;.</a><br>
+             <a href="goBack()"><?= $this->lang['gobacktopage']; ?>&nbsp;<?= $this->page; ?>&nbsp;.</a><br>
              <div class="pull-right">
                 <button type="button" class="btn btn-primary">
                     <a href="<?= URL::base_uri(); ?>admin/questions/<?= $this->page; ?>/add"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['addquestion']; ?></a>
