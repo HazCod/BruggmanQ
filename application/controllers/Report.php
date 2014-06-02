@@ -144,7 +144,7 @@
                                 $this->template->output = $output;
                                 
                                 //- Cleanup
-                                unlink($raw);
+                                //unlink($raw);
                                 unlink($questionnaire);
                                 $files = explode(',', $datastr);
                                 foreach ($files as $file){

@@ -46,14 +46,14 @@
                     if (is_array($data)){
                         foreach ($data as $part){
                             $lang = end(explode('/', $part));
-                            $imgu = URL::base_uri() . 'img/flags/' . $lang ;
+                            $imgu = '/img/flags/' . $lang ;
                             $url = URL::base_uri() . 'admin/templates';
                             echo "&nbsp;&nbsp;&nbsp;&nbsp;<img src='$imgu.png' alt='$lang' />&nbsp;&nbsp;";
                             if (is_dir($part)){
-                                echo "<a href=\"javascript:getNights('$url/$list[0]/$lang/download/')\">Download</a>/";
-                                echo "<a href=\"javascript:getNights('$url/$list[0]/$lang/replace/')\">Replace</a>";
+                                echo "<a href=\"javascript:getNights('$url/$list[0]/$lang/download/')\">Download</a>\n";
+                                echo "<a href=\"javascript:getNights('$url/$list[0]/$lang/replace/')\">Replace</a>\n";
                             } else {
-                                echo "<a href=\"javascript:getNights('$url/$list[0]/$lang/replace/')\"><strong>Upload</strong></a>";
+                                echo "<a href=\"javascript:getNights('$url/$list[0]/$lang/replace/')\"><strong>Upload</strong></a>\n";
                             }
                         }
                     } else {

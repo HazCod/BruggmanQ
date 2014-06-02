@@ -1,0 +1,45 @@
+NAME	\| Patient name:  \| (.+)   \|	0	0	0
+FIRSTNAME	\| First name:  \| (.+)   \|	0	0	0
+TST	\| TST \| : \| (\d+(?:\.\d*\d*)*) min \|	0	300	0
+SLEEP_EFFICIENCY	\| Sleep efficiency 2 \| : (\d+(?:\.\d+)*)%       \|	0	0	0
+SOL	WK before sleep \| : \| (?:(\d+\.\d+)|\s+) min \|	0	0	0
+WASO	WK during sleep \| : \| (?:(\d+\.\d+)|\s+) min \|	0	0	0
+EMA	WK after sleep \| : \| (?:(\d+\.\d+)|\s+) min \|	0	0	0
+N1_min	S1 \| (?:(\d+\.\d+)|\s+) \|	0	10	0
+N2_min	S2 \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+N3_min	S3 \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+N4_min	S4 \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+REM_FROM_LIGHT	REM \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+REM_FROM_SLEEP	REM \| (?:\d+\.\d+|\s+) \| (?:(\d+\.\d+)|\s+) \|	0	0	0
+S3_EPISODES	\| S3         \| (\d+\.*\d*)	0	0	0
+S3_DURATION	\| S3         \| \d+\.*\d*    \| (\d+\.*\d*)   \|	0	0	0
+S3_TIB	\| S3         \| \d+\.*\d*    \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+S3_SPT	\| S3         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+S3_TST	\| S3         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+ALPHA_INDEX_S3S4	Alpha index \[S3\+S4\]  \(#/h\)(\d+\.*\d*)	0	0	0
+SWS_TIME	\| SWS time \| : \| (\d+\.*\d*) min	0	0	0
+REM_min	\| REM        \| \d+\.*\d*    \| (\d+\.*\d*)	0	0	0
+REM_percent	\| REM        \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+N1_percent	\| S1         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+N2_percent	\| S2         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+N3_percent	\| S3         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+N4_percent	\| S4         \| \d+\.*\d*    \| \d+\.*\d*   \| \d+\.*\d*   \| \d+\.*\d*   \| (\d+\.*\d*)   \|	0	0	0
+AHI	\| AHI \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+RDI	\| RDI \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_50	\| <50   \(min\) \| \d+\.*\d* \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_60	\| <60   \(min\) \| \d+\.*\d* \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_70	\| <70   \(min\) \| \d+\.*\d* \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_80	\| <80   \(min\) \| \d+\.*\d* \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_85	\| <85   \(min\) \| \d+\.*\d* \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_90	\| <90   \(min\) \| \d+\.*\d* \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_95	\| <95   \(min\) \| \d+\.*\d* \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_AVG	\|  Average \(%\)   \| \d+ \| \d+ \| \d+ \| (\d+) \|	0	0	0
+OXIMETRY_DESAT	\| Desat Index \(#/hour\) \|  \d*\.*\d*  \| \d+\.*\d* \| \d+\.*\d* \| (\d+\.*\d*) \|	0	0	0
+OXIMETRY_DESATMAX	\| Desat max \(%\) \| \d* \| \d* \| \d* \| (\d*) \|	0	0	0
+HYPOXEMY_MAX	\| Minimum of the resp\. event O2 min levels \[%\] : \| (\d+\.*\d*) \|	0	0	0
+AROUSAL_RESP	\|   arousal TOT   \| \d+\.*\d*  \| (\d+\.*\d*)     \| \d+\.*\d*      \| \d+\.*\d*      \| \d+\.*\d* \|	0	0	0
+AROUSEL_RESPDESAT	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| (\d+\.*\d*)      \| \d+\.*\d*      \| \d+\.*\d* \|	0	0	0
+AROUSAL_LEG	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| \d+\.*\d*      \| (\d+\.*\d*)      \| \d+\.*\d* \|	0	0	0
+AROUSAL_SPONT	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| \d+\.*\d*      \| \d+\.*\d*      \| (\d+\.*\d*) \|	0	0	0
+PLMI	\| Index of Leg movements meeting PLM criteria  \[#/h\] \| : (\d+\.*\d*) \|	0	0	0
+

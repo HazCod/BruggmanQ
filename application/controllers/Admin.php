@@ -122,7 +122,7 @@
                 foreach ($files as $entry){
                     $entry = $root_path . 'scripts/templates/' . $entry; //Every template
                     if (is_dir($entry)){ //Is it a directory?
-                        $tmpl_langs = array();
+                        $lang_entries = array();
                         foreach ($this->langs_m->getLangs() as $lang){
                             //Add a language directory that 'should be there'.
                             $lang_entries[] = $entry  . '/' . $lang->flag;
@@ -193,7 +193,7 @@
                                         $this->fixPermissions(); //Fix permissions
                                         //Cleanup
                                         unlink($tempfile);
-                                        unlink($file['tmp_name']);
+                                        //unlink($file['tmp_name']);
                                     }
                                 } else {
                                     //Remove template

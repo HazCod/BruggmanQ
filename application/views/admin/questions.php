@@ -13,9 +13,9 @@
     }
 ?>
 <script>
-function goBack() {
-    window.history.back()
-}
+    function goBack() {
+        window.history.back()
+    }
 </script>
 <br><br><br>
 <div class="bs-docs-section">
@@ -50,13 +50,11 @@ function goBack() {
                   <?php 
                     if ($property == 'type'){
                           echo getTypeStr($this->types, $data); 
-                    } else { 
-                    if (strlen($data) > 60) {
-                       echo substr($data, 0, 60) . '..'; 
+                    } elseif (strlen($data) > 60) {
+                           echo substr($data, 0, 60) . '..'; 
                     } else {
-                        echo $data;
-                    }
-                     } ?>
+                            echo $data;
+                    } ?>
                   </td>
                   <?php endforeach; ?>
                   <td>
