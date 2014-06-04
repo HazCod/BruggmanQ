@@ -146,6 +146,7 @@ function getLang($controller){
           $lang['stddev']           = 'Standaard deviatie';
           $lang['settings']         = 'Instellingen';
           $lang['parameters']       = 'Parameters';
+          $lang['parameteradded']   = 'Parameter is toegevoegd.';
           
           //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';

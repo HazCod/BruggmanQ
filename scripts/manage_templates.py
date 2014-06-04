@@ -15,7 +15,7 @@ import zipfile
 import sys
 import argparse
 
-from shutil import copyfile, rmtree
+from shutil import copyfile, rmtree, move
 
 report_file = "report.docx"	#default output file
 command 	= "extract"		#default command
@@ -42,11 +42,10 @@ def assembleFile( template, result ):
 		zipf.close()
 
 
-def extractFile( input, folder):
-	#folder example; /var/www/scripts/templates/nl/
+def extractFile( input, folder, newname):
+	#folder example; /var/www/scripts/templates/nl
 	#input example; template_1.docx
-	folder = folder + '/' + os.path.basename(input.rstrip('.docx'))
-	print(folder)
+	folder = folder + '/' + newname
 	try:
     	#remove old template
 		if (os.path.isdir(folder)):
@@ -56,6 +55,9 @@ def extractFile( input, folder):
 		os.chdir(folder)
 		zipfile.ZipFile(os.path.basename(input)).extractall()
 		#os.remove(input)
+		#if (newname is not None):
+		#	move(os.path.basename(input), newname)
+		os.remove(input)
 		os.remove(folder + '/' + os.path.basename(input))
 
 	except Exception, e:
@@ -76,6 +78,7 @@ def main(argv=None):
 	global report_file
 	datafile = None
 	command = "assemble"
+	newname = None
 
 	#Commandline parameter handling
 	if argv is None:
@@ -84,6 +87,7 @@ def main(argv=None):
 		parser.add_argument("template", help="The template directory or file.")
 		parser.add_argument("-o", "--output", help="The output file. Default is report.docx")
 		parser.add_argument("-l", "--language", help="Language used in template. Default is nl")
+		parser.add_argument("-n", "--name", help="Filename when extracting.")
 		args = parser.parse_args()
 		if (args.template is not None):
 			datafile = args.template
@@ -93,6 +97,8 @@ def main(argv=None):
 				command = args.command
 			if (args.language is not None):
 				language = args.language
+			if (args.name is not None):
+				newname = args.name
 		else:
 			raise Exception("Must provide an argument!")
 			Usage()
@@ -102,7 +108,7 @@ def main(argv=None):
 		Usage()
 
 	if (command == 'extract'):
-		extractFile(datafile, report_file)
+		extractFile(datafile, report_file, newname)
 	elif (command == 'assemble'):
 		assembleFile(datafile, report_file)
 	elif (command == 'delete'):

@@ -157,7 +157,7 @@ def readParameters(c):
 			par = line.split('\t') #seperated by tabs
 			#If addToExcel = 1, add it to our headers list to check.
 			if (par[-1] == '1'):
-				headers.append(par[1])
+				headers.append(par[0])
 			parList.append(par)
 	finally:
 		if f is not None:
@@ -216,6 +216,13 @@ def html_decode(s):
 # html_decode : Turns <, > and == html entitites into special characters. Ugly approach, but it works.
 	return s.replace('&lt;','<').replace('&gt;','>').replace('&equiv;','=')
 
+def escape_unneeded(s):
+	match1 = re.escape("</w:t></w:r><w:r w:rsidRPr=\"") + ".+" + re.escape("\"><w:rPr><w:rFonts w:ascii=\"") + "\s+" + re.escape("\" w:hAnsi=\"") + "\s+" + re.escape("\"/><w:sz w:val=\"") + "\d+" + re.escape("\"/><w:szCs w:val=\"") + "\d+" + re.escape("\"/><w:lang w:val=\"") + ".+" + re.escape("\"/></w:rPr><w:t>")
+	match2 = re.escape("</w:t></w:r><w:r><w:rPr><w:rFonts w:ascii=\"") + "\s+" + re.escape("\" w:hAnsi=\"") + "\s+" + re.escape("\"/><w:sz w:val=\"") + "\d+" + re.escape("\"/><w:szCs w:val=\"") + "\d+" + re.escape("\"/><w:lang w:val=\"") + ".+" + re.escape("\"/></w:rPr><w:t>")
+	re.sub(r'' + match1, r'', s)
+	re.sub(r'' + match2, r'', s)
+	return s
+
 def writeParameters(data, i):
 # writeParameters : Extracts the template, replaces the values and zips it back into a docx file.
 	global template_dir
@@ -265,6 +272,7 @@ def writeParameters(data, i):
 				log('HTML decoding file..')
 				#FIX: word converts characters into their html code, such as >  to &gt;. We convert them back now.
 				t = html_decode(contents)
+				t = escape_unneeded(t)
 				contents_fw = codecs.open(file, "w", encoding="utf-8")
 				contents_fw.write(t)
 			finally:
@@ -330,11 +338,11 @@ def checkSpreadsheetHeaders( dataHeaders ):
 	ncols =  len(cols)
 
 	for header in dataHeaders:
-		header_caption = str(header.value).lower()
+		header_caption = str(header).lower()
 		#log('col: ' + str(header_caption))
 		if header_caption not in cols:
 			# We need to add a column
-			log('Writing header ' + header + ' to Spreadsheet on (0, ' + ncols +1 + '). (' + str(header.value).lower() + ')')
+			log('Writing header ' + header + ' to Spreadsheet on (0, ' + str(ncols +1) + '). (' + str(header).lower() + ')')
 			out_sheet.write(0, ncols +1, str(header))
 			ncols = ncols + 1 #For when we need to add another column afterwards
 
@@ -391,7 +399,7 @@ def updateSpreadsheet( data ):
 		os.remove(spreadsheet_file)
 		copyfile(spreadsheet_file.rstrip("xls") + "_new.xls", spreadsheet_file)
 		os.remove(spreadsheet_file.rstrip("xls") + "_new.xls")
-		
+
 
 
 def addQuestionnaire( data ):

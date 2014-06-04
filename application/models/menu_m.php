@@ -37,7 +37,7 @@ class Menu_m extends Core_db
                                         'description' => $lang['adminlists'],
                                     ),
                                     array(
-                                        'link' => 'admin/langs',
+                                        'link' => 'admin/data',
                                         'description' => $lang['admindata'],
                                     ),
                               ),

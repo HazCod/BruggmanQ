@@ -3,13 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/views/lists/page.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/database.sql</file>
+            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/languages/lang.en.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/models/menu_m.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/views/admin/data.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/views/admin/regex.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/views/admin/parameters.php</file>
             <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/views/_partials/navbar.php</file>
             <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/controllers/Admin.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/views/admin/templates.php</file>
+            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/controllers/Report.php</file>
             <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/application/languages/lang.nl.php</file>
-            <file>file:/home/nindustries/NetBeansProjects/BruggmanQ/README.md</file>
         </group>
     </open-files>
 </project-private>

@@ -6,11 +6,15 @@
         <div class="row-fluid">
           <div class="span4">
               <h2><?= $this->lang['regextool']; ?></h2>
-              <form method="post" action="<?= URL::base_uri(); ?>admin/tools/regex">
+              <form method="post" action="<?= URL::base_uri(); ?>admin/parameters/add">
                 <div class="form-group">
                     <label for="regex"><?= $this->lang['input']; ?></label>
                     <input type="text" class="form-control" id="regex" name="regex" placeholder="<?= $this->lang['input']; ?>" value="<?php if ($this->regex){ echo $this->regex; } ?>">
                 </div><!-- /input-group -->
+                <div class="form-group">
+                    <label for="name"><?= $this->lang['name']; ?></label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="1" value="<?php if ($this->name){ echo $this->name; } ?>">
+                </div><!-- /input-group -->                
                 <div class="form-group">
                     <label for="occurence"><?= $this->lang['occurence']; ?></label>
                     <input type="text" class="form-control" id="occurence" name="occurence" placeholder="1" value="<?php if ($this->occurence){ echo $this->occurence; } ?>">
@@ -31,12 +35,7 @@
                     </select>
                 </div><!-- /input-group -->
                 
-                <div class="well">
-                    <label for="result"><?= $this->lang['result']; ?></label>
-                    <textarea class="form-control" readonly="yes" name="result" id="result" rows="3"><?php if ($this->result){ echo $this->result; } ?></textarea>
-                </div><!-- /input-group -->
-                
-                <button class="btn btn-primary" type="submit"><?= $this->lang['calculate']; ?></button>
+                <button class="btn btn-primary" type="submit"><?= $this->lang['add']; ?></button>
               </form>
           </div>
         </div>

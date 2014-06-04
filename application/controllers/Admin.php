@@ -126,17 +126,28 @@
         return $str;
     }
     
-    public function tools($tool=false)
+    public function parameters($command=false, $par1=false)
     {
+        $root_path = $_SERVER['DOCUMENT_ROOT'] . '/';
         if ($this->checkPrivilege()){
-            if ($tool == 'regex'){
+            if (!$command){
+                $this->template->parameters = explode("\n", file_get_contents($root_path . 'scripts/report_parameters'));
+                $this->template->render('admin/parameters');
+            } elseif ($command == 'add'){
                 if ($_POST){
                     $formdata = $this->form->getPost();
                     $this->form->validateLength('regex', 1);
                     $this->form->validateInteger('occurence');
+                    $this->form->validateLength('name', 2);
                     if ($this->form->isFormValid()){
-                        $this->template->result = $this->calculateRegex($formdata->regex, $formdata->occurence);
-                        $this->template->render('admin/regex');
+                        $regex = $this->calculateRegex($formdata->regex, $formdata->occurence);
+                        $current = file_get_contents($root_path . 'scripts/report_parameters');
+                        $line = "$formdata->name\t$regex\t$formdata->norm\t$formdata->stddev\t$formdata->excel";
+                        $current .= $line . "\n";
+                        file_put_contents($root_path . 'scripts/report_parameters', $current);
+                        shell_exec('scripts/fixpermissions.py ' . $root_path . 'scripts/report_parameters');
+                        $this->setFlashmessage($this->lang['parameteradded']);
+                        $this->redirect('admin/parameters');
                     } else {
                         $this->setCurrentFlashmessage($this->lang['checkparameters'], 'danger');
                         $this->template->formdata = $formdata->regex;
@@ -145,6 +156,32 @@
                 } else {
                     $this->template->render('admin/regex');
                 }
+            } elseif ($command == 'remove' and $par1 != false and (intval($par1) == $par1)){
+                $path = $root_path . 'scripts/report_parameters';
+                $lines = file($path, FILE_IGNORE_NEW_LINES);
+                $found = 0;
+                for ($i=0; ($i < sizeof($lines)) and ($found == 0); $i++){
+                  if($i === intval($par1)){
+                      unset($lines[$i]);
+                      $found = 1;
+                  }
+                }
+                $data = implode("\n", array_values($lines));
+                $file = fopen($path, 'w');
+                fwrite($file, $data);
+                fclose($file);
+                $this->redirect('admin/parameters');
+            } else {
+                $this->setFlashmessage('Bad URL', 'danger');
+                $this->redirect('admin/index');
+            }
+        }
+    }
+    
+    public function tools($tool=false)
+    {
+        if ($this->checkPrivilege()){
+            if ($tool == 'regex'){
             } else {
                 $this->setFlashmessage('Wrong URL', 'danger');
                 $this->redirect('admin/index');
@@ -234,7 +271,9 @@
                                         $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1'); //Do the stuff
                                         $this->fixPermissions(); //Fix permissions
                                         //Cleanup
-                                        shell_exec("sudo python2 scripts/remove.py $temp");
+                                        foreach ($temp as $tempfile){
+                                            shell_exec("sudo python2 scripts/remove.py $tempfile");                                           
+                                        }
                                         $tmp = $file['tmp_name'];
                                         shell_exec("sudo python2 scripts/remove.py $tmp");
                                     }
@@ -261,9 +300,9 @@
                             $this->fixPermissions(); //Fix permissions prior to upload
                             
                             $tempfile = $file['tmp_name']; //tmp file name
-                            $dir = $root_path . "scripts/templates/$templ/$lang/template_$nights"; //Output path
+                            $dir = $root_path . "scripts/templates/$templ/$lang"; //Output path
                             $this->deleteDirectory($dir); //remove old template
-                            $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1'); //Do the stuff
+                            $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir -n template_$nights". ' 2>&1'); //Do the stuff
                             $this->setFlashmessage($this->lang['templatereplaced']);
                             $this->fixPermissions(); //Fix permissions
                             $this->redirect('admin/templates');

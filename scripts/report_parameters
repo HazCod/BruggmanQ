@@ -46,7 +46,7 @@ AROUSAL15_LEG	\|  arousal >15sec  \| \d+  \| \d+     \| \d+      \| (\d+)      \
 AROUSAL_SPONT	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| \d+\.*\d*      \| \d+\.*\d*      \| (\d+\.*\d*) \|	0	0	0
 AROUSAL15_SPONT	\|  arousal >15sec  \| \d+  \| \d+     \| \d+      \| \d+      \| (\d+) \|	0	0	0
 AROUSAL_TOT	\|   arousal TOT   \| (\d+)  \| \d+     \| \d+      \| \d+      \| \d+ \|	0	0	0
-AROUSAL15_TOT	\|  arousal >15sec  \| (\d+)  \| \d+     \| \d+      \| \d+      \| \d+ \|
+AROUSAL15_TOT	\|  arousal >15sec  \| (\d+)  \| \d+     \| \d+      \| \d+      \| \d+ \|	0	0	0
 PLMI	\| Index of Leg movements meeting PLM criteria  \[#/h\] \| : (\d+\.*\d*) \|	0	0	0
 AROUSAL_INDEX	\| Arousal index  \| : (\d+)\.*(\d*)/h\(sleep\) \|	0	0	0
 CA	\| Number \| (\d+) \| \d+ \| \d+ \| \d+ \| \d+ \| \d+ \|	0	0	0

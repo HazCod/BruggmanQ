@@ -163,6 +163,7 @@
                                 fclose($file);
                                 //- Run the script!
                                 $excel = $root_path . 'upload/PSG.xls';
+                                shell_exec("sudo python2 scripts/remove.py $root_path . upload/report.docx");
                                 $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --questionnaire $questionnaire --excel $excel --output $results --parameters $parameters --raw $raw $template $datastr";
                                 $output = shell_exec($this->template->cmd . ' 2>&1');
                                 //- Pass our variables to the template
