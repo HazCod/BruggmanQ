@@ -1,7 +1,8 @@
 TODO:
 -------
 From most to least important.
-- Automatically fix 'broken' docx templates (history syntax polution)
+- Add more parameters
+- Add text possibility to Add Parameter
 - Add back button on pages
 - Add editing support
 - Add multiple admin user support
