@@ -30,23 +30,35 @@ class Menu_m extends Core_db
             array(
                 'link' => 'admin/index',
                 'description' => $lang['adminindex'],
-            ),            
-            array(
-                'link' => 'admin/lists',
-                'description' => $lang['adminlists'],
+            ), 
+            array( 'link' => array(
+                                    array(
+                                        'link' => 'admin/lists',
+                                        'description' => $lang['adminlists'],
+                                    ),
+                                    array(
+                                        'link' => 'admin/langs',
+                                        'description' => $lang['admindata'],
+                                    ),
+                              ),
+                   'description' => $lang['manage'],
             ),
-            array(
-                'link' => 'admin/data',
-                'description' => $lang['admindata'],
+            array( 'link' => array(
+                                    array(
+                                        'link' => 'admin/langs',
+                                        'description' => $lang['adminlangs'],
+                                    ),
+                                    array(
+                                        'link' => 'admin/templates',
+                                        'description' => 'Templates',
+                                    ),
+                                    array(
+                                        'link' => 'admin/parameters',
+                                        'description' => $lang['parameters'],
+                                    )
+                              ),
+                   'description' => $lang['settings'],
             ),
-            array(
-                'link' => 'admin/langs',
-                'description' => $lang['adminlangs'],
-            ),
-            array(
-                'link' => 'admin/templates',
-                'description' => 'Templates'
-            )
         );
         return $menuitems;
     }

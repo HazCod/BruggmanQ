@@ -4,6 +4,13 @@
 	<?php $this->renderPartial('flashmessage'); ?>
         </div>
         <div class="row-fluid">
+          
+         <div class="pull-right">
+            <a href="<?= URL::base_uri(); ?>report/excel/download"><i class="glyphicon glyphicon-share-alt"></i><?= $this->lang['download']; ?></a>
+            &nbsp;
+            <a href="<?= URL::base_uri(); ?>report/excel/remove" onClick="return confirm('<?= $this->lang['areyousure']; ?>');"><i class="glyphicon glyphicon-fire"></i><?= $this->lang['clear']; ?></a>                 
+         </div>
+           
           <div class="span4">
              <h2><?= $this->lang['managedata']; ?></h2>
              <table class="table table-hover">

@@ -38,8 +38,19 @@ OXIMETRY_DESAT	\| Desat Index \(#/hour\) \|  \d*\.*\d*  \| \d+\.*\d* \| \d+\.*\d
 OXIMETRY_DESATMAX	\| Desat max \(%\) \| \d* \| \d* \| \d* \| (\d*) \|	0	0	0
 HYPOXEMY_MAX	\| Minimum of the resp\. event O2 min levels \[%\] : \| (\d+\.*\d*) \|	0	0	0
 AROUSAL_RESP	\|   arousal TOT   \| \d+\.*\d*  \| (\d+\.*\d*)     \| \d+\.*\d*      \| \d+\.*\d*      \| \d+\.*\d* \|	0	0	0
-AROUSEL_RESPDESAT	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| (\d+\.*\d*)      \| \d+\.*\d*      \| \d+\.*\d* \|	0	0	0
+AROUSAL15_RESP	\|  arousal >15sec  \| \d+  \| (\d+)     \| \d+      \| \d+      \| 8 \|	0	0	0
+AROUSAL_RESPDESAT	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| (\d+\.*\d*)      \| \d+\.*\d*      \| \d+\.*\d* \|	0	0	0
+AROUSAL15_RESPDESAT	\|  arousal >15sec  \| \d+  \| \d+     \| (\d+)      \| \d+      \| 8 \|	0	0	0
 AROUSAL_LEG	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| \d+\.*\d*      \| (\d+\.*\d*)      \| \d+\.*\d* \|	0	0	0
+AROUSAL15_LEG	\|  arousal >15sec  \| \d+  \| \d+     \| \d+      \| (\d+)      \| \d+ \|	0	0	0
 AROUSAL_SPONT	\|   arousal TOT   \| \d+\.*\d*  \| \d+\.*\d*     \| \d+\.*\d*      \| \d+\.*\d*      \| (\d+\.*\d*) \|	0	0	0
+AROUSAL15_SPONT	\|  arousal >15sec  \| \d+  \| \d+     \| \d+      \| \d+      \| (\d+) \|	0	0	0
+AROUSAL_TOT	\|   arousal TOT   \| (\d+)  \| \d+     \| \d+      \| \d+      \| \d+ \|	0	0	0
+AROUSAL15_TOT	\|  arousal >15sec  \| (\d+)  \| \d+     \| \d+      \| \d+      \| \d+ \|
 PLMI	\| Index of Leg movements meeting PLM criteria  \[#/h\] \| : (\d+\.*\d*) \|	0	0	0
+AROUSAL_INDEX	\| Arousal index  \| : (\d+)\.*(\d*)/h\(sleep\) \|	0	0	0
+CA	\| Number \| (\d+) \| \d+ \| \d+ \| \d+ \| \d+ \| \d+ \|	0	0	0
+OA	\| Number \| \d+ \| (\d+) \| \d+ \| \d+ \| \d+ \| \d+ \|	0	0	0
+MA	\| Number \| \d+ \| \d+ \| (\d+) \| \d+ \| \d+ \| \d+ \|	0	0	0
+HYP	\| Number \| \d+ \| \d+ \| \d+ \| \d+ \| (\d+) \| \d+ \|	0	0	0
 

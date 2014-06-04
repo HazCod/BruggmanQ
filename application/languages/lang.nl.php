@@ -131,7 +131,23 @@ function getLang($controller){
           $lang['areyousure']       = 'Bent u zeker?';
           $lang['code']             = 'Identificatiecode (voor het rapport)';
           $lang['langsnotice']      = 'Opmerking: Bij het toevoegen van een nieuwe taal mag u niet vergeten het template voor deze taal toe te voegen.';
-           //- description of every type
+          $lang['download']         = 'Download PSG';
+          $lang['clear']            = 'Maak PSG leeg';
+          $lang['regextool']        = 'RegEx Tool';
+          $lang['regex']            = 'Regular Expression';
+          $lang['input']            = 'Invoer';
+          $lang['result']           = 'Resultaat';
+          $lang['calculate']        = 'Bereken';
+          $lang['occurence']        = 'Hoeveelste getal?';
+          $lang['yes']              = 'Ja';
+          $lang['no']               = 'Nee';
+          $lang['addtoexcel']       = 'Voeg toe in GLS?';
+          $lang['norm']             = 'Norm';
+          $lang['stddev']           = 'Standaard deviatie';
+          $lang['settings']         = 'Instellingen';
+          $lang['parameters']       = 'Parameters';
+          
+          //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
           $lang['RADIOBOXdesc']  = 'Dit is een lijst van opties met bolletjes om 1 waarde uit te kiezen.';
           $lang['CHECKBOXdesc']  = 'Dit is een lijst van opties waar mensen geen of meerdere waardes kunnen uitkiezen.';

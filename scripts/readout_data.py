@@ -50,7 +50,7 @@ contents = None 						#leave this to None
 lang_dir = 'nl/' 						#language defaults to nl (=Dutch)
 questionnaire = None 					#datafile where questionnaire data is stored (if not None)
 ql_prefix = 'QL_'						#prefix for the questionnaire variables
-ql_split = '|'                                                  #the character used for splitting multiple answers
+ql_split = '|'                          #the character used for splitting multiple answers
 #==
 
 def log( logmsg ):
@@ -103,11 +103,12 @@ def convertFile( wfile, type='rtf' ):
 
 def file_test( file ):
 # file_test : Give warning when the file doesn't exist or is empty.
-	if (0 == os.path.isfile(file) or (0 == os.stat(file)[stat.ST_SIZE])):
+	if (0 != os.path.isfile(file) and (0 != os.stat(str(file))[stat.ST_SIZE])):
+		return 1
+	else:
 		log("file is empty! " + file)	
 		quit()	
 		return 1
-	else:
 		return 0
 
 def readout( f ):
@@ -198,7 +199,8 @@ def readParameters(c):
 	finally:
 		if f_result is not None:
 				f_result.close()
-                                os.remove(f_result)
+                if os.path.isfile(str(f_result)):
+                	os.remove(str(f_result))
 
 	return data
 
@@ -329,10 +331,10 @@ def checkSpreadsheetHeaders( dataHeaders ):
 
 	for header in dataHeaders:
 		header_caption = str(header.value).lower()
-		log('col: ' + str(header_caption))
+		#log('col: ' + str(header_caption))
 		if header_caption not in cols:
 			# We need to add a column
-			log('Writing header ' + header + ' to Spreadsheet on (0, ' + ncols +1 + ').')
+			log('Writing header ' + header + ' to Spreadsheet on (0, ' + ncols +1 + '). (' + str(header.value).lower() + ')')
 			out_sheet.write(0, ncols +1, str(header))
 			ncols = ncols + 1 #For when we need to add another column afterwards
 
@@ -377,7 +379,7 @@ def updateSpreadsheet( data ):
 		log('commencing write..')
 		for cell in cols:
 			col_caption = str(cell.value)
-			log('col: ' + str(col_caption))
+			#log('col: ' + str(col_caption))
 			if col_caption in data.keys():
 				log('write on ' + str(row) + 'x' + str(i))
 				log(str(data[col_caption]))
@@ -389,6 +391,7 @@ def updateSpreadsheet( data ):
 		os.remove(spreadsheet_file)
 		copyfile(spreadsheet_file.rstrip("xls") + "_new.xls", spreadsheet_file)
 		os.remove(spreadsheet_file.rstrip("xls") + "_new.xls")
+		
 
 
 def addQuestionnaire( data ):
@@ -522,6 +525,8 @@ def main(argv=None):
 		#adjust the spreadsheet
 		log("Doing spreadsheet business on " + spreadsheet_file)
 		updateSpreadsheet(data)
+	else:
+		log("Spreadsheet not found, skipping; " + spreadsheet_file)
 
 
 class SilentUndefined(Undefined):

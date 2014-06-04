@@ -1,4 +1,4 @@
-    <?php
+<?php
     function getLangName($arr, $code){
         $result = '';
         for ($i=0; $i < $arr and $result == ''; $i++){
@@ -22,9 +22,22 @@
         <div class="navbar-collapse collapse" id="navbar-main">
           <ul class="nav navbar-nav">
           <? foreach ($this->menuitems as $menuitem): ?>
+            <? if (!is_array($menuitem['link'])): ?>
             <li class="<?= ($menuitem['link'] == URL::getCurrentPath()) ? 'active' : ''; ?>">
               <a href="<?= URL::base_uri(); ?><?= $menuitem['link']; ?>"><?= $menuitem['description']; ?></a>
             </li>
+            <? else: ?>
+            <li class="dropdown">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown"><?= $menuitem['description']; ?><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                <? foreach ($menuitem['link'] as $item): ?>
+                    <li class="<?= ($item['link'] == URL::getCurrentPath()) ? 'active' : ''; ?>">
+                      <a href="<?= URL::base_uri(); ?><?= $item['link']; ?>"><?= $item['description']; ?></a>
+                    </li>
+                <? endforeach; ?>
+                </ul>
+            </li>
+            <? endif; ?>
           <? endforeach; ?>
           </ul>
           <ul class="nav navbar-nav navbar-right">

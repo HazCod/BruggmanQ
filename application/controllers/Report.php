@@ -76,6 +76,33 @@
     }
     
     
+    public function excel($command=false)
+    {
+        if ($this->checkPrivilege()){
+            if ($command){
+                if ($command == 'download'){
+                    header("Content-Type: application/octet-stream");
+                    header("Content-Transfer-Encoding: Binary");
+                    header("Content-disposition: attachment; filename=\"PSG_database.xls\""); 
+                    echo readfile($_SERVER['DOCUMENT_ROOT'] . '/upload/PSG.xls');
+                } elseif ($command == 'remove') {
+                    shell_exec('sudo python2 scripts/remove.py upload/PSG.xls');
+                    copy('upload/empty.xls', 'upload/PSG.xls');
+                    shell_exec("sudo python2 scripts/fixpermissions.py upload/PSG.xls");
+                    $this->setFlashmessage('PSG Cleared');
+                    $this->redirect('admin/data');
+                } else {
+                    $this->setFlashmessage('Bad URL!', 'danger');
+                    $this->redirect('admin/data'); 
+                }
+            } else {
+                $this->setFlashmessage('Bad URL!', 'danger');
+                $this->redirect('admin/data');
+            }
+        }
+    }
+    
+    
     public function generate($userid=false, $language=false)
     {
         if ($this->checkPrivilege()){
@@ -122,12 +149,11 @@
                             } else { //begin!
                                 $results = $root_path . 'upload/report.docx'; //This will be our result
                                 
-                                $parameters = URL::base_uri() . 'scripts/report_parameters'; //Here are our parameters
+                                $parameters = '/scripts/report_parameters'; //Here are our parameters
                                 $raw = "/tmp/" . $this->generateRandomString(8); //Temporary file where we store our raw file
 
                                 $questionnaire = '/tmp/' . $this->generateRandomString(8); //Temporary file where we store our questionnaire data
                                 $q_data = $this->data_m->getUserAnswers($userid); //Get our questionnaire data
-
                                 $q_data = $this->transformQuestionnaire($q_data); //Get rid of the double values
                                 $file = fopen($questionnaire, 'w'); //Write the questionnaire to the file                              
                                 foreach ($q_data as $question => $answer)
@@ -136,7 +162,8 @@
                                 }
                                 fclose($file);
                                 //- Run the script!
-                                $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --questionnaire $questionnaire --output $results --parameters $parameters --raw $raw $template $datastr";
+                                $excel = $root_path . 'upload/PSG.xls';
+                                $this->template->cmd = "sudo python2 scripts/readout_data.py --language $language --questionnaire $questionnaire --excel $excel --output $results --parameters $parameters --raw $raw $template $datastr";
                                 $output = shell_exec($this->template->cmd . ' 2>&1');
                                 //- Pass our variables to the template
                                 $this->template->result = URL::base_uri() . 'upload/report.docx';
@@ -144,11 +171,12 @@
                                 $this->template->output = $output;
                                 
                                 //- Cleanup
-                                //unlink($raw);
-                                unlink($questionnaire);
+                                shell_exec("sudo python2 scripts/fixpermissions.py $root_path" . "upload/PSG.xls");
+                                shell_exec("sudo python2 scripts/remove.py $raw");
+                                shell_exec("sudo python2 scripts/remove.py $questionnaire");
                                 $files = explode(',', $datastr);
                                 foreach ($files as $file){
-                                    unlink($file);
+                                    shell_exec("sudo python2 scripts/remove.py $file");
                                 }
                                 
                                 $this->template->render('report/result');

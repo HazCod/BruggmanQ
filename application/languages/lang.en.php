@@ -131,7 +131,23 @@ function getLang($controller){
           $lang['areyousure']       = 'Are you sure?';
           $lang['code']             = 'Identification code (for the report)';
           $lang['langsnotice']      = 'Notice: When adding a new language, don\'t forget to add the templates for this language.';
-           //- description of every type
+          $lang['download']         = 'Download PSG';
+          $lang['clear']            = 'Clear PSG';
+          $lang['regextool']        = 'RegEx Tool';
+          $lang['regex']            = 'Regular Expression';
+          $lang['input']            = 'Input';
+          $lang['result']           = 'Result';
+          $lang['calculate']       = 'Calculate';
+          $lang['occurence']        = 'Which Occurence';
+          $lang['yes']              = 'Yes';
+          $lang['no']               = 'No';
+          $lang['addtoexcel']       = 'Add to GLS?';
+          $lang['norm']             = 'Norm';
+          $lang['stddev']           = 'Standard deviation';
+          $lang['settings']         = 'Settings';
+          $lang['parameters']       = 'Parameters';
+          
+          //- description of every type
           $lang['COMBOBOXdesc']  = 'This is a dropdown where people can pick one value.';
           $lang['RADIOBOXdesc']  = 'This is a list of bullets where people can choose one item.';
           $lang['CHECKBOXdesc']  = 'This is a list of items where people can pick none to many items.';

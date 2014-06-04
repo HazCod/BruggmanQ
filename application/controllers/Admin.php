@@ -110,6 +110,48 @@
         shell_exec('sudo python2 scripts/fixpermissions.py ' . $_SERVER['DOCUMENT_ROOT'] . '/scripts/templates');
     }
     
+    function str_replace_nth($search, $replace, $subject, $nth){
+        $found = preg_match_all('/'.preg_quote($search).'/', $subject, $matches, PREG_OFFSET_CAPTURE);
+        if (false !== $found && $found > $nth) {
+            return substr_replace($subject, $replace, $matches[0][$nth][1], strlen($search));
+        }
+        return $subject;
+    }
+    
+    function calculateRegex( $str, $occurence=1){
+        $str = preg_quote($str);
+        $str = preg_replace('/ +/', ' *', $str);
+        $str = preg_replace('/\d+\.*\d*/', '(?:\d+\.*\d*)*', $str);
+        $str = $this->str_replace_nth('(?:\d+\.*\d*)*', '(\d+\.*\d*)*', $str, $occurence);
+        return $str;
+    }
+    
+    public function tools($tool=false)
+    {
+        if ($this->checkPrivilege()){
+            if ($tool == 'regex'){
+                if ($_POST){
+                    $formdata = $this->form->getPost();
+                    $this->form->validateLength('regex', 1);
+                    $this->form->validateInteger('occurence');
+                    if ($this->form->isFormValid()){
+                        $this->template->result = $this->calculateRegex($formdata->regex, $formdata->occurence);
+                        $this->template->render('admin/regex');
+                    } else {
+                        $this->setCurrentFlashmessage($this->lang['checkparameters'], 'danger');
+                        $this->template->formdata = $formdata->regex;
+                        $this->template->render('admin/regex');
+                    }
+                } else {
+                    $this->template->render('admin/regex');
+                }
+            } else {
+                $this->setFlashmessage('Wrong URL', 'danger');
+                $this->redirect('admin/index');
+            }
+        }
+    }
+    
     public function templates($templ=false, $lang=false, $command=false, $nights=1)
     {
         if ($this->checkPrivilege()){
@@ -192,8 +234,9 @@
                                         $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1'); //Do the stuff
                                         $this->fixPermissions(); //Fix permissions
                                         //Cleanup
-                                        unlink($tempfile);
-                                        //unlink($file['tmp_name']);
+                                        shell_exec("sudo python2 scripts/remove.py $temp");
+                                        $tmp = $file['tmp_name'];
+                                        shell_exec("sudo python2 scripts/remove.py $tmp");
                                     }
                                 } else {
                                     //Remove template
