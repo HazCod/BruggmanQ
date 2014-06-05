@@ -199,15 +199,41 @@
                 $this->redirect('admin/parameters');
             } elseif ($command == 'getdata'){
                 if ($_POST){
-                shell_exec('/usr/bin/docfrac ');
-                //- Headers to anounce a file is being offered to the browser
-                header("Content-Description: File Transfer"); 
-                header("Content-Type: application/octet-stream"); 
-                header("Content-Disposition: attachment; filename=\"$templ" . "_$lang" . "_$nights.docx\""); 
+                    if (isset($_FILES["file"])){ //If name is OK and every language has a template
+                        //var_dump($_FILES); quit();
+                        $ok = true;
+                        $allowedExts = array('rtf', 'html', 'txt'); //Only accept docx
+                        $ext = end(explode(".", $_FILES['file']["name"]));
+                        if (!in_array($ext, $allowedExts) or $_FILES['file']['error'] > 0){ //Is the file allowed/bugged/wrongly named?
+                                $ok = false; //no! Don't generate a report!
+                                $error = $file['error']; //Save the file error to show afterwards
+                        } elseif ($ext == 'txt'){
+                            $ext = 'text'; //for docfrac --to-text
+                        }
+                        if ($ok){ //Everything is OK, start!
+                            $loc = $root_path . "upload/data/data.rtf";
+                            $conv = $root_path . "upload/data";
+                            //if (!move_uploaded_file($_FILES['file']['tmp_name'], $loc)){ //Move to temp location
+                           //     error_log('!ERROR: Could not move ' . $file['tmp_name'] . ' to ' . $loc);
+                            //}
+                            //chmod($loc, 0777); //just to be sure
+                            $loc = $_FILES['file']['tmp_name'];
+                            error_log(shell_exec("/usr/bin/docfrac --from-$ext $loc --to-text $conv " . "2>&1"));
+                            //- Headers to anounce a file is being offered to the browser
+                            header("Content-Description: File Transfer"); 
+                            header("Content-Type: application/octet-stream"); 
+                            header("Content-Disposition: attachment; filename=\"data\"");
+                            readfile( $conv );
+                            shell_exec("sudo python2 scripts/remove.py $loc");
+                            shell_exec("sudo python2 scripts/remove.py $conv");
+                        }
+                    } else {
+                        $this->setCurrentFlashmessage($this->lang['templateadderror'], 'danger');
+                        $this->template->render('admin/templates.add');
+                    }             
                 } else {
                     $this->template->render('admin/parameters.data');
                 }
-                readfile ($file); //Now send it
             } else {
                 $this->setFlashmessage('Bad URL', 'danger');
                 $this->redirect('admin/index');
