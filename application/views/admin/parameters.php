@@ -8,6 +8,9 @@
              <h2><?= $this->lang['parameters']; ?></h2>
              <div class="pull-right">
                 <button ype="button" class="btn btn-primary">
+                    <a href="<?= URL::base_uri() . 'admin/parameters/getdata' ?>"><span class="glyphicon glyphicon-share-alt"></span> <?= $this->lang['downloadData']; ?></a>
+                </button>
+                <button ype="button" class="btn btn-primary">
                     <a href="<?= URL::base_uri() . 'admin/parameters/add' ?>"><span class="glyphicon glyphicon-plus"></span> <?= $this->lang['add']; ?></a>
                 </button>
              </div>

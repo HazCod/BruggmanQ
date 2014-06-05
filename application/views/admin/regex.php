@@ -20,6 +20,10 @@
                     <input type="text" class="form-control" id="occurence" name="occurence" placeholder="1" value="<?php if ($this->occurence){ echo $this->occurence; } ?>">
                 </div><!-- /input-group -->
                 <div class="form-group">
+                    <label for="length"><?= $this->lang['regexlength']; ?></label>
+                    <input type="text" class="form-control" id="length" name="length" placeholder="<?= $this->lang['regexleaveempty']; ?>" >
+                </div>
+                <div class="form-group">
                     <label for="norm"><?= $this->lang['norm']; ?></label>
                     <input type="text" class="form-control" id="norm" name="norm" placeholder="0" value="<?php if ($this->stddev){ echo $this->stddev; } ?>">
                 </div><!-- /input-group -->

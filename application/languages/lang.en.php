@@ -147,6 +147,9 @@ function getLang($controller){
           $lang['settings']         = 'Settings';
           $lang['parameters']       = 'Parameters';
           $lang['parameteradded']   = 'Parameter has been added.';
+          $lang['regexlength']      = 'Amount of entities to capture (numbers count too!)';
+          $lang['regexleaveempty']   = 'Leave this empty for numbers! The parameter will be treated as text otherwise.';
+          $lang['downloadData']     = 'Download converted Data';
           
           //- description of every type
           $lang['COMBOBOXdesc']  = 'This is a dropdown where people can pick one value.';

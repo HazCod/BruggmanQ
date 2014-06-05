@@ -110,19 +110,40 @@
         shell_exec('sudo python2 scripts/fixpermissions.py ' . $_SERVER['DOCUMENT_ROOT'] . '/scripts/templates');
     }
     
-    function str_replace_nth($search, $replace, $subject, $nth){
-        $found = preg_match_all('/'.preg_quote($search).'/', $subject, $matches, PREG_OFFSET_CAPTURE);
+    function getNwords($str, $occurence=1, $length=1){
+        $result = '';
+        preg_match_all('#((?:\w{2,} *){' . $length . '})#', $str, $matches);
+        $matches = $matches[0]; 
+        $start = strpos($str, $matches[$occurence -1]);
+        if ($length > 1){
+            $stop = strlen($matches[$occurence + $length -2]) + 1;
+        } else {
+            $stop = strlen($matches[$occurence -1]);
+        }
+        return substr_replace($str, '((?:\w{2,} *){' . $length .  '})', $start, $stop);
+    }
+    
+    function str_replace_nth($search, $replace, $subject, $nth, $pregquote=false){
+        if ($pregquote == true){
+            $search = preg_quote($search);
+        }
+        $found = preg_match_all("/$search/", $subject, $matches, PREG_OFFSET_CAPTURE);
         if (false !== $found && $found > $nth) {
             return substr_replace($subject, $replace, $matches[0][$nth][1], strlen($search));
         }
         return $subject;
     }
     
-    function calculateRegex( $str, $occurence=1){
-        $str = preg_quote($str);
-        $str = preg_replace('/ +/', ' *', $str);
-        $str = preg_replace('/\d+\.*\d*/', '(?:\d+\.*\d*)*', $str);
-        $str = $this->str_replace_nth('(?:\d+\.*\d*)*', '(\d+\.*\d*)*', $str, $occurence);
+    function calculateRegex( $str, $occurence=1, $text=false ){
+        $str = preg_quote($str); #quote non-regex characters
+        if ($text != false){
+            $regex = "((?:\w{2,} *\**){1,})";
+            $str=  $this->getNwords($str, $occurence, $text);
+        } else {           
+            $str = preg_replace('/ +/', ' *', $str); #replace spaces with variable spacing
+            $str = preg_replace('/\d+\.*\d*/', '(?:\d+\.*\d*)*', $str);
+            $str = str_replace_nth('(?:\d+\.*\d*)*', '(\d+\.*\d*)*', $str, $occurence, true);
+        }
         return $str;
     }
     
@@ -140,7 +161,12 @@
                     $this->form->validateInteger('occurence');
                     $this->form->validateLength('name', 2);
                     if ($this->form->isFormValid()){
-                        $regex = $this->calculateRegex($formdata->regex, $formdata->occurence);
+                        $regex = '';
+                        if ($formdata->length){
+                            $regex = $this->calculateRegex($formdata->regex, $formdata->occurence, $formdata->length); 
+                        } else {
+                           $regex = $this->calculateRegex($formdata->regex, $formdata->occurence); 
+                        }
                         $current = file_get_contents($root_path . 'scripts/report_parameters');
                         $line = "$formdata->name\t$regex\t$formdata->norm\t$formdata->stddev\t$formdata->excel";
                         $current .= $line . "\n";
@@ -171,19 +197,19 @@
                 fwrite($file, $data);
                 fclose($file);
                 $this->redirect('admin/parameters');
+            } elseif ($command == 'getdata'){
+                if ($_POST){
+                shell_exec('/usr/bin/docfrac ');
+                //- Headers to anounce a file is being offered to the browser
+                header("Content-Description: File Transfer"); 
+                header("Content-Type: application/octet-stream"); 
+                header("Content-Disposition: attachment; filename=\"$templ" . "_$lang" . "_$nights.docx\""); 
+                } else {
+                    $this->template->render('admin/parameters.data');
+                }
+                readfile ($file); //Now send it
             } else {
                 $this->setFlashmessage('Bad URL', 'danger');
-                $this->redirect('admin/index');
-            }
-        }
-    }
-    
-    public function tools($tool=false)
-    {
-        if ($this->checkPrivilege()){
-            if ($tool == 'regex'){
-            } else {
-                $this->setFlashmessage('Wrong URL', 'danger');
                 $this->redirect('admin/index');
             }
         }

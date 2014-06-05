@@ -147,6 +147,9 @@ function getLang($controller){
           $lang['settings']         = 'Instellingen';
           $lang['parameters']       = 'Parameters';
           $lang['parameteradded']   = 'Parameter is toegevoegd.';
+          $lang['regexlength']      = 'Aantal opeenvolgende (getallen tellen ook!)';
+          $lang['regexleaveempty']  = 'Laat dit leeg voor getallen! Indien ingevuld, wordt de parameter als tekst behandelt.';
+          $lang['downloadData']     = 'Download geconverteerde Data';
           
           //- description of every type
           $lang['COMBOBOXdesc']  = 'Dit is een dropdown-menu waar mensen 1 waarde kunnen uitkiezen.';
