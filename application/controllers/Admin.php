@@ -301,7 +301,7 @@
                             
                             $tempfile = $file['tmp_name']; //tmp file name
                             $dir = $root_path . "scripts/templates/$templ/$lang"; //Output path
-                            $this->deleteDirectory($dir); //remove old template
+                            $this->deleteDirectory($dir . '/template_' . $nights); //remove old template
                             $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir -n template_$nights". ' 2>&1'); //Do the stuff
                             $this->setFlashmessage($this->lang['templatereplaced']);
                             $this->fixPermissions(); //Fix permissions
