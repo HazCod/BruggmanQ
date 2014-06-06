@@ -134,17 +134,25 @@
     }
     
     function calculateRegex( $str, $occurence=1, $text=false ){
-        $occurence = $occurence +1; //not zero ,but one is now first occurence
+        $occurence = $occurence -1; //not zero ,but one is now first occurence
         $str = preg_quote($str); #quote non-regex characters
+        $str = str_replace('\-', '-', $str); #dont escape -, for lines like ---------------------
+        $str=str_replace("\r\n", "\\n", $str); #replace newlines
         if ($text != false){
             $regex = "((?:\w{2,} *\**){1,})";
-            $str=  getNwords($str, $occurence, $text);
+            $str=  $this->getNwords($str, $occurence, $text);
         } else {           
-            $str = preg_replace('/ +/', ' *', $str); #replace spaces with variable spacing
-            $str = preg_replace('/\\\.(\d+)/', '.$1', $str); #replace obsolete escaping
-            $regex= '(?:(?:\d+\.*\d*)|(?:\d\s))'; #number regex
-            $str = preg_replace('/(\d+\.*\d*)|(\d\s)/', $regex, $str); #replace numbers by their respective regex
-            $str = str_replace_nth($regex, '(?:(\d+\.*\d*)|(\d\s))', $str, $occurence); #set the capture group (remove ?:)
+            error_log('with obsolete: ' . $str);
+            $str = str_replace('\\\\', '\\', $str);
+#$str = preg_replace('#\\\\#', '\\', $str);
+            $str = preg_replace('#/\\\.(\d+)#', '.$1', $str); #replace obsolete escaping
+            $regex= '(?:(?:\d+\.*\d*)|(?:\d\s)|(?:\s-\s))'; #number regex
+            
+            $str = preg_replace('#(\d+\.*\d*)|(\d\s)|(\s-\s)#', $regex, $str); #replace numbers by their respective regex
+            error_log('numbers are replaced here: ' . $str);
+            $str = preg_replace('/ +/', '\s*', $str); #replace spaces with variable spacing 
+            #error_log('replace this; ' . $str);
+            $str = $this->str_replace_nth($regex, '(?:(\d+\.*\d*)|(\d\s)|(\s-\s))', $str, $occurence); #set the capture group (remove ?:)
         }
         return $str;
     }
@@ -167,6 +175,7 @@
                         if ($formdata->length){
                             $regex = $this->calculateRegex($formdata->regex, $formdata->occurence, $formdata->length); 
                         } else {
+                            //var_dump($formdata->regex); quit();
                            $regex = $this->calculateRegex($formdata->regex, $formdata->occurence); 
                         }
                         $current = file_get_contents($root_path . 'scripts/report_parameters');

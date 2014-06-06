@@ -9,7 +9,7 @@
               <form method="post" action="<?= URL::base_uri(); ?>admin/parameters/add">
                 <div class="form-group">
                     <label for="regex"><?= $this->lang['input']; ?></label>
-                    <input type="text" class="form-control" id="regex" name="regex" placeholder="<?= $this->lang['input']; ?>" value="<?php if ($this->regex){ echo $this->regex; } ?>">
+                    <textarea class="form-control" id="regex" name="regex" placeholder="<?= $this->lang['input']; ?>"></textarea>
                 </div><!-- /input-group -->
                 <div class="form-group">
                     <label for="name"><?= $this->lang['name']; ?></label>

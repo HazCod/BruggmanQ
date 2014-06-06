@@ -287,7 +287,7 @@ def writeParameters(data, i):
 			templateEnv = jinja2.Environment( undefined=SilentUndefined, loader=templateLoader )
 			t_template = templateEnv.get_template( file )
 			contents = t_template.render( templateVars ) #render the report using the variables. This does the magic!
-			log('Variables not found: ' + meta.find_undeclared_variables(templateEnv))
+			#log('Variables not found: ' + meta.find_undeclared_variables(templateEnv))
 			log('Template rendered. ')
 			#log(contents.encode('utf-8'))
 		except Exception as e:
