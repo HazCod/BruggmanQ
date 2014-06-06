@@ -25,11 +25,11 @@
                 </div>
                 <div class="form-group">
                     <label for="norm"><?= $this->lang['norm']; ?></label>
-                    <input type="text" class="form-control" id="norm" name="norm" placeholder="0" value="<?php if ($this->stddev){ echo $this->stddev; } ?>">
+                    <input type="text" class="form-control" id="norm" name="norm" placeholder="0" value="0">
                 </div><!-- /input-group -->
                 <div class="form-group">
                     <label for="stddev"><?= $this->lang['stddev']; ?></label>
-                    <input type="text" class="form-control" id="stddev" name="stddev" placeholder="0" value="<?php if ($this->norm){ echo $this->norm; } ?>">
+                    <input type="text" class="form-control" id="stddev" name="stddev" placeholder="0" value="0">
                 </div><!-- /input-group -->
                 <div class="form-group">
                     <label for="excel"><?= $this->lang['addtoexcel']; ?></label>

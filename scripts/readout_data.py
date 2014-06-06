@@ -24,11 +24,11 @@ import traceback
 
 # specific imported methods & variables
 from xlrd import open_workbook, empty_cell
-from jinja2 import Undefined
+from jinja2 import Undefined, meta
 #from xlwt3 import utils  #Python3
 from xlwt import Utils
 from xlutils.copy import copy
-from shutil import copyfile, move3
+from shutil import copyfile, move
 
 #== constants and global variables
 standarddev_str = 'sd_'					#Norm variable prefix
@@ -182,7 +182,7 @@ def readParameters(c):
 			if m != None:
 				try:
 					if (m.group(1) != None):
-						v = m.group(1)
+						v = m.group(1).rstrip().lstrip()
 					else:
 						v = '/'
 					log(var_name + ': ' + v)
@@ -287,6 +287,7 @@ def writeParameters(data, i):
 			templateEnv = jinja2.Environment( undefined=SilentUndefined, loader=templateLoader )
 			t_template = templateEnv.get_template( file )
 			contents = t_template.render( templateVars ) #render the report using the variables. This does the magic!
+			log('Variables not found: ' + meta.find_undeclared_variables(templateEnv))
 			log('Template rendered. ')
 			#log(contents.encode('utf-8'))
 		except Exception as e:
@@ -543,7 +544,7 @@ class SilentUndefined(Undefined):
     '''
     def _fail_with_undefined_error(self, *args, **kwargs):
         notfound(*args)
-        
+
         return None
 
 #==========================#

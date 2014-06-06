@@ -51,14 +51,16 @@ def extractFile( input, folder, newname):
 		if (os.path.isdir(folder)):
 			rmtree(folder)
 		os.makedirs(folder)
-		copyfile(input, folder + '/' + os.path.basename(input))	
+		print('copy ' + input + ' to ' + folder + '/' + os.path.basename(input))
+		copyfile(input, folder + '/' + os.path.basename(input))
 		os.chdir(folder)
+		print('Extracting ' + folder + '/' + os.path.basename(input))
 		zipfile.ZipFile(os.path.basename(input)).extractall()
 		#os.remove(input)
 		#if (newname is not None):
 		#	move(os.path.basename(input), newname)
-		os.remove(input)
-		os.remove(folder + '/' + os.path.basename(input))
+		#os.remove(input)
+		
 
 	except Exception, e:
 		print('Error while unzipping template ' + input + '; ' + str(e))

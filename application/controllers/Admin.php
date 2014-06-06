@@ -109,8 +109,7 @@
     // We can only run python in sudo, so fix our files using Python!
         shell_exec('sudo python2 scripts/fixpermissions.py ' . $_SERVER['DOCUMENT_ROOT'] . '/scripts/templates');
     }
-    
-    function getNwords($str, $occurence=1, $length=1){
+     function getNwords($str, $occurence=1, $length=1){
         $result = '';
         preg_match_all('#((?:\w{2,} *){' . $length . '})#', $str, $matches);
         $matches = $matches[0]; 
@@ -120,14 +119,14 @@
         } else {
             $stop = strlen($matches[$occurence -1]);
         }
-        return substr_replace($str, '((?:\w{2,} *){' . $length .  '})', $start, $stop);
+        $str = substr_replace($str, '((?:\w{2,} *){' . $length .  '})', $start, $stop);
+        $str = preg_replace('/ /', ' +', $str);
+        $str=  preg_replace('/ \+\*/', ' +', $str);
+        return $str;
     }
     
-    function str_replace_nth($search, $replace, $subject, $nth, $pregquote=false){
-        if ($pregquote == true){
-            $search = preg_quote($search);
-        }
-        $found = preg_match_all("/$search/", $subject, $matches, PREG_OFFSET_CAPTURE);
+    function str_replace_nth($search, $replace, $subject, $nth){
+        $found = preg_match_all(preg_quote("#$search#"), $subject, $matches, PREG_OFFSET_CAPTURE);
         if (false !== $found && $found > $nth) {
             return substr_replace($subject, $replace, $matches[0][$nth][1], strlen($search));
         }
@@ -135,14 +134,17 @@
     }
     
     function calculateRegex( $str, $occurence=1, $text=false ){
+        $occurence = $occurence +1; //not zero ,but one is now first occurence
         $str = preg_quote($str); #quote non-regex characters
         if ($text != false){
             $regex = "((?:\w{2,} *\**){1,})";
-            $str=  $this->getNwords($str, $occurence, $text);
+            $str=  getNwords($str, $occurence, $text);
         } else {           
             $str = preg_replace('/ +/', ' *', $str); #replace spaces with variable spacing
-            $str = preg_replace('/\d+\.*\d*/', '(?:\d+\.*\d*)*', $str);
-            $str = str_replace_nth('(?:\d+\.*\d*)*', '(\d+\.*\d*)*', $str, $occurence, true);
+            $str = preg_replace('/\\\.(\d+)/', '.$1', $str); #replace obsolete escaping
+            $regex= '(?:(?:\d+\.*\d*)|(?:\d\s))'; #number regex
+            $str = preg_replace('/(\d+\.*\d*)|(\d\s)/', $regex, $str); #replace numbers by their respective regex
+            $str = str_replace_nth($regex, '(?:(\d+\.*\d*)|(\d\s))', $str, $occurence); #set the capture group (remove ?:)
         }
         return $str;
     }
@@ -169,7 +171,7 @@
                         }
                         $current = file_get_contents($root_path . 'scripts/report_parameters');
                         $line = "$formdata->name\t$regex\t$formdata->norm\t$formdata->stddev\t$formdata->excel";
-                        $current .= $line . "\n";
+                        $current .= "\n" . $line;
                         file_put_contents($root_path . 'scripts/report_parameters', $current);
                         shell_exec('scripts/fixpermissions.py ' . $root_path . 'scripts/report_parameters');
                         $this->setFlashmessage($this->lang['parameteradded']);
@@ -182,7 +184,7 @@
                 } else {
                     $this->template->render('admin/regex');
                 }
-            } elseif ($command == 'remove' and $par1 != false and (intval($par1) == $par1)){
+            } elseif ($command == 'remove' and (intval($par1) == $par1)){
                 $path = $root_path . 'scripts/report_parameters';
                 $lines = file($path, FILE_IGNORE_NEW_LINES);
                 $found = 0;
@@ -218,7 +220,7 @@
                             //}
                             //chmod($loc, 0777); //just to be sure
                             $loc = $_FILES['file']['tmp_name'];
-                            error_log(shell_exec("/usr/bin/docfrac --from-$ext $loc --to-text $conv " . "2>&1"));
+                            shell_exec("/usr/bin/docfrac --from-$ext $loc --to-text $conv " . "2>&1");
                             //- Headers to anounce a file is being offered to the browser
                             header("Content-Description: File Transfer"); 
                             header("Content-Type: application/octet-stream"); 
@@ -271,7 +273,7 @@
                     //- Headers to anounce a file is being offered to the browser
                     header("Content-Description: File Transfer"); 
                     header("Content-Type: application/octet-stream"); 
-                    header("Content-Disposition: attachment; filename=\"$templ" . "_$lang" . "_$nights.docx\""); 
+                    header("Content-Disposition: attachment; filename=\"template_$nights.docx\""); 
                     readfile ($file); //Now send it
                 } elseif ($command == 'delete'){ //Delete a template folder
                     $this->fixPermissions(); //Make sure we have access to the folder
@@ -320,8 +322,9 @@
                                             error_log('could not move ' . $file['tmp_name'] . ' to ' . $tempfile);
                                         }
                                         chmod($tempfile, 0777); //just to be sure
-                                        $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -l $lang -o $dir". ' 2>&1'); //Do the stuff
+                                        $output = shell_exec("sudo python2 scripts/manage_templates.py extract $tempfile -o $dir -n template_$nights". ' 2>&1'); //Do the stuff
                                         $this->fixPermissions(); //Fix permissions
+                                        error_log($output);
                                         //Cleanup
                                         foreach ($temp as $tempfile){
                                             shell_exec("sudo python2 scripts/remove.py $tempfile");                                           
@@ -331,7 +334,7 @@
                                     }
                                 } else {
                                     //Remove template
-                                    shell_exec("sudo python2 scripts/manage_templates.py delete " . $root_path . "scripts/templates/$name"); //Run the script
+                                   // shell_exec("sudo python2 scripts/manage_templates.py delete " . $root_path . "scripts/templates/$name"); //Run the script
                                     $this->setCurrentFlashmessage('Not OK: ' . $this->lang['invalidfile'] . $this->lang['invalidtemplatename'] . ' (' . $error . ')', 'danger');
                                     $this->template->render('admin/templates.add'); 
                                 }
