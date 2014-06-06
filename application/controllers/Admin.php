@@ -142,17 +142,33 @@
             $regex = "((?:\w{2,} *\**){1,})";
             $str=  $this->getNwords($str, $occurence, $text);
         } else {           
-            error_log('with obsolete: ' . $str);
-            $str = str_replace('\\\\', '\\', $str);
-#$str = preg_replace('#\\\\#', '\\', $str);
-            $str = preg_replace('#/\\\.(\d+)#', '.$1', $str); #replace obsolete escaping
-            $regex= '(?:(?:\d+\.*\d*)|(?:\d\s)|(?:\s-\s))'; #number regex
+            error_log('with obsolete: ' . $str . "\n");
+            /**
+             * Respiratory events summary\\(Total sleep time\\)\\n\\n\\n-----------------------------------\\n\\| CA \\| OA \\| MA \\| Sum Ap \\| Hyp \\| Events \\|\\n-----------------------------------\\n\\| Settings \\(sec\\) \\| 10\\.0 \\| 10\\.0 \\| 10\\.0 \\| - \\| 10\\.0 \\| - \\|\\n-----------------------------------\\n\\| Number \\| 0 \\| 5 \\| 0 \\| 5 \\| 62 \\| 67 \\|
+             */
+            //$str = str_replace('\\\\', '\\', $str);
+            //error_log('Double slashed deleted: ' . $str . "\n");
             
-            $str = preg_replace('#(\d+\.*\d*)|(\d\s)|(\s-\s)#', $regex, $str); #replace numbers by their respective regex
+            $str = preg_replace('#\\\.(\d+)#', '.$1', $str); #replace obsolete escaping
+            error_log('Slash in numbers deleted: ' . $str . "\n");
+            
+            
+            $regex= '\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*'; #number regex
+            
+            $str = preg_replace('#\s*(?:(\d+\.\d+)|(\d+)|(\s-\s))\s*#', $regex, $str); #replace numbers by their respective regex
             error_log('numbers are replaced here: ' . $str);
+            //print($str); exit();
+            /*
+             * Respiratory events summary\\(Total sleep time\\)\\n\\n\\n-----------------------------------\\n\\| CA \\| OA \\| MA \\| Sum Ap \\| Hyp \\| Events \\|\\n-----------------------------------\\n\\| Settings \\(sec\\) \\\\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\\\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\\\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\| - \\\\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\| - \\|\\n-----------------------------------\\n\\| Number \\| \\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\| \\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\| \\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\| \\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\| \\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\| \\|\\s*(?:(?:\\d+\\.\\d+)|(?:\\d+)|(?:\\s-\\s))\\s*\\| \\|
+             */
             $str = preg_replace('/ +/', '\s*', $str); #replace spaces with variable spacing 
-            #error_log('replace this; ' . $str);
-            $str = $this->str_replace_nth($regex, '(?:(\d+\.*\d*)|(\d\s)|(\s-\s))', $str, $occurence); #set the capture group (remove ?:)
+            error_log('with variable spacing; ' . $str . "\n");
+
+            $str = $this->str_replace_nth('(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))', '(?:(\d+\.\d+)|(\d+)|(\s-\s))', $str, $occurence); #set the capture group (remove ?:)
+        
+            /*
+             * Respiratory\s*events\s*summary\(Total\s*sleep\s*time\)\n\n\n-----------------------------------\n\|\s*CA\s*\|\s*OA\s*\|\s*MA\s*\|\s*Sum\s*Ap\s*\|\s*Hyp\s*\|\s*Events\s*\|\n-----------------------------------\n\|\s*Settings\s*\(sec\)\s*\\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\|\s*-\s*\\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\|\s*-\s*\|\n-----------------------------------\n\|\s*Number\s*\|\s*\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\|\s*\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\|\s*\|\s*(?:(\d+\.\d+)|(\d+)|(\s-\s))\s*\|\s*\|\s*\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\|\s*\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\|\s*\|\s*(?:(?:\d+\.\d+)|(?:\d+)|(?:\s-\s))\s*\|\s*\|
+             */
         }
         return $str;
     }
