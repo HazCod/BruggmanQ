@@ -15,7 +15,7 @@ import os
 import sys
 import stat
 import zipfile
-import jinja2 
+import jinja2
 import argparse
 import codecs
 import glob
@@ -67,7 +67,7 @@ def checkOS():
 	if ('windows' == pf.lower()):
 		docfraq = "C:/Program Files (x86)/DocFrac/qt-docfrac.exe"
 	elif ('linux' == pf.lower()): #failsave, linux
-		docfraq = '/usr/bin/docfrac'		
+		docfraq = '/usr/bin/docfrac'
 	else:
 		log('Using non-supported OS ' + pf + ', reverting docfraq path to ' + docfraq)
 	#Check if docfraq is installed
@@ -87,7 +87,7 @@ def openFile( wfile ):
 	return codecs.open(wfile, "r",encoding="utf-8").read()
 
 def convertFile( wfile, type='rtf' ):
-# convertFile : call docfraq and ask to convert this file for us 
+# convertFile : call docfraq and ask to convert this file for us
 # Supported: HTML, RTF, Text
 	if (wfile.endswith("." + type)):
 		cmd = docfraq + " --from-" + type + " " + wfile + " --to-text " + wfile.rstrip('.' + type)
@@ -106,8 +106,8 @@ def file_test( file ):
 	if (0 != os.path.isfile(file) and (0 != os.stat(str(file))[stat.ST_SIZE])):
 		return 1
 	else:
-		log("file is empty! " + file)	
-		quit()	
+		log("file is empty! " + file)
+		quit()
 		return 1
 		return 0
 
@@ -164,7 +164,7 @@ def readParameters(c):
 			f.close()
 
 	#Check if the Excel files contains all needed columns
-	if os.path.isfile(spreadsheet_file):	
+	if os.path.isfile(spreadsheet_file):
 		checkSpreadsheetHeaders(headers)
 	#Extract the parameters
 	try:
@@ -263,7 +263,7 @@ def writeParameters(data, i):
 			#- read the template into variable
 			try:
 				contents_fr = codecs.open(file,"r",encoding="utf-8")
-				contents = contents_fr.read() 
+				contents = contents_fr.read()
 			finally:
 				contents_fr.close()
 			#- unscape it and replace the content with the unescaped one
@@ -395,7 +395,7 @@ def updateSpreadsheet( data ):
 				out_sheet.write(row,i, str(data[col_caption]))
 				log('Wrote ' + str(data[col_caption]) + ' to ' + str(col_caption) + ' on ' + str(row) + 'x' + str(i))
 			i = i + 1
-		#cleanup	
+		#cleanup
 		out_book.save(spreadsheet_file.rstrip("xls") + "_new.xls")
 		os.remove(spreadsheet_file)
 		copyfile(spreadsheet_file.rstrip("xls") + "_new.xls", spreadsheet_file)
@@ -411,7 +411,7 @@ def addQuestionnaire( data ):
 	if questionnaire is not None:
 		log('Questionnaire set! File: ' + questionnaire)
 		content = openFile(questionnaire)
-		contents = content.split("\n") 
+		contents = content.split("\n")
 		for line in contents:
 			if (len(line) > 1):
 				parts = line.split("\t")
@@ -422,7 +422,7 @@ def addQuestionnaire( data ):
 					log('QL; ' + parts[0] + ' : ' + parts[1])
 				else:
 					log("Notice: bad line in questionnaire file; " + line)
-	data[0] = data_t 
+	data[0] = data_t
 	return data
 
 def processData( data ):
@@ -431,16 +431,13 @@ def processData( data ):
 	# PLACEHOLDER
 	return data
 
-def resize(l, newsize, filling=None):    
-# resize : resize a dictionary                                                                              
-    if newsize > len(l):                                                                                 
-        l.extend([filling for x in xrange(len(l), newsize)])                                                 
-    else:                                                                                                
-        del l[newsize:]     
+def resize(l, newsize, filling=None):
+# resize : resize a dictionary
+    if newsize > len(l):
+        l.extend([filling for x in xrange(len(l), newsize)])
+    else:
+        del l[newsize:]
 
-class Usage(Exception):
-    def __init__(self, msg):
-        self.msg = msg
 
 def main(argv=None):
 # main : This is ran when you start the script.
@@ -514,7 +511,7 @@ def main(argv=None):
 		log('-- night ' + str(i) + '; ' + dataf)
 		#Extra check if file exists
 		if (os.path.isfile(dataf) == False):
-			raise Exception("Inputfile " + dataf + " not found!")	
+			raise Exception("Inputfile " + dataf + " not found!")
 			quit()
 		log("Extracting parameters from " + parameters_file + " (" + str(i) + ")")
 		c = readout(dataf)
@@ -530,7 +527,7 @@ def main(argv=None):
 	log("Removing " + results_file)
 	#os.remove(results_file)
 
-	if (0 != os.path.isfile(spreadsheet_file)):	
+	if (0 != os.path.isfile(spreadsheet_file)):
 		#adjust the spreadsheet
 		log("Doing spreadsheet business on " + spreadsheet_file)
 		updateSpreadsheet(data)
