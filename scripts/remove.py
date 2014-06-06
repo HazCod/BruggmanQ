@@ -16,10 +16,6 @@ import os
 from shutil import rmtree
 
 
-class Usage(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-
 def main(argv=None):
 # main : This is ran when you start the script.
 	target = None

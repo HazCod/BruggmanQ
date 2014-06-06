@@ -60,19 +60,15 @@ def extractFile( input, folder, newname):
 		#if (newname is not None):
 		#	move(os.path.basename(input), newname)
 		#os.remove(input)
-		
+
 
 	except Exception, e:
 		print('Error while unzipping template ' + input + '; ' + str(e))
 
+
 def removeTemplate(template):
 	rmtree(template)
 
-
-
-class Usage(Exception):
-    def __init__(self, msg):
-        self.msg = msg
 
 def main(argv=None):
 # main : This is ran when you start the script.
@@ -93,7 +89,7 @@ def main(argv=None):
 		args = parser.parse_args()
 		if (args.template is not None):
 			datafile = args.template
-			if (args.output is not None):	
+			if (args.output is not None):
 				report_file = args.output
 			if (args.command is not None):
 				command = args.command

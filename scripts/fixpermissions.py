@@ -15,10 +15,6 @@ import grp
 import pwd
 import sys
 
-class Usage(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-
 def main(argv=None):
 # main : This is ran when you start the script.
 	folder = None
@@ -39,7 +35,7 @@ def main(argv=None):
 	groupID = grp.getgrnam('www-data')[2]       # get group ID
 	userID  = pwd.getpwnam('www-data').pw_uid   # get user  ID
 	for root, dirs, files in os.walk(folder):   # for everything in the folder
-		for momo in dirs:                   
+		for momo in dirs:
 			os.chown(os.path.join(root, momo), userID, groupID) #chown a directory
 			os.chmod(os.path.join(root, momo), 0777)           #chmod a directory
 			for momo in files:                                  #now do all files
