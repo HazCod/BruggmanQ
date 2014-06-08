@@ -33,8 +33,10 @@ Add this line: *www-data ALL = NOPASSWD: /usr/bin/python2*
 
 If your web user is not www-data, change it in scripts/manage_templates.py.
 
-Installation Instructions (on Raspbian/Debian/Ubuntu)
+Installation Instructions (on *bian/Ubuntu)
 --------------------------------------
+*Tested on Raspbian*
+
 - sudo nano /etc/network/interfaces  *(set a static IP)*
 - sudo service networking restart
 
