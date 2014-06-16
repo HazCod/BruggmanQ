@@ -17,16 +17,13 @@ import sys
 
 def main(argv=None):
 # main : This is ran when you start the script.
-	folder = None
 
 	#Commandline parameter handling
 	if argv is None:
 		parser = argparse.ArgumentParser()
 		parser.add_argument("Folder", help="The folder where to recursively set chmod & chown.")
 		args = parser.parse_args()
-		if (args.Folder is not None):
-			folder = args.Folder
-		else:
+		if (args.Folder is None):
 			raise Exception("Must provide correct argument!")
 			Usage()
 			quit()
@@ -34,7 +31,7 @@ def main(argv=None):
 	#-- Start Script
 	groupID = grp.getgrnam('www-data')[2]       # get group ID
 	userID  = pwd.getpwnam('www-data').pw_uid   # get user  ID
-	for root, dirs, files in os.walk(folder):   # for everything in the folder
+	for root, dirs, files in os.walk(args.Folder):   # for everything in the folder
 		for momo in dirs:
 			os.chown(os.path.join(root, momo), userID, groupID) #chown a directory
 			os.chmod(os.path.join(root, momo), 0777)           #chmod a directory
