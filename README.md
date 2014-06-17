@@ -70,3 +70,5 @@ Installation Instructions (on *bian/Ubuntu)
 - sudo make install clean
 
 - sudo chown -R www-data:www-data /var/www
+
+- setup mySQL (using phpMyadmin?) to contain the right user stored in application/config.php
