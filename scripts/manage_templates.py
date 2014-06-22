@@ -31,7 +31,12 @@ def recursive_zip(zipf, directory, folder = ""):
          recursive_zip(zipf, os.path.join(directory, item), folder + os.sep + item)
 
 
-def assembleFile( template, result ):
+def assembleFile(args):
+	template = args.template
+	global report_file
+	if (args.output is not None):
+		report_file = args.output
+	result = report_file
 	if not template.endswith('/'):
 		template = template + '/'
 	zipf = zipfile.ZipFile(result, "w", compression=zipfile.ZIP_DEFLATED )
@@ -42,41 +47,45 @@ def assembleFile( template, result ):
 		zipf.close()
 
 
-def extractFile( input, folder, newname):
+def extractFile(args):
 	#folder example; /var/www/scripts/templates/nl
 	#input example; template_1.docx
-	folder = folder + '/' + newname
+	datafile = args.template
+	global report_file
+	if (args.output is not None):
+		report_file = args.output
+	newname = None
+        if (args.name is not None):
+		newname = args.name
+	folder = report_file + '/' + newname
 	try:
     	#remove old template
 		if (os.path.isdir(folder)):
 			rmtree(folder)
 		os.makedirs(folder)
-		print('copy ' + input + ' to ' + folder + '/' + os.path.basename(input))
-		copyfile(input, folder + '/' + os.path.basename(input))
+		print('copy ' + datafile + ' to ' + folder + '/' + os.path.basename(datafile))
+		copyfile(datafile, folder + '/' + os.path.basename(datafile))
 		os.chdir(folder)
-		print('Extracting ' + folder + '/' + os.path.basename(input))
-		zipfile.ZipFile(os.path.basename(input)).extractall()
+		print('Extracting ' + folder + '/' + os.path.basename(datafile))
+		zipfile.ZipFile(os.path.basename(datafile)).extractall()
 		#os.remove(input)
 		#if (newname is not None):
-		#	move(os.path.basename(input), newname)
+		#	move(os.path.basename(datafile), newname)
 		#os.remove(input)
-
-
 	except Exception, e:
-		print('Error while unzipping template ' + input + '; ' + str(e))
+		print('Error while unzipping template ' + datafile + '; ' + str(e))
 
 
-def removeTemplate(template):
+def removeTemplate(args):
+	template = args.template
 	rmtree(template)
 
 
 def main(argv=None):
 # main : This is ran when you start the script.
 	global language
-	global report_file
-	datafile = None
 	command = "assemble"
-	newname = None
+        commandtable = {"extract": extractFile, "assemble": assembleFile, "delete": removeTemplate}
 
 	#Commandline parameter handling
 	if argv is None:
@@ -87,30 +96,19 @@ def main(argv=None):
 		parser.add_argument("-l", "--language", help="Language used in template. Default is nl")
 		parser.add_argument("-n", "--name", help="Filename when extracting.")
 		args = parser.parse_args()
-		if (args.template is not None):
-			datafile = args.template
-			if (args.output is not None):
-				report_file = args.output
-			if (args.command is not None):
-				command = args.command
-			if (args.language is not None):
-				language = args.language
-			if (args.name is not None):
-				newname = args.name
-		else:
+		if (args.template is None):
 			raise Exception("Must provide an argument!")
 			Usage()
-
+		if (args.command is not None):
+			command = args.command
+		if (args.language is not None):
+			language = args.language
 	else:
 		raise Exception("Must provide argument!")
 		Usage()
 
-	if (command == 'extract'):
-		extractFile(datafile, report_file, newname)
-	elif (command == 'assemble'):
-		assembleFile(datafile, report_file)
-	elif (command == 'delete'):
-		removeTemplate(datafile)
+	if (command in commandtable):
+		commandtable[command](args)
 	else:
 		print "Not a valid command! Quitting.."
 
