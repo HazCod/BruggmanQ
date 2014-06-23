@@ -17,9 +17,7 @@ import argparse
 
 from shutil import copyfile, rmtree, move
 
-report_file = "report.docx"	#default output file
-command 	= "extract"		#default command
-language 	= "nl"			#default language
+language = "nl"  #default language
 
 
 def recursive_zip(zipf, directory, folder = ""):
@@ -33,13 +31,12 @@ def recursive_zip(zipf, directory, folder = ""):
 
 def assembleFile(args):
 	template = args.template
-	global report_file
+	report_file = "assemble_report.docx"
 	if (args.output is not None):
 		report_file = args.output
-	result = report_file
 	if not template.endswith('/'):
 		template = template + '/'
-	zipf = zipfile.ZipFile(result, "w", compression=zipfile.ZIP_DEFLATED )
+	zipf = zipfile.ZipFile(report_file, "w", compression=zipfile.ZIP_DEFLATED )
 	try:
 		print(template)
 		recursive_zip(zipf, template)
@@ -50,42 +47,41 @@ def assembleFile(args):
 def extractFile(args):
 	#folder example; /var/www/scripts/templates/nl
 	#input example; template_1.docx
-	datafile = args.template
-	global report_file
+	template = args.template
+	report_file = "extract_report.docx"
 	if (args.output is not None):
 		report_file = args.output
 	newname = None
-        if (args.name is not None):
+	if (args.name is not None):
 		newname = args.name
 	folder = report_file + '/' + newname
 	try:
-    	#remove old template
+		#  remove old template
 		if (os.path.isdir(folder)):
 			rmtree(folder)
 		os.makedirs(folder)
-		print('copy ' + datafile + ' to ' + folder + '/' + os.path.basename(datafile))
-		copyfile(datafile, folder + '/' + os.path.basename(datafile))
+		print('copy ' + template + ' to ' + folder + '/' + os.path.basename(template))
+		copyfile(template, folder + '/' + os.path.basename(template))
 		os.chdir(folder)
-		print('Extracting ' + folder + '/' + os.path.basename(datafile))
-		zipfile.ZipFile(os.path.basename(datafile)).extractall()
+		print('Extracting ' + folder + '/' + os.path.basename(template))
+		zipfile.ZipFile(os.path.basename(template)).extractall()
 		#os.remove(input)
 		#if (newname is not None):
-		#	move(os.path.basename(datafile), newname)
+		#	move(os.path.basename(template), newname)
 		#os.remove(input)
 	except Exception, e:
-		print('Error while unzipping template ' + datafile + '; ' + str(e))
+		print('Error while unzipping template ' + template + '; ' + str(e))
 
 
 def removeTemplate(args):
-	template = args.template
-	rmtree(template)
+	rmtree(args.template)
 
 
 def main(argv=None):
 # main : This is ran when you start the script.
 	global language
-	command = "assemble"
-        commandtable = {"extract": extractFile, "assemble": assembleFile, "delete": removeTemplate}
+	command = "assemble"  #default
+	commandtable = {"extract": extractFile, "assemble": assembleFile, "delete": removeTemplate}
 
 	#Commandline parameter handling
 	if argv is None:
@@ -108,6 +104,7 @@ def main(argv=None):
 		Usage()
 
 	if (command in commandtable):
+		#Run method assigned to key command and pass it args
 		commandtable[command](args)
 	else:
 		print "Not a valid command! Quitting.."
