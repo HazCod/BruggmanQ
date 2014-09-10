@@ -4,7 +4,6 @@ From most to least important.
 - Fix report generation
 
 - Add more parameters
-- Add text possibility to Add Parameter
 - Add back button on pages
 - Add editing support
 - Add multiple admin user support
