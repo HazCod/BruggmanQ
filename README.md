@@ -1,13 +1,17 @@
+BruggmanQ
+=====
+BruggmanQ is a web platform that speeds up sleep data analysis drastically. It allows the user to build responsive & user-friendy surveys for patients, upload sleep data reports and process them into a report. These reports are built from templates extracted from .docx files. Administrators can manage languages, templates, questionnaires and data. For data mining purposes every parameter can be added to an Excel file.
+
+
 TODO:
 -------
 From most to least important.
 - Fix report generation
-
 - Add more parameters
 - Add back button on pages
 - Add editing support
 - Add multiple admin user support
-- Check if we need more cleanup
+- Cleanup & optimize code
 
 Repository
 -----------
