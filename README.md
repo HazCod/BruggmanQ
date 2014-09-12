@@ -2,7 +2,7 @@ BruggmanQ
 =====
 BruggmanQ is a web platform that speeds up sleep data analysis drastically. It allows the user to build responsive & user-friendy surveys for patients, upload sleep data reports and process them into a report. These reports are built from templates extracted from .docx files. Administrators can manage languages, templates, questionnaires and data. For data mining purposes every parameter can be added to an Excel file.
 
-A client can be any device accessing the web server over wireless or wired internet. The perfect example would be [a Raspberry Pi running in Kiosk mode](http://blogs.wcode.org/2013/09/howto-boot-your-raspberry-pi-into-a-fullscreen-browser-kiosk/).
+A client can be any device accessing the web server over the wireless or wired network. The perfect example would be [a Raspberry Pi running in Kiosk mode](http://blogs.wcode.org/2013/09/howto-boot-your-raspberry-pi-into-a-fullscreen-browser-kiosk/).
 
 TODO:
 -------
