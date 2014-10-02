@@ -47,32 +47,41 @@ Installation Instructions (on *bian/Ubuntu)
 - sudo service networking restart
 
 - sudo apt-get update
-- sudo apt-get install apache2 mysql-server php5 libapache2-mod-php5 git python
+- sudo apt-get install -y apache2 mysql-server php5 libapache2-mod-php5 git python
 
 - sudo rm -f /var/www/index.html
-- git clone https://github.com/HazCod/BruggmanQ.git
+- sudo chmod -R 777 /var/www/
+- git clone https://github.com/HazCod/BruggmanQ.git /var/www
 
 - groupadd www-data
 - usermod -g www-data www-data
 
-- a2enmod rewrite
+- sudo a2enmod rewrite
 - sudo service apache2 restart
 
-- sudo apt-get install phpmyadmin *(optional)*
-- sudo service mysqld start
+*(optional)*
+- sudo apt-get install -y phpmyadmin
+(Choose apache2 to configure automatically)
+- sudo service mysql start
 
-- sudo apt-get install python-xlrd
-- sudo apt-get install python-xlwt
-- sudo apt-get install pip
+- sudo apt-get install -y python-xlrd
+- sudo apt-get install -y python-xlwt
+- sudo apt-get install -y python-pip
 - sudo pip install xlutils
 - sudo pip install jinja2
 
 - sudo wget http://downloads.sourceforge.net/project/docfrac/docfrac/4.0.1/docfrac-4.0.1.src.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fdocfrac%2F&ts=1401205200&use_mirror=heanet docfrac.tar.gz
 - sudo tar -zxvf docfrac.tar.gz
 - cd docfrac/
-- sudo apt-get install libboost-all-dev
+- sudo apt-get install -y libboost-all-dev
 - sudo make install clean
+- cd ../
+- sudo rm -r docfrac*
+- sudo rm docfrac*
 
 - sudo chown -R www-data:www-data /var/www
 
-- setup mySQL (using phpMyadmin?) to contain the right user stored in application/config.php
+- mysql -u root -p < database.sql *(using password chosen during Mysql setup)*
+- setup mySQL (using phpMyadmin?) to contain the correct user (permissions) and fill this in at application/config.php;
+Go to http://YourStaticIP/phpmyadmin, login with username *root* and password chosen during phpMyAdmin.
+Then add a new user, set the machine recognition to every machine and assign the user permissions on **.
