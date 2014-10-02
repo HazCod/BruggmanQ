@@ -57,6 +57,15 @@ Installation Instructions (on *bian/Ubuntu)
 - usermod -g www-data www-data
 
 - sudo a2enmod rewrite
+- sudo nano /etc/apache2/sites-enabled/000-deafult
+almost at the top you will find
+<Directory /var/www/>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+</Directory>
+Change the AllowOverride None to AllowOverride All
 - sudo service apache2 restart
 
 *(optional)*
@@ -85,3 +94,4 @@ Installation Instructions (on *bian/Ubuntu)
 - setup mySQL (using phpMyadmin?) to contain the correct user (permissions) and fill this in at application/config.php;
 Go to http://YourStaticIP/phpmyadmin, login with username *root* and password chosen during phpMyAdmin.
 Then add a new user, set the machine recognition to every machine and assign the user permissions on **.
+
